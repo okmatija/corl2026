@@ -19,10 +19,10 @@
   <header class="top">
     <div class="top-inner">
       <div>
-        <h1 id="title">CoRL 2026 Trip</h1>
-        <p class="sub" id="subtitle"></p>
+        <h1>CoRL 2026 · USA trip</h1>
+        <p class="sub">CoRL 9–12 Nov · Austin</p>
       </div>
-      <button class="who-btn" id="whoBtn" aria-label="Choose who you are"></button>
+      <button class="who-btn" id="whoBtn" aria-label="Switch who you are"></button>
     </div>
   </header>
 
@@ -30,19 +30,20 @@
 
   <nav class="tabs" aria-label="Sections">
     <a href="#plan" data-tab="plan"><span>🗺️</span>Plan</a>
-    <a href="#compare" data-tab="compare"><span>⚖️</span>Compare</a>
     <a href="#ideas" data-tab="ideas"><span>✨</span>Ideas</a>
-    <a href="#stays" data-tab="stays"><span>🛏️</span>Stays</a>
-    <a href="#feedback" data-tab="feedback"><span>💬</span>Feedback<b id="pendingBadge" hidden></b></a>
+    <a href="#matija" data-tab="matija"><span>🙋‍♂️</span>Matija</a>
+    <a href="#maryna" data-tab="maryna"><span>🙋‍♀️</span>Maryna</a>
   </nav>
 
-  <dialog id="noteDialog">
+  <dialog id="dlg">
     <form method="dialog">
-      <h3 id="noteTitle">Add a note</h3>
-      <textarea id="noteText" rows="4" placeholder="What do you think?"></textarea>
-      <div class="row end">
-        <button value="cancel" class="ghost">Cancel</button>
-        <button value="ok" class="primary">Save</button>
+      <h3></h3>
+      <p class="muted small"></p>
+      <textarea rows="4"></textarea>
+      <input type="text" autocomplete="off" hidden>
+      <div class="row end" style="margin-top:10px">
+        <button type="button" class="ghost" onclick="this.closest('dialog').close('cancel')">Cancel</button>
+        <button value="ok" class="primary">OK</button>
       </div>
     </form>
   </dialog>
@@ -51,7 +52,7 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
   <script src="data/trip.js"></script>
-  <script src="data/feedback.js"></script>
+  <script src="data/config.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

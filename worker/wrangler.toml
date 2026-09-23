@@ -1,0 +1,12 @@
+name = "corl2026-feedback"
+main = "src/index.js"
+compatibility_date = "2026-09-01"
+
+[vars]
+REPO = "okmatija/corl2026"
+ALLOWED_ORIGINS = "https://okmatija.github.io,http://localhost:8123"
+PEOPLE = "Matija,Maryna"
+
+# Secrets (set with `npx wrangler secret put <NAME>`, never committed):
+#   GITHUB_TOKEN - fine-grained PAT, only this repo, Issues: read & write
+#   TRIP_KEY     - passcode the site sends with every submission

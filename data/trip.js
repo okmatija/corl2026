@@ -5,17 +5,7 @@ window.TRIP = {
     title: "CoRL 2026 · USA trip",
     travellers: ["Matija", "Maryna"],
     updated: "2026-09-23",
-    status: "First draft - built before any assets were added. Dates outside the conference are assumptions.",
-  },
-
-  // Default planning inputs. Each person can override these on the Feedback tab;
-  // overrides are sent back with feedback and folded into the next revision.
-  settings: {
-    budgetPerNight: 200,
-    currency: "USD",
-    tripStart: "2026-11-07",
-    maxDriveHoursPerDay: 5,
-    pace: "relaxed",
+    status: "First draft - dates outside the conference are assumptions until we get your itinerary.",
   },
 
   obligations: [
@@ -48,8 +38,9 @@ window.TRIP = {
     nyc:            { name: "New York City",         lat: 40.7128, lng: -74.0060,  blurb: "Museums, Broadway, late-fall Central Park." },
   },
 
+  // Idea cards. Region groups them on the Ideas page; ideas outside the plan's regions are alternatives to vote on.
   // cat: nature | food | culture | music | city | night | adventure
-  activities: [
+  ideas: [
     // Austin
     { id: "atx-barton", place: "austin", title: "Swim at Barton Springs Pool", cat: "nature", cost: "$", dur: "2h", why: "Spring-fed pool at ~20°C all year - locals swim in November too." },
     { id: "atx-soco", place: "austin", title: "South Congress stroll", cat: "city", cost: "free", dur: "2h", why: "Shops, murals, 'I love you so much' wall, view of the Capitol." },
@@ -128,148 +119,41 @@ window.TRIP = {
     { id: "nyc-summit", place: "nyc", title: "Top of the Rock or SUMMIT at sunset", cat: "city", cost: "$$", dur: "2h", why: "Top of the Rock has the Empire State in view." },
   ],
 
-  // price = rough estimate per night in USD. kind: hotel | airbnb | lodge | motel | campground
-  stays: [
-    { id: "s-atx-jw", place: "austin", name: "JW Marriott Austin (venue)", area: "Downtown", kind: "hotel", price: 380, notes: "Zero commute. Check for a CoRL group rate." },
-    { id: "s-atx-hyattplace", place: "austin", name: "Hyatt Place / Hampton Inn Downtown", area: "Downtown", kind: "hotel", price: 240, notes: "Walkable to venue, cheaper chain option." },
-    { id: "s-atx-sanjose", place: "austin", name: "Hotel San José", area: "South Congress", kind: "hotel", price: 300, notes: "Boutique, great area for Maryna; 10 min ride to venue." },
-    { id: "s-atx-airbnb", place: "austin", name: "Airbnb in East Austin / Travis Heights", area: "East Austin", kind: "airbnb", price: 160, notes: "Kitchen + space for a 6-night stay; ride-share to venue." },
-
-    { id: "s-fbg-cottage", place: "fredericksburg", name: "Guesthaus / cottage near Main St", area: "Downtown", kind: "airbnb", price: 180, notes: "Classic Fredericksburg stay." },
-    { id: "s-fbg-inn", place: "fredericksburg", name: "Hangar Hotel / chain inn", area: "Airport / edge of town", kind: "hotel", price: 150, notes: "" },
-
-    { id: "s-mfa-hotelsaintgeorge", place: "marfa", name: "Hotel Saint George", area: "Marfa", kind: "hotel", price: 260, notes: "Stylish; Marfa has few rooms - book early." },
-    { id: "s-mfa-elcosmico", place: "marfa", name: "El Cosmico (trailers / tents)", area: "Marfa", kind: "campground", price: 170, notes: "Quirky vintage trailers. Cold nights in Nov!" },
-    { id: "s-mfa-alpine", place: "marfa", name: "Motel in Alpine (26 mi)", area: "Alpine", kind: "motel", price: 110, notes: "Budget fallback." },
-
-    { id: "s-bb-chisos", place: "bigbend", name: "Chisos Mountains Lodge", area: "Inside the park", kind: "lodge", price: 200, notes: "Only lodging in the park - books out months ahead." },
-    { id: "s-bb-willow", place: "bigbend", name: "Casita / tiny house in Terlingua", area: "Terlingua", kind: "airbnb", price: 150, notes: "Off-grid style stays with huge skies." },
-    { id: "s-bb-lajitas", place: "bigbend", name: "Lajitas Golf Resort", area: "Lajitas", kind: "hotel", price: 230, notes: "Most comfortable option, 40 min from park." },
-
-    { id: "s-sa-emma", place: "sanantonio", name: "Hotel Emma", area: "Pearl", kind: "hotel", price: 450, notes: "Splurge - one of the best hotels in Texas." },
-    { id: "s-sa-riverwalk", place: "sanantonio", name: "River Walk mid-range hotel", area: "Downtown", kind: "hotel", price: 180, notes: "" },
-    { id: "s-sa-kinglwm", place: "sanantonio", name: "Airbnb in King William district", area: "King William", kind: "airbnb", price: 140, notes: "Historic, walkable to River Walk." },
-
-    { id: "s-hou-museum", place: "houston", name: "Hotel in Museum District", area: "Museum District", kind: "hotel", price: 170, notes: "" },
-
-    { id: "s-nola-quarter", place: "neworleans", name: "Boutique hotel in French Quarter", area: "French Quarter", kind: "hotel", price: 250, notes: "Loud at night - ask for a courtyard room." },
-    { id: "s-nola-marigny", place: "neworleans", name: "Guesthouse in the Marigny", area: "Marigny", kind: "airbnb", price: 170, notes: "Walk to Frenchmen St." },
-    { id: "s-nola-garden", place: "neworleans", name: "B&B in Garden District", area: "Garden District", kind: "hotel", price: 200, notes: "Quieter, on the streetcar line." },
-
-    { id: "s-lv-strip", place: "lasvegas", name: "Mid-Strip hotel (weekday)", area: "The Strip", kind: "hotel", price: 120, notes: "Watch out for resort fees (~$45/night)." },
-    { id: "s-zion-cliffrose", place: "zion", name: "Cliffrose / Desert Pearl, Springdale", area: "Springdale", kind: "hotel", price: 260, notes: "Walk to park entrance." },
-    { id: "s-zion-motel", place: "zion", name: "Springdale motel", area: "Springdale", kind: "motel", price: 150, notes: "" },
-    { id: "s-page-hotel", place: "page", name: "Page chain hotel", area: "Page", kind: "hotel", price: 130, notes: "" },
-    { id: "s-gc-eltovar", place: "grandcanyon", name: "El Tovar / Bright Angel Lodge", area: "In park, on the rim", kind: "lodge", price: 230, notes: "Book 6-12 months ahead; cancellations do appear." },
-    { id: "s-gc-tusayan", place: "grandcanyon", name: "Hotel in Tusayan", area: "Tusayan (10 min)", kind: "hotel", price: 170, notes: "" },
-    { id: "s-sed-lauberge", place: "sedona", name: "L'Auberge de Sedona", area: "Uptown / creekside", kind: "hotel", price: 600, notes: "Big splurge." },
-    { id: "s-sed-mid", place: "sedona", name: "West Sedona hotel", area: "West Sedona", kind: "hotel", price: 220, notes: "" },
-    { id: "s-sed-cottonwood", place: "sedona", name: "Cottonwood inn (25 min)", area: "Cottonwood", kind: "hotel", price: 130, notes: "Budget fallback, nice old town." },
-
-    { id: "s-nyc-midtown", place: "nyc", name: "Midtown hotel", area: "Midtown", kind: "hotel", price: 320, notes: "NYC hotel tax ~15% on top." },
-    { id: "s-nyc-brooklyn", place: "nyc", name: "Hotel in Williamsburg / DUMBO", area: "Brooklyn", kind: "hotel", price: 280, notes: "" },
-    { id: "s-nyc-lic", place: "nyc", name: "Long Island City hotel", area: "Queens (1 stop to Midtown)", kind: "hotel", price: 200, notes: "Best value with skyline views." },
-  ],
-
-  // Each variant is a sequence of legs. A leg = where you sleep between two dates.
-  // "arrive" is the check-in date, "leave" the check-out date. "days" is a per-day plan (text or activity ids).
-  currentVariant: "texas",
-  variants: [
-    {
-      id: "texas",
-      name: "Texas road trip",
-      emoji: "🌵",
-      summary: "Conference in Austin, then a loop through Hill Country, the West Texas desert and Big Bend, ending in San Antonio. One rental car, no extra flights.",
-      pros: ["No internal flights", "Big Bend is spectacular and uncrowded in Nov", "Very varied: art town, desert, canyons, cities"],
-      cons: ["Long drives (5-6h) on two days", "Big Bend lodging is limited - book early"],
-      legs: [
-        { place: "austin", arrive: "2026-11-07", leave: "2026-11-13", pick: "s-atx-airbnb",
-          travel: { mode: "flight", text: "Fly into AUS" },
-          days: [
-            ["Arrive, recover from jet lag", "atx-tacos", "atx-soco"],
-            ["atx-barton", "atx-bbq", "atx-bonnell"],
-            ["CoRL workshops (Matija)", "Maryna: atx-wildflower"],
-            ["CoRL (Matija)", "Maryna: atx-blanton, atx-capitol", "atx-music"],
-            ["CoRL (Matija)", "Maryna: atx-kayak"],
-            ["CoRL (Matija)", "Evening: celebrate - atx-music"],
-          ] },
-        { place: "fredericksburg", arrive: "2026-11-13", leave: "2026-11-15", pick: "s-fbg-cottage",
-          travel: { mode: "car", text: "Pick up rental car, 1.5h drive", hours: 1.5 },
-          days: [["fbg-wine", "Dinner on Main St"], ["fbg-rock (early start)", "fbg-luck"]] },
-        { place: "marfa", arrive: "2026-11-15", leave: "2026-11-16", pick: "s-mfa-hotelsaintgeorge",
-          travel: { mode: "car", text: "5h drive via I-10", hours: 5 },
-          days: [["Drive", "mfa-prada", "mfa-lights / mfa-mcdonald"]] },
-        { place: "bigbend", arrive: "2026-11-16", leave: "2026-11-19", pick: "s-bb-willow",
-          travel: { mode: "car", text: "1.5h drive; Chinati tour in the morning first", hours: 1.5 },
-          days: [["mfa-chinati", "Drive to Terlingua", "bb-terlingua"], ["bb-lostmine", "bb-window"], ["bb-santaelena", "bb-river", "bb-hotsprings?"]] },
-        { place: "sanantonio", arrive: "2026-11-19", leave: "2026-11-21", pick: "s-sa-kinglwm",
-          travel: { mode: "car", text: "6h drive", hours: 6 },
-          days: [["Long drive", "sa-riverwalk"], ["sa-missions", "sa-pearl", "sa-alamo"]] },
-      ],
-      end: { date: "2026-11-21", text: "Drive to Austin (1.3h) or fly out of SAT" },
-    },
-    {
-      id: "nola",
-      name: "Austin → Houston → New Orleans",
-      emoji: "🎺",
-      summary: "City-and-food version: Space Center in Houston on the way, then 4 nights of music and food in New Orleans. Fly home from MSY.",
-      pros: ["Very little driving after Houston", "Amazing food and music", "Easy one-way car or bus/flight"],
-      cons: ["Less nature", "Hotels in NOLA pricier on weekends"],
-      legs: [
-        { place: "austin", arrive: "2026-11-07", leave: "2026-11-13", pick: "s-atx-airbnb",
-          travel: { mode: "flight", text: "Fly into AUS" },
-          days: [["Arrive", "atx-tacos", "atx-soco"], ["atx-barton", "atx-bbq", "atx-bonnell"], ["CoRL workshops", "Maryna: atx-wildflower"], ["CoRL", "Maryna: atx-blanton"], ["CoRL", "Maryna: atx-hamilton"], ["CoRL", "atx-music"]] },
-        { place: "houston", arrive: "2026-11-13", leave: "2026-11-14", pick: "s-hou-museum",
-          travel: { mode: "car", text: "2.5h drive (one-way rental)", hours: 2.5 },
-          days: [["hou-space", "hou-menil"]] },
-        { place: "neworleans", arrive: "2026-11-14", leave: "2026-11-18", pick: "s-nola-marigny",
-          travel: { mode: "car", text: "5.5h drive, drop car at MSY", hours: 5.5 },
-          days: [["Drive", "nola-frenchmen"], ["nola-beignets", "nola-ww2", "nola-preservation"], ["nola-streetcar", "nola-swamp"], ["nola-brunch", "Bywater & Marigny wander"]] },
-      ],
-      end: { date: "2026-11-18", text: "Fly out of MSY" },
-    },
-    {
-      id: "southwest",
-      name: "Southwest national parks",
-      emoji: "🏜️",
-      summary: "Fly Austin → Las Vegas, then Zion, Horseshoe Bend/Antelope Canyon, Grand Canyon and Sedona. Fly home from Phoenix.",
-      pros: ["The most iconic US landscapes", "November = no summer heat, fewer crowds"],
-      cons: ["Extra flight AUS → LAS", "Cold nights at Grand Canyon (can be below 0°C)", "Busiest itinerary"],
-      legs: [
-        { place: "austin", arrive: "2026-11-07", leave: "2026-11-13", pick: "s-atx-airbnb",
-          travel: { mode: "flight", text: "Fly into AUS" },
-          days: [["Arrive", "atx-soco"], ["atx-barton", "atx-bbq"], ["CoRL workshops"], ["CoRL"], ["CoRL"], ["CoRL", "atx-music"]] },
-        { place: "zion", arrive: "2026-11-13", leave: "2026-11-15", pick: "s-zion-motel",
-          travel: { mode: "flight", text: "Fly AUS → LAS (~3h), then 2.5h drive", hours: 2.5 },
-          days: [["Flight + drive", "Sunset in Springdale"], ["zion-overlook", "zion-narrows"]] },
-        { place: "page", arrive: "2026-11-15", leave: "2026-11-16", pick: "s-page-hotel",
-          travel: { mode: "car", text: "2h drive", hours: 2 },
-          days: [["page-antelope", "page-horseshoe"]] },
-        { place: "grandcanyon", arrive: "2026-11-16", leave: "2026-11-17", pick: "s-gc-eltovar",
-          travel: { mode: "car", text: "2.5h via Desert View entrance", hours: 2.5 },
-          days: [["Desert View drive", "gc-sunrise (sunset)", "Next morning: sunrise + gc-brightangel"]] },
-        { place: "sedona", arrive: "2026-11-17", leave: "2026-11-20", pick: "s-sed-mid",
-          travel: { mode: "car", text: "2h drive", hours: 2 },
-          days: [["gc-brightangel", "Drive", "sed-chapel"], ["sed-cathedral", "sed-stars"], ["sed-westfork"]] },
-      ],
-      end: { date: "2026-11-20", text: "2h drive, fly out of PHX" },
-    },
-    {
-      id: "nyc",
-      name: "Austin + New York",
-      emoji: "🗽",
-      summary: "Simplest option: after the conference, fly to NYC for 5 nights of museums, shows and late-fall Central Park.",
-      pros: ["No driving at all", "Endless things to do", "Easy connections home"],
-      cons: ["Most expensive lodging", "Less 'road trip' feeling"],
-      legs: [
-        { place: "austin", arrive: "2026-11-07", leave: "2026-11-13", pick: "s-atx-airbnb",
-          travel: { mode: "flight", text: "Fly into AUS" },
-          days: [["Arrive", "atx-soco"], ["atx-barton", "atx-bbq", "atx-bonnell"], ["CoRL workshops"], ["CoRL"], ["CoRL"], ["CoRL", "atx-music"]] },
-        { place: "nyc", arrive: "2026-11-13", leave: "2026-11-18", pick: "s-nyc-lic",
-          travel: { mode: "flight", text: "Fly AUS → NYC (~3.5h)" },
-          days: [["Arrive", "nyc-highline"], ["nyc-central", "nyc-met", "nyc-broadway"], ["nyc-brooklyn", "nyc-summit"], ["Free day / neighbourhoods", "nyc-jazz"], ["Last museum or shopping"]] },
-      ],
-      end: { date: "2026-11-18", text: "Fly out of JFK / EWR" },
-    },
-  ],
+  // THE plan. A leg = where you sleep between arrive (check-in) and leave (check-out).
+  // days[k] = items for the k-th day of the leg; idea ids are expanded to their titles on the page.
+  plan: {
+    name: "Texas road trip",
+    summary: "Conference in Austin, then a loop through Hill Country, the West Texas desert and Big Bend, ending in San Antonio. One rental car, no extra flights.",
+    budgetPerNight: 200,
+    legs: [
+      { place: "austin", arrive: "2026-11-07", leave: "2026-11-13",
+        travel: "✈️ Fly into Austin (AUS)",
+        stay: { name: "Airbnb in East Austin / Travis Heights", price: 160, notes: "Kitchen + space for 6 nights; ride-share to the venue. Alt: Hyatt Place Downtown ~$240, JW Marriott (venue) ~$380." },
+        days: [
+          ["Arrive, recover from jet lag", "atx-tacos", "atx-soco"],
+          ["atx-barton", "atx-bbq", "atx-bonnell"],
+          ["Maryna: atx-wildflower"],
+          ["Maryna: atx-blanton, atx-capitol", "Evening: atx-music"],
+          ["Maryna: atx-kayak"],
+          ["Evening: celebrate the end of CoRL"],
+        ] },
+      { place: "fredericksburg", arrive: "2026-11-13", leave: "2026-11-15",
+        travel: "🚗 Pick up rental car · 1.5 h drive",
+        stay: { name: "Guesthaus / cottage near Main St", price: 180, notes: "" },
+        days: [["fbg-wine", "Dinner on Main St"], ["fbg-rock (early start)", "fbg-luck"]] },
+      { place: "marfa", arrive: "2026-11-15", leave: "2026-11-16",
+        travel: "🚗 5 h drive via I-10",
+        stay: { name: "Hotel Saint George", price: 260, notes: "Few rooms in Marfa - book early. Budget alt: motel in Alpine ~$110." },
+        days: [["mfa-prada", "mfa-lights or mfa-mcdonald"]] },
+      { place: "bigbend", arrive: "2026-11-16", leave: "2026-11-19",
+        travel: "🚗 1.5 h drive (after a morning Chinati tour)",
+        stay: { name: "Casita / tiny house in Terlingua", price: 150, notes: "Chisos Mountains Lodge (in park, ~$200) books out months ahead." },
+        days: [["mfa-chinati", "Drive to Terlingua", "bb-terlingua"], ["bb-lostmine", "bb-window"], ["bb-santaelena", "bb-river", "bb-hotsprings"]] },
+      { place: "sanantonio", arrive: "2026-11-19", leave: "2026-11-21",
+        travel: "🚗 6 h drive",
+        stay: { name: "Airbnb in King William district", price: 140, notes: "Walkable to the River Walk." },
+        days: [["Long drive", "sa-riverwalk"], ["sa-missions", "sa-pearl", "sa-alamo"]] },
+    ],
+    end: { date: "2026-11-21", text: "Drive back to Austin (1.3 h) or fly out of San Antonio (SAT)" },
+  },
 };

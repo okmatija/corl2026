@@ -4,10 +4,9 @@ Planning Matija & Maryna's trip around [CoRL 2026](https://www.corl.org/) (Austi
 
 **Site:** https://okmatija.github.io/corl2026/ - add it to your home screen (iOS: Share → Add to Home Screen; Android: ⋮ → Add to Home screen).
 
-- **Plan** - current plan (★) and alternative variants: map, stops, stays, day-by-day.
-- **Compare** - variants side by side: dates, lodging estimate at your budget, driving, votes.
-- **Ideas / Stays** - react ❤️ 👍 🤷 👎 and leave notes; set your budget per night.
-- **Feedback** - your preferences + unsent reactions → Share (WhatsApp/iMessage/email), Copy, or open a GitHub issue.
-  Paste it to Claude, who merges it into `data/feedback.js` and revises `data/trip.js`.
+- **Plan** - the current plan: map, stops, where to stay, day by day.
+- **Ideas** - idea cards; 👍/👎 with an optional reason; filter by who liked/disliked what.
+- **Matija / Maryna** - everything that person has said, plus a box for free-form feedback.
 
-Reactions are kept on your device until merged, so both of you see each other's feedback once it's in the repo.
+Feedback is sent through a small Cloudflare Worker (`worker/`) that files it as a GitHub issue. Claude reads the open issues,
+updates the plan, and closes each issue with a note on what changed - which then shows as ✅ on the site.

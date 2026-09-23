@@ -94,7 +94,7 @@ h3 { font-size: 17px; margin: 0 0 4px; }
 .chips::-webkit-scrollbar { display: none; }
 .chip { flex: none; border: 1px solid var(--line); background: var(--card); border-radius: 999px; padding: 7px 12px; font-size: 14px; cursor: pointer; white-space: nowrap; }
 .chip.on { background: var(--accent); border-color: var(--accent); color: #fff; }
-.tag { display: inline-block; font-size: 12px; padding: 2px 8px; border-radius: 999px; background: var(--line); color: var(--ink); }
+.tag { white-space: nowrap; display: inline-block; font-size: 12px; padding: 2px 8px; border-radius: 999px; background: var(--line); color: var(--ink); }
 .tag.ok { background: var(--ok-soft); color: var(--ok); }
 .tag.over { background: var(--warn-soft); color: var(--warn); }
 .tag.star { background: var(--accent); color: #fff; }
@@ -169,3 +169,24 @@ dialog::backdrop { background: rgba(0,0,0,.4); }
   .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
   .grid2 > .card { margin: 0; }
 }
+
+/* v2: ideas, votes, feedback */
+.pin { width: 24px; height: 24px; border-radius: 50%; background: #c2410c; color: #fff; display: grid; place-items: center; font: 700 12px sans-serif; border: 2px solid #fff; }
+.stay { margin-top: 10px; padding: 10px; background: var(--bg); border-radius: 10px; }
+.days { margin-top: 8px; }
+h3.region { margin: 20px 0 6px; font-size: 15px; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; }
+select#region { margin-bottom: 4px; }
+.idea { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px; margin: 10px 0; box-shadow: var(--shadow); }
+.idea h3 { margin: 0; }
+.idea p { margin: 6px 0; font-size: 15px; }
+.fb { font-size: 14px; padding: 6px 10px; border-radius: 10px; margin: 6px 0; }
+.fb.up { background: var(--ok-soft); }
+.fb.down { background: var(--warn-soft); }
+.vote { display: flex; gap: 8px; margin-top: 10px; }
+.vote button { flex: 1; border: 1px solid var(--line); background: var(--bg); border-radius: 12px; padding: 10px; font-size: 15px; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+.vote button.on { border-color: var(--accent); background: var(--accent-soft); font-weight: 600; }
+.vote button:disabled { opacity: .5; }
+.fbitem p { margin: 8px 0; }
+.fbitem.closed { opacity: .8; }
+.resolution { background: var(--bg); border-left: 3px solid var(--ok); padding: 6px 10px; border-radius: 6px; font-size: 14px; }
+dialog textarea, dialog input { margin-top: 4px; }
