@@ -11,6 +11,8 @@ Travellers: Matija and Maryna. CoRL 2026: Austin TX, workshops Nov 9, main confe
 - `assets/` - user inputs. `assets/private/` is git-ignored: read it, never copy sensitive details (booking refs, addresses, IDs) into tracked files.
 - `assets/private/notes.md` - private facts extracted from work documents (policy, schedule). Read it first when planning.
 - `scripts/resolve.sh` - close a feedback issue with a resolution.
+- `data/runs.js` - update history shown on the #updates page. A scheduled cloud routine processes feedback hourly 06:00-23:00 UK.
+  If there are no open feedback issues, do nothing (no commit).
 
 ## Feedback = GitHub issues
 Every submission is an issue labelled `feedback` + `from:matija|from:maryna` + `idea|general`.
@@ -22,7 +24,9 @@ The site shows an issue as "done" once closed, plus the text after `**Resolution
 2. Decide what each item changes. A later vote by the same person on the same idea supersedes an earlier one.
    Idea votes: 👍 → consider adding to the plan; 👎 → remove/avoid. General notes: budget, dates, must-sees, new ideas (add idea cards).
 3. Edit `data/trip.js` (plan, ideas, openQuestions, bump `meta.updated`, refresh `meta.status`).
-4. Commit and push (Pages redeploys in ~1 min).
+4. Prepend an entry to `window.RUNS` in `data/runs.js`: start/end ISO UTC times (`date -u +%Y-%m-%dT%H:%M:%SZ` at start and just
+   before committing), `by` ("scheduled" or "manual"), model id, issue numbers, a one-line summary. Add `tokens`/`costUsd` only if known.
+   Then commit and push to `main` (Pages redeploys in ~1 min).
 5. For each issue: `scripts/resolve.sh <n> "<one line: what changed>"` - use `not_planned` as 3rd arg if deliberately not acted on, and say why.
    Superseded votes: resolve with "Superseded by #m".
 6. Report back a short summary of changes.

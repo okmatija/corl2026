@@ -125,6 +125,7 @@
         </div>
       </div>
       <div class="banner">${esc(T.meta.status)} Updated ${esc(T.meta.updated)}.</div>
+      ${autoBanner()}
       ${T.openQuestions?.length ? `<div class="card"><h3>Open questions</h3><ul class="plain">${T.openQuestions.map(q => `<li>${esc(q)}</li>`).join("")}</ul><p class="muted small" style="margin:6px 0 0">Answer on your own tab: ${PEOPLE.map(p => `<a href="#${p.toLowerCase()}">${esc(p)}</a>`).join(" · ")}</p></div>` : ""}
       <div id="map" role="img" aria-label="Route map"></div>
       ${legs}
@@ -223,6 +224,41 @@
     `;
   }
 
+  function autoBanner() {
+    const A = window.AUTOMATION;
+    if (!A) return "";
+    const last = (window.RUNS || [])[0];
+    return `<div class="banner info">🤖 Claude reads new feedback and updates this plan <b>${esc(A.schedule)}</b>.${last ? ` Last update ${fmt(last.end.slice(0, 10))}.` : ""} <a href="#updates">Update history & cost →</a></div>`;
+  }
+
+  function viewUpdates() {
+    const runs = window.RUNS || [];
+    const mins = r => Math.max(1, Math.round((new Date(r.end) - new Date(r.start)) / 60000));
+    const totalMin = runs.reduce((n, r) => n + mins(r), 0);
+    const tokens = runs.reduce((n, r) => n + (r.tokens || 0), 0);
+    const cost = runs.reduce((n, r) => n + (r.costUsd || 0), 0);
+    const issues = runs.reduce((n, r) => n + (r.issues?.length || 0), 0);
+    const time = r => new Date(r.end).toLocaleString("en-GB", { weekday: "short", day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" });
+    return `
+      <h2>Plan updates</h2>
+      <div class="card">
+        <p style="margin:0">A scheduled Claude agent checks for new feedback <b>${esc(window.AUTOMATION?.schedule || "")}</b>. If there's nothing new it stops straight away, and nothing is logged here. When there is feedback it updates the plan, closes the GitHub issues with a note, and adds a row below.</p>
+        <div class="stats">
+          <div class="stat"><b>${runs.length}</b><span>updates</span></div>
+          <div class="stat"><b>${issues}</b><span>feedback items handled</span></div>
+          <div class="stat"><b>${totalMin} min</b><span>total agent time</span></div>
+          <div class="stat"><b>${tokens ? Math.round(tokens / 1000) + "k" : "–"}</b><span>tokens${cost ? " · ~$" + cost.toFixed(2) : ""}</span></div>
+        </div>
+        <p class="muted small" style="margin:8px 0 0">Tokens and cost are filled in only when they can be measured, which isn't always possible for scheduled runs. Runs are covered by Matija's Claude subscription usage rather than billed separately.</p>
+      </div>
+      ${runs.map(r => `<div class="card">
+        <div class="item-head"><b>${time(r)}</b><span class="tag">${r.by === "scheduled" ? "🤖 scheduled" : "💬 manual"}</span></div>
+        <p style="margin:6px 0">${esc(r.summary)}</p>
+        <div class="item-meta">${mins(r)} min · ${esc(r.model || "")} · issues ${(r.issues || []).map(n => `<a href="https://github.com/okmatija/corl2026/issues/${n}" target="_blank" rel="noopener">#${n}</a>`).join(" ")}${r.tokens ? ` · ${Math.round(r.tokens / 1000)}k tokens` : ""}${r.costUsd ? ` · ~$${r.costUsd.toFixed(2)}` : ""}</div>
+      </div>`).join("") || '<p class="muted">No updates yet.</p>'}
+    `;
+  }
+
   function statusBanner() {
     if (loadState === "off") return '<div class="banner">Feedback service not connected yet - voting is disabled.</div>';
     if (loadState === "error") return '<div class="banner">Couldn\'t load the latest feedback (showing last saved copy).</div>';
@@ -251,7 +287,10 @@
   function route() {
     const tab = (location.hash.slice(1) || "plan").toLowerCase();
     const person = PEOPLE.find(p => p.toLowerCase() === tab);
-    return person ? { tab, render: () => viewPerson(person) } : tab === "ideas" ? { tab, render: viewIdeas } : { tab: "plan", render: viewPlan };
+    if (person) return { tab, render: () => viewPerson(person) };
+    if (tab === "ideas") return { tab, render: viewIdeas };
+    if (tab === "updates") return { tab, render: viewUpdates };
+    return { tab: "plan", render: viewPlan };
   }
 
   function render(keepScroll) {
