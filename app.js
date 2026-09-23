@@ -33,6 +33,8 @@
   const money = n => "$" + Math.round(n).toLocaleString("en-US");
   const place = id => T.places[id] || { name: id };
   const short = id => place(id).name.split(",")[0].split(" (")[0];
+  const TYPE_ICON = { city: "🏙️", nature: "🌲", beach: "🏖️" };
+  const placeLabel = id => `${TYPE_ICON[place(id).type] || "📍"} ${place(id).name}`;
   const vIcon = v => ({ up: "👍", down: "👎", note: "💬" })[v] || "👍";
 
   // Latest vote per person per idea
@@ -158,11 +160,13 @@
       <p style="margin:4px 0"><a href="#plan">← Plan</a></p>
       <h2>Austin: venues & hotels</h2>
       <p class="muted small">💼 = where Matija works · 🛏️ = hotel options (prices are rough estimates for CoRL week). Tap a pin or name for directions.</p>
+      <div class="banner info">🏃‍♀️ <b>Morning runs for Maryna:</b> the best and safest running is the Ann &amp; Roy Butler Hike-and-Bike Trail around Lady Bird Lake. There's a 3-mile loop (Congress Ave - Lamar bridges) or the full 10-mile loop, and it's busy with runners from about 6am. Sunrise is around 6:50am in mid-November and parts of the trail are unlit, so best to go at first light. Hotels by the lake (⭐ below) put you right on it. This is my assessment; check recent reviews too.</div>
       <div id="amap" role="img" aria-label="Map of Austin venues and hotels"></div>
       <div class="card"><h3>💼 Work</h3>${A.work.map(w => `<div class="item"><a class="item-title" href="${gmaps(w.address)}" target="_blank" rel="noopener">${esc(w.name)}</a><div class="item-meta">${esc(w.address)}</div></div>`).join("")}</div>
       <div class="card"><h3>🛏️ Hotel options</h3>${A.hotels.slice().sort((a, b) => km(a, jw) - km(b, jw)).map(h => `<div class="item">
         <div class="item-head"><a class="item-title" href="${gmaps(h.name + ", " + h.address)}" target="_blank" rel="noopener">${esc(h.name)}</a><span class="tag">~${money(h.price)}/nt</span></div>
-        <div class="item-meta">${esc(dist(h))}${h.note ? " · " + esc(h.note) : ""}</div></div>`).join("")}
+        <div class="item-meta">${esc(dist(h))}${h.note ? " · " + esc(h.note) : ""}</div>
+        ${h.run ? `<div class="run">🏃‍♀️ ${esc(h.run)}</div>` : ""}</div>`).join("")}
         <p class="muted small" style="margin:8px 0 0">Matija's work covers his room for 7-13 Nov, so this mostly matters for where you'd like to be based.</p></div>`;
   }
 
@@ -173,7 +177,7 @@
     const pin = (p, cls, label) => L.marker([p.lat, p.lng], {
       icon: L.divIcon({ className: "", html: `<div class="apin ${cls}">${label}</div>`, iconSize: [28, 28], iconAnchor: [14, 14] }),
       zIndexOffset: cls === "work" ? 1000 : 0,
-    }).addTo(map).bindPopup(`<b>${esc(p.name)}</b><br>${p.price ? `~${money(p.price)}/nt<br>` : ""}<a href="${gmaps(p.name + ", " + p.address)}" target="_blank" rel="noopener">Open in Google Maps</a>`);
+    }).addTo(map).bindPopup(`<b>${esc(p.name)}</b><br>${p.price ? `~${money(p.price)}/nt<br>` : ""}${p.run ? `🏃‍♀️ ${esc(p.run)}<br>` : ""}<a href="${gmaps(p.name + ", " + p.address)}" target="_blank" rel="noopener">Open in Google Maps</a>`);
     A.hotels.forEach(h => pin(h, "hotel", "🛏️"));
     A.work.forEach(w => pin(w, "work", "💼"));
     map.fitBounds([...A.work, ...A.hotels].map(p => [p.lat, p.lng]), { padding: [24, 24] });
@@ -253,9 +257,9 @@
       <h2>Ideas</h2>
       ${statusBanner()}
       <div class="chips">${FILTERS.map(([k, l]) => `<button class="chip ${ui.filter === k ? "on" : ""}" data-filter="${esc(k)}">${esc(l)}</button>`).join("")}</div>
-      <select id="region" aria-label="Region"><option value="all">All places</option>${regions.map(r => `<option value="${r}" ${ui.region === r ? "selected" : ""}>${esc(place(r).name)}</option>`).join("")}</select>
+      <select id="region" aria-label="Region"><option value="all">All places</option>${regions.map(r => `<option value="${r}" ${ui.region === r ? "selected" : ""}>${esc(placeLabel(r))}</option>`).join("")}</select>
       <p class="muted small">${list.length} idea${list.length === 1 ? "" : "s"}</p>
-      ${groups.map(g => `<h3 class="region">${esc(place(g.r).name)}</h3>${g.items.map(ideaCard).join("")}`).join("") || '<p class="muted">Nothing matches this filter.</p>'}
+      ${groups.map(g => `<h3 class="region">${esc(placeLabel(g.r))}</h3>${g.items.map(ideaCard).join("")}`).join("") || '<p class="muted">Nothing matches this filter.</p>'}
     `;
   }
 

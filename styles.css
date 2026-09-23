@@ -206,3 +206,4 @@ dialog textarea, dialog input { margin-top: 4px; }
 .apin { width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; font-size: 14px; border: 2px solid #fff; box-shadow: 0 1px 4px rgba(0,0,0,.35); }
 .apin.work { background: #c2410c; }
 .apin.hotel { background: #2563eb; }
+.run { font-size: 13px; margin-top: 4px; padding: 6px 8px; background: var(--bg); border-radius: 8px; }
