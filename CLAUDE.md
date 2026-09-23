@@ -23,6 +23,9 @@ The site shows an issue as "done" once closed, plus the text after `**Resolution
 
 ## "Process feedback" workflow (when the user asks)
 1. `gh issue list -R okmatija/corl2026 -l feedback -s open --json number,title,body,labels --limit 200`
+   Requests to change the WEBSITE itself (layout, new pages/features, how feedback is shown) are not plan changes:
+   scheduled runs must NOT close them - add the label `site`, leave them open, and move on. They are handled in an
+   interactive session with Matija (which implements them, then closes them normally).
 2. Decide what each item changes. Read the reason carefully - a 👎 with a reason means "apply the reason", not "delete the item".
    Check your change actually moves the plan towards what they asked (e.g. "save nature for when we're both free" means move
    nature to shared days, not remove it). If the intent is genuinely ambiguous, make no plan change: add an open question
