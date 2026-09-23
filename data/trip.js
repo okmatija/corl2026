@@ -55,6 +55,9 @@ window.TRIP = {
     { id: "atx-wildflower", place: "austin", title: "Lady Bird Johnson Wildflower Center", cat: "nature", cost: "$", dur: "2-3h", why: "Good solo day for Maryna during the conference." },
     { id: "atx-blanton", place: "austin", title: "Blanton Museum + Ellsworth Kelly's 'Austin'", cat: "culture", cost: "$", dur: "2h", why: "Kelly's light-filled chapel is a must for art fans." },
     { id: "atx-hamilton", place: "austin", title: "Hamilton Pool Preserve", cat: "nature", cost: "$", dur: "half day", why: "Collapsed grotto with waterfall; reservation required - check if open." },
+    { id: "atx-lbj", place: "austin", title: "LBJ Presidential Library", cat: "culture", cost: "$", dur: "2h", why: "On the UT campus right next to Bass Hall (a CoRL venue). Daytime museum hours - no evening opening, check times before going." },
+    { id: "atx-mckinney", place: "austin", title: "McKinney Falls State Park", cat: "nature", cost: "$", dur: "half day", why: "Waterfalls, limestone pools and cypress trails 20 min from downtown. Book a day pass." },
+    { id: "atx-greenbelt", place: "austin", title: "Barton Creek Greenbelt hike", cat: "nature", cost: "free", dur: "2-3h", why: "Wooded canyon trail starting right by Barton Springs; creek may be dry in Nov." },
     { id: "atx-bats", place: "austin", title: "Congress Avenue bat bridge", cat: "nature", cost: "free", dur: "30m", why: "Season is Mar-Oct; by November most bats have left - low odds." },
 
     // Maryna's options while Matija works (Mon 9 - Fri 13 Nov)
@@ -67,6 +70,7 @@ window.TRIP = {
     // Fredericksburg / Hill Country
     { id: "fbg-rock", place: "fredericksburg", title: "Hike Enchanted Rock", cat: "nature", cost: "$", dur: "3h", why: "Huge pink granite dome; book a state-park day pass in advance." },
     { id: "fbg-wine", place: "fredericksburg", title: "Hill Country wineries on Hwy 290", cat: "food", cost: "$$", dur: "half day", why: "Dozens of tasting rooms; designate a driver or book a shuttle." },
+    { id: "fbg-pedernales", place: "fredericksburg", title: "Pedernales Falls State Park", cat: "nature", cost: "$", dur: "3h", why: "Tiered limestone falls in the Hill Country; an easy stop on the way to or from Fredericksburg." },
     { id: "fbg-luck", place: "fredericksburg", title: "Luckenbach dance hall", cat: "music", cost: "free", dur: "2h", why: "Tiny town, big country music legend." },
     { id: "fbg-pacific", place: "fredericksburg", title: "National Museum of the Pacific War", cat: "culture", cost: "$", dur: "3h", why: "Excellent if you like history." },
 
@@ -82,6 +86,7 @@ window.TRIP = {
     { id: "bb-window", place: "bigbend", title: "Window View at sunset", cat: "nature", cost: "free", dur: "1h", why: "Easy walk, classic sunset frame." },
     { id: "bb-hotsprings", place: "bigbend", title: "Soak in the Hot Springs", cat: "nature", cost: "free", dur: "2h", why: "Historic hot spring right on the Rio Grande." },
     { id: "bb-river", place: "bigbend", title: "River Road (FM 170) scenic drive", cat: "adventure", cost: "free", dur: "half day", why: "One of the most beautiful drives in Texas." },
+    { id: "bb-stars", place: "bigbend", title: "Stargazing in Big Bend (Dark Sky Park)", cat: "nature", cost: "free", dur: "1-2h", why: "One of the darkest places in the lower 48 - just lie back anywhere away from lights." },
     { id: "bb-terlingua", place: "bigbend", title: "Terlingua ghost town + Starlight Theatre", cat: "food", cost: "$$", dur: "evening", why: "Porch sunset, then dinner and live music." },
 
     // San Antonio
@@ -132,16 +137,16 @@ window.TRIP = {
   // days[k] = items for the k-th day of the leg; idea ids are expanded to their titles on the page.
   plan: {
     name: "Texas road trip",
-    summary: "A weekend together in Austin, then Maryna explores while Matija works (Mon-Fri). From Friday evening: a road trip through Hill Country, the West Texas desert and Big Bend, ending in San Antonio.",
+    summary: "A nature-heavy weekend together in Austin, then Maryna explores while Matija works (Mon-Fri). From Friday evening: a road trip through Hill Country, the West Texas desert and Big Bend, ending in San Antonio.",
     budgetPerNight: 200,
     legs: [
       { place: "austin", arrive: "2026-11-07", leave: "2026-11-13",
         travel: "✈️ Fly into Austin (AUS) together",
         stay: { name: "Downtown hotel near the venues", covered: true, notes: "Paid by Matija's work for 7-13 Nov. Check that Maryna can share the room." },
         days: [
-          ["Arrive, recover from jet lag", "atx-tacos", "atx-soco"],
-          ["Together: atx-barton", "atx-bbq", "atx-bonnell"],
-          ["Maryna: atx-wildflower", "Evening together: atx-music"],
+          ["Arrive, recover from jet lag", "atx-lbj if you land by early afternoon (otherwise Matija can pop over on a lunch break - it's next to Bass Hall)", "atx-soco", "Dinner: atx-bbq (Terry Black's is walk-in)"],
+          ["Breakfast: atx-tacos", "Together, nature day: atx-barton", "atx-wildflower", "Sunset: atx-bonnell"],
+          ["Maryna: atx-mckinney or atx-greenbelt", "Evening together: atx-music"],
           ["Maryna: atx-blanton, atx-capitol"],
           ["Maryna: atx-kayak or a side trip (see Ideas)"],
           ["mar-food"],
@@ -157,7 +162,7 @@ window.TRIP = {
       { place: "bigbend", arrive: "2026-11-16", leave: "2026-11-19",
         travel: "🚗 1.5 h drive (after a morning Chinati tour)",
         stay: { name: "Casita / tiny house in Terlingua", price: 150, notes: "Chisos Mountains Lodge (in park, ~$200) books out months ahead." },
-        days: [["mfa-chinati", "Drive to Terlingua", "bb-terlingua"], ["bb-lostmine", "bb-window"], ["bb-santaelena", "bb-river", "bb-hotsprings"]] },
+        days: [["mfa-chinati", "Drive to Terlingua", "bb-terlingua"], ["bb-lostmine", "bb-window", "bb-stars"], ["bb-santaelena", "bb-river", "bb-hotsprings"]] },
       { place: "sanantonio", arrive: "2026-11-19", leave: "2026-11-21",
         travel: "🚗 6 h drive",
         stay: { name: "Airbnb in King William district", price: 140, notes: "Walkable to the River Walk." },
