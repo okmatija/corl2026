@@ -135,8 +135,8 @@
       ${autoBanner()}
       ${T.openQuestions?.length ? `<div class="card"><h3>Open questions</h3>${T.openQuestions.map((q, i) => `
         <div class="question">
-          <div class="q-row"><span>${esc(q)}</span><button class="q-btn" data-answer="${i}" aria-label="Answer this question">❓ Answer</button></div>
-          ${answers(q).map(f => `<div class="fb up"><b>${esc(f.who)}:</b> ${esc(f.answer)}</div>`).join("")}
+          <div class="q-row"><span>${esc(q)}</span><button class="q-btn" data-answer="${i}" aria-label="Answer this question">💬 Answer</button></div>
+          ${answers(q).map(f => `<div class="fb note"><b>${esc(f.who)} 💬</b> ${esc(f.answer)}</div>`).join("")}
         </div>`).join("")}</div>` : ""}
       <div id="map" role="img" aria-label="Route map"></div>
       ${legs}
@@ -200,6 +200,8 @@
     return PEOPLE.filter(p => v[p]).map(p => ` <span class="pv ${v[p].vote}" title="${esc(v[p].text || "")}">${esc(p)} ${vIcon(v[p].vote)}</span>`).join("");
   }
 
+  const isAnswer = f => f.kind === "general" && /^Q: [\s\S]*\nA: /.test(f.text || "");
+
   // Answers are general notes whose text starts with "Q: <question>" then "A: <answer>"; latest per person wins.
   function answers(q) {
     const out = {};
@@ -245,17 +247,18 @@
         <h3>Add feedback</h3>
         <p class="muted small" style="margin:0 0 8px">Anything: must-sees, budget per night, where to stay, dates, dealbreakers, answers to the open questions…</p>
         <textarea id="freeText" rows="4" placeholder="e.g. Budget ~150/night. I'd love a day at the beach."></textarea>
-        <div class="row end" style="margin-top:8px"><button class="primary" data-send="${esc(name)}">Send as ${esc(name)}</button></div>
+        <div class="row end" style="margin-top:8px"><button class="primary" data-send="${esc(name)}">💬 Send as ${esc(name)}</button></div>
       </div>
       <p class="muted small">${mine.length} item${mine.length === 1 ? "" : "s"} · ${open} waiting for Claude · ${mine.length - open} done</p>
       ${mine.map(f => `
         <div class="card fbitem ${f.state}">
           <div class="item-head">
             <span>${f.kind === "idea" ? `${vIcon(f.vote)} <b>${esc(f.ideaTitle || ideas[f.idea]?.title || f.idea)}</b>`
-              : f.kind === "plan" ? `${vIcon(f.vote)} <b>Plan · ${esc(f.targetTitle || f.target)}</b>` : "💬 <b>General</b>"}</span>
+              : f.kind === "plan" ? `${vIcon(f.vote)} <b>Plan · ${esc(f.targetTitle || f.target)}</b>`
+              : isAnswer(f) ? `💬 <b>Answer · ${esc(f.text.slice(3).split("\nA: ")[0])}</b>` : "💬 <b>General</b>"}</span>
             <span class="tag ${f.state === "open" ? "over" : "ok"}">${f.state === "open" ? "⏳ open" : "✅ done"}</span>
           </div>
-          ${f.text ? `<p>${esc(f.text).replace(/\n/g, "<br>")}</p>` : ""}
+          ${f.text ? `<p>${esc(isAnswer(f) ? f.text.split("\nA: ").slice(1).join("\nA: ") : f.text).replace(/\n/g, "<br>")}</p>` : ""}
           ${f.resolution ? `<p class="resolution">🤖 ${esc(f.resolution)}</p>` : ""}
           <div class="item-meta">${fmt(f.date.slice(0, 10))}${f.url ? ` · <a href="${esc(f.url)}" target="_blank" rel="noopener">#${f.number}</a>` : ""}</div>
         </div>`).join("") || '<p class="muted">No feedback yet.</p>'}
@@ -381,7 +384,7 @@
     if (ds.answer) {
       if (!who) { toast("Tap 👤 at the top to pick who you are"); return; }
       const q = T.openQuestions[+ds.answer];
-      const text = (await ask({ title: "❓ " + q, body: `Answering as ${who}:`, placeholder: "Your answer", ok: "Send" }))?.trim();
+      const text = (await ask({ title: "💬 " + q, body: `Answering as ${who}:`, placeholder: "Your answer", ok: "Send" }))?.trim();
       if (!text) return;
       el.disabled = true;
       await submit({ who, kind: "general", text: `Q: ${q}\nA: ${text}` });
