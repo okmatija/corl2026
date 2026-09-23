@@ -194,9 +194,6 @@ dialog textarea, dialog input { margin-top: 4px; }
 .day .mini button { border: 1px solid var(--line); background: var(--card); border-radius: 8px; padding: 2px 6px; font-size: 13px; line-height: 1.4; cursor: pointer; -webkit-tap-highlight-color: transparent; }
 .day .mini button.on { border-color: var(--accent); background: var(--accent-soft); }
 .day .fb { font-size: 13px; padding: 4px 8px; margin: 4px 0 0; }
-.pv { display: inline-block; font-size: 11px; font-weight: 600; padding: 0 6px; border-radius: 999px; white-space: nowrap; }
-.pv.up { background: var(--ok-soft); color: var(--ok); }
-.pv.down { background: var(--warn-soft); color: var(--warn); }
 .question { padding: 8px 0; border-bottom: 1px solid var(--line); }
 .question:last-child { border-bottom: 0; }
 .q-row { display: flex; gap: 10px; align-items: flex-start; justify-content: space-between; font-size: 15px; }
@@ -205,7 +202,6 @@ dialog textarea, dialog input { margin-top: 4px; }
 .fb.note { background: var(--bg); border: 1px solid var(--line); }
 .fb.note { background: var(--bg); border: 1px solid var(--line); }
 .vote button { white-space: nowrap; padding: 10px 6px; }
-.hide-fb .fb, .hide-fb .pv { display: none; }
 #amap { height: 420px; border-radius: var(--radius); border: 1px solid var(--line); margin: 12px 0; z-index: 1; }
 .apin { width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; font-size: 14px; border: 2px solid #fff; box-shadow: 0 1px 4px rgba(0,0,0,.35); }
 .apin.work { background: #c2410c; }

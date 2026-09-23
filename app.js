@@ -45,10 +45,6 @@
     return out;
   }
 
-  // 💬 comments on a plan stop - all of them, oldest first (they don't replace votes)
-  const comments = key => feedback.filter(f => f.kind === "plan" && f.target === key && f.vote === "note")
-    .sort((a, b) => a.date.localeCompare(b.date));
-
   // ---------- API ----------
   async function loadFeedback() {
     if (!API) return;
@@ -101,13 +97,13 @@
       const days = Array.from({ length: n }, (_, k) => {
         const date = addDays(l.arrive, k);
         const obl = T.obligations.filter(o => date >= o.start && date <= o.end).map(o => `<span class="oblig">💼 ${o.who ? esc(o.who) + ": " : ""}${esc(o.title)}</span>`);
-        const items = (l.days?.[k] || []).map(s => esc(s).replace(idPattern, id => `<b>${esc(ideas[id].title)}</b>${ideaMarks(id)}`));
+        const items = (l.days?.[k] || []).map(s => esc(s).replace(idPattern, id => `<b>${esc(ideas[id].title)}</b>`));
         const lines = [...obl, ...items];
-        const key = "day:" + date, v = votes(key);
+        const key = "day:" + date;
         const dayTitle = `${fmt(date)} in ${short(l.place)}`;
         return `<div class="day"><div class="date"><b>${fmt(date, { weekday: "short" })}</b>${fmt(date, { day: "numeric", month: "short" })}
           <div class="mini">${voteBtn(key, dayTitle, "up", true)}${voteBtn(key, dayTitle, "down", true)}</div></div>
-          <div><ul>${lines.map(x => `<li>${x}</li>`).join("") || "<li class='muted'>Free</li>"}</ul>${voteChips(v)}</div></div>`;
+          <div><ul>${lines.map(x => `<li>${x}</li>`).join("") || "<li class='muted'>Free</li>"}</ul></div></div>`;
       }).join("");
       const s = l.stay;
       return `
@@ -120,8 +116,6 @@
             ${l.place === "austin" && T.austinMap ? `<p style="margin:8px 0 0"><a href="#austin">🗺️ Map of CoRL venues, Google office & hotel options →</a></p>` : ""}
             ${s ? `<div class="stay"><div class="item-head"><span>🛏️ ${esc(s.name)}</span>${s.covered ? '<span class="tag ok">paid by work</span>' : `<span class="tag ${s.price <= P.budgetPerNight ? "ok" : "over"}">~${money(s.price)}/nt</span>`}</div>${s.notes ? `<div class="item-meta">${esc(s.notes)}</div>` : ""}</div>` : ""}
             <div class="days">${days}</div>
-            ${voteChips(votes("stop:" + l.place))}
-            ${comments("stop:" + l.place).map(f => `<div class="fb note"><b>${esc(f.who)} 💬</b> ${esc(f.text)}</div>`).join("")}
             <div class="vote">${["up", "down", "note"].map(dir => voteBtn("stop:" + l.place, `Stop: ${p.name}`, dir)).join("")}</div>
           </div>
         </div>`;
@@ -138,12 +132,10 @@
         </div>
       </div>
       <div class="banner">${esc(T.meta.status)} Updated ${esc(T.meta.updated)}.</div>
-      ${fbToggle()}
       ${autoBanner()}
       ${T.openQuestions?.length ? `<div class="card"><h3>Open questions</h3>${T.openQuestions.map((q, i) => `
         <div class="question">
           <div class="q-row"><span>${esc(q)}</span><button class="q-btn" data-answer="${i}" aria-label="Answer this question">💬 Answer</button></div>
-          ${answers(q).map(f => `<div class="fb note"><b>${esc(f.who)} 💬</b> ${esc(f.answer)}</div>`).join("")}
         </div>`).join("")}</div>` : ""}
       <div id="map" role="img" aria-label="Route map"></div>
       ${legs}
@@ -239,28 +231,7 @@
     </article>`;
   }
 
-  // Compact "Matija 👍" marks shown after an idea's title inside the plan
-  function ideaMarks(id) {
-    const v = votes(id);
-    return PEOPLE.filter(p => v[p]).map(p => ` <span class="pv ${v[p].vote}" title="${esc(v[p].text || "")}">${esc(p)} ${vIcon(v[p].vote)}</span>`).join("");
-  }
-
   const isAnswer = f => f.kind === "general" && /^Q: [\s\S]*\nA: /.test(f.text || "");
-
-  // Answers are general notes whose text starts with "Q: <question>" then "A: <answer>"; latest per person wins.
-  function answers(q) {
-    const out = {};
-    const prefix = "Q: " + q + "\nA: ";
-    feedback.filter(f => f.kind === "general" && f.text?.startsWith(prefix))
-      .sort((a, b) => a.date.localeCompare(b.date))
-      .forEach(f => { out[f.who] = { ...f, answer: f.text.slice(prefix.length) }; });
-    return Object.values(out);
-  }
-
-  function fbToggle() {
-    const n = feedback.filter(f => f.kind !== "general" || isAnswer(f)).length;
-    return `<div class="row"><button class="chip ${ui.showFb ? "on" : ""}" data-togglefb>💬 ${ui.showFb ? "Hide" : "Show"} everyone's feedback${n ? ` (${n})` : ""}</button></div>`;
-  }
 
   function voteChips(v) {
     return PEOPLE.filter(p => v[p]).map(p => `
@@ -280,7 +251,6 @@
     const groups = regions.map(r => ({ r, items: list.filter(a => a.place === r) })).filter(g => g.items.length);
     return `
       <h2>Ideas</h2>
-      ${fbToggle()}
       ${statusBanner()}
       <div class="chips">${FILTERS.map(([k, l]) => `<button class="chip ${ui.filter === k ? "on" : ""}" data-filter="${esc(k)}">${esc(l)}</button>`).join("")}</div>
       <select id="region" aria-label="Region"><option value="all">All places</option>${regions.map(r => `<option value="${r}" ${ui.region === r ? "selected" : ""}>${esc(place(r).name)}</option>`).join("")}</select>
@@ -395,8 +365,6 @@
     document.getElementById("view").innerHTML = r.render();
     if (draft && document.getElementById("freeText")) document.getElementById("freeText").value = draft;
     document.querySelectorAll(".tabs a").forEach(a => a.classList.toggle("active", a.dataset.tab === r.tab));
-    // Others' feedback is hidden by default on Plan/Ideas to reduce clutter; person tabs always show it.
-    document.getElementById("view").classList.toggle("hide-fb", !ui.showFb && ["plan", "ideas"].includes(r.tab));
     if (r.tab === "plan" || r.tab === "austin") drawMap(); else if (map) { map.remove(); map = null; }
     window.scrollTo(0, keepScroll ? y : 0);
     document.getElementById("whoBtn").textContent = who ? "👤 " + who : "👤 Who are you?";
@@ -419,7 +387,6 @@
       store.set("who", who); toast("You are " + who); return rerender();
     }
     if (ds.filter) { ui.filter = ds.filter; store.set("ui", ui); return rerender(); }
-    if ("togglefb" in ds) { ui.showFb = !ui.showFb; store.set("ui", ui); return rerender(); }
     if (ds.vote) {
       if (!who) { toast("Tap 👤 at the top to pick who you are"); return; }
       const idea = ideas[ds.idea];
