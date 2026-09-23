@@ -204,3 +204,4 @@ dialog textarea, dialog input { margin-top: 4px; }
 .question .fb { font-size: 13px; margin: 6px 0 0; }
 .fb.note { background: var(--bg); border: 1px solid var(--line); }
 .fb.note { background: var(--bg); border: 1px solid var(--line); }
+.vote button { white-space: nowrap; padding: 10px 6px; }

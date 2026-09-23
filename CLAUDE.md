@@ -25,7 +25,7 @@ The site shows an issue as "done" once closed, plus the text after `**Resolution
 2. Decide what each item changes. A later vote by the same person on the same idea supersedes an earlier one.
    Answers to open questions arrive as general notes formatted `Q: <question>` / `A: <answer>`. Use the answer to update the plan,
    then remove (or reword) that entry in `openQuestions` once it's settled.
-   Idea votes: 👍 → consider adding to the plan; 👎 → remove/avoid. Plan votes: 👍 → keep as is; 👎 → rework that stop/day using the reason. General notes: budget, dates, must-sees, new ideas (add idea cards).
+   Idea votes: 👍 → consider adding to the plan; 👎 → remove/avoid. Plan votes: 👍 → keep as is; 👎 → rework that stop/day using the reason. Plan `vote: "note"` = 💬 comment on a stop (question/idea, no sentiment). General notes: budget, dates, must-sees, new ideas (add idea cards).
 3. Edit `data/trip.js` (plan, ideas, openQuestions, bump `meta.updated`, refresh `meta.status`).
 4. Prepend an entry to `window.RUNS` in `data/runs.js`: start/end ISO UTC times (`date -u +%Y-%m-%dT%H:%M:%SZ` at start and just
    before committing), `by` ("scheduled" or "manual"), model id, issue numbers, a one-line summary. Add `tokens`/`costUsd` only if known.
