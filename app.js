@@ -242,11 +242,11 @@
       <div class="fb ${v[p].vote}"><b>${esc(p)} ${vIcon(v[p].vote)}</b>${v[p].text ? ` ${esc(v[p].text)}` : ""}</div>`).join("");
   }
 
-  // Like/Dislike button for a plan stop or day. mini = icon-only (day rows).
+  // Like/Dislike/Comment button for a plan stop or day. mini = icon-only (day rows).
+  // No "selected" state: the plan view doesn't display feedback, so a highlighted button would just look stuck.
   function voteBtn(key, title, dir, mini) {
-    const on = who && votes(key)[who]?.vote === dir;
     const label = { up: "Like", down: "Dislike", note: "Comment" }[dir];
-    return `<button class="${on ? "on" : ""}" data-planvote="${dir}" data-target="${esc(key)}" data-title="${esc(title)}" aria-label="${label} ${esc(title)}">${vIcon(dir)}${mini ? "" : " " + label}</button>`;
+    return `<button data-planvote="${dir}" data-target="${esc(key)}" data-title="${esc(title)}" aria-label="${label} ${esc(title)}">${vIcon(dir)}${mini ? "" : " " + label}</button>`;
   }
 
   function viewIdeas() {

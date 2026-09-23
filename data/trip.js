@@ -23,6 +23,9 @@ window.TRIP = {
     "Maryna, Mon 9 - Fri 13 Nov: stay in Austin with day trips, or a side trip (New Orleans, Houston, San Antonio...)? Vote on the 'Maryna:' idea cards.",
     "OK renting a car for the road trip after the conference, with some 4-6 h driving days?",
     "SpaceX: with Florida in the plan, we could swap a Keys day for the Space Coast if a launch is scheduled then (I'll check the schedule nearer the time). Interested?",
+    "Vegas: where should it go? Options: (a) swap Key West for 3 nights in Vegas (Sphere + Valley of Fire), flying Austin/San Antonio -> Vegas; (b) replace all of Florida with Vegas + the Grand Canyon; (c) add Vegas at the end and fly home a few days later.",
+    "NASCAR: the Cup championship race is Sun 8 Nov at Homestead-Miami - the day before CoRL. Only possible by flying into Miami first (Fri 6 Nov) and on to Austin on Sunday night. Worth it, or do the Texas Motor Speedway drive/ride-along (Fort Worth, a full day) instead?",
+    "Theme parks: add Orlando (Disney World / Universal) to the Florida leg? It would take 2-3 nights, e.g. from Key West or NYC.",
     "Any must-sees already on your list?",
   ],
 
@@ -41,6 +44,9 @@ window.TRIP = {
     spacecoast:     { name: "Space Coast, FL",             type: "beach",  lat: 28.3922, lng: -80.6077,  blurb: "Cape Canaveral / Kennedy Space Center - the busiest launch site in the US." },
     sandiego:       { name: "San Diego, CA",               type: "beach",  lat: 32.7157, lng: -117.1611, blurb: "~21°C and sunny in November; beaches, La Jolla, Balboa Park." },
     sanjuan:        { name: "San Juan, PR",                type: "beach",  lat: 18.4655, lng: -66.1057,  blurb: "Puerto Rico: ~29°C, Old San Juan, rainforest, bioluminescent bays. US territory (ESTA works)." },
+    fortworth:      { name: "Fort Worth, TX",              type: "city",   lat: 32.7555, lng: -97.3308,  blurb: "Cowboy town: Stockyards cattle drives, rodeo, and Texas Motor Speedway just north." },
+    orlando:        { name: "Orlando, FL",                 type: "city",   lat: 28.5384, lng: -81.3789,  blurb: "Theme park capital: Walt Disney World, Universal & Epic Universe; an hour from the Space Coast." },
+    anaheim:        { name: "Anaheim (Disneyland), CA",    type: "city",   lat: 33.8121, lng: -117.9190, blurb: "The original Disneyland; pairs with a San Diego warm leg (1.5 h away)." },
     lasvegas:       { name: "Las Vegas, NV",               type: "city",   lat: 36.1699, lng: -115.1398, blurb: "Gateway airport for the parks; Red Rock & Valley of Fire nearby." },
     zion:           { name: "Zion National Park, UT",      type: "nature", lat: 37.1889, lng: -112.9986, blurb: "Towering red canyon walls, iconic hikes (stay in Springdale)." },
     page:           { name: "Page, AZ",                    type: "nature", lat: 36.9147, lng: -111.4558, blurb: "Horseshoe Bend, Antelope Canyon, Lake Powell." },
@@ -93,6 +99,26 @@ window.TRIP = {
     { id: "sd-coast", place: "sandiego", title: "Warm alternative: San Diego (La Jolla, beaches, Balboa Park)", cat: "nature", cost: "$$", dur: "3-4 days", why: "Dry, sunny ~21°C; sea lions at La Jolla Cove, coastal walks, great tacos. Direct flights from Texas." },
     { id: "pr-island", place: "sanjuan", title: "Warm alternative: Puerto Rico (Old San Juan, El Yunque, bio bay)", cat: "adventure", cost: "$$", dur: "3-4 days", why: "Hottest option (~29°C): colourful old town, rainforest hikes, kayaking a glowing bioluminescent bay." },
 
+    // Alligators
+    { id: "gator-brazos", place: "houston", title: "Alligators at Brazos Bend State Park", cat: "nature", cost: "$", dur: "half day", why: "~1 h from Houston; 250-350 big gators around Elm Lake and 40-Acre Lake, and Sep-Nov is peak viewing. Best on a sunny morning when they bask." },
+    { id: "gator-nola-swamp", place: "neworleans", title: "Honey Island Swamp boat tour", cat: "nature", cost: "$$", dur: "half day", why: "Small-boat tour into a protected cypress swamp (not an airboat park); gators get less active as it cools, so pick a warm day." },
+    { id: "gator-nola-barataria", place: "neworleans", title: "Jean Lafitte Barataria Preserve boardwalk", cat: "nature", cost: "free", dur: "2-3h", why: "Free National Park boardwalk through swamp 30 min from the French Quarter; gators and herons on warm days." },
+    { id: "gator-gatorland", place: "orlando", title: "Gatorland", cat: "adventure", cost: "$$", dur: "half day", why: "Classic Florida gator park with thousands of alligators, breeding marsh boardwalk and a zipline over the pens." },
+    { id: "gator-bigcypress", place: "miami", title: "Gator spotting on Loop Road / Big Cypress", cat: "nature", cost: "free", dur: "half day", why: "Wild alligators line the canals along the Tamiami Trail - pairs with Shark Valley in the Everglades." },
+
+    // Theme parks
+    { id: "park-disneyworld", place: "orlando", title: "Walt Disney World (Magic Kingdom / EPCOT)", cat: "adventure", cost: "$$$", dur: "1-2 days", why: "The big one. Mid-November before Thanksgiving is a relatively quiet week; Thanksgiving week itself is very busy." },
+    { id: "park-universal", place: "orlando", title: "Universal Orlando + Epic Universe", cat: "adventure", cost: "$$$", dur: "1-2 days", why: "Harry Potter worlds, big coasters; Epic Universe (opened 2025) is the newest theme park in the US." },
+    { id: "park-kennedy", place: "spacecoast", title: "Kennedy Space Center Visitor Complex", cat: "culture", cost: "$$", dur: "full day", why: "Space Shuttle Atlantis, Saturn V, astronaut encounters - and a launch if the timing works. 1 h from Orlando." },
+    { id: "park-disneyland", place: "anaheim", title: "Disneyland Resort", cat: "adventure", cost: "$$$", dur: "1-2 days", why: "The original park + California Adventure; an easy add-on if we pick San Diego as the warm leg." },
+    { id: "park-fiesta", place: "sanantonio", title: "Six Flags Fiesta Texas", cat: "adventure", cost: "$$", dur: "full day", why: "Big coasters in an old quarry. Heads-up: 'Holiday in the Park' only starts 21 Nov, so it's probably closed on our San Antonio day - check the calendar." },
+
+    // NASCAR / motorsport
+    { id: "nascar-tms", place: "fortworth", title: "Drive (or ride in) a NASCAR stock car at Texas Motor Speedway", cat: "adventure", cost: "$$$", dur: "half day", why: "Ride-alongs at up to ~160 mph or drive yourself in timed sessions on the 1.5-mile oval. Fort Worth is ~3 h from Austin - would need a dedicated day." },
+    { id: "nascar-stockyards", place: "fortworth", title: "Fort Worth Stockyards cattle drive + rodeo", cat: "culture", cost: "$", dur: "half day", why: "Longhorns walk the street twice a day; Friday/Saturday night rodeo. Pairs with the Speedway for a 'very Texas' day." },
+    { id: "nascar-cota", place: "austin", title: "Circuit of the Americas (COTA)", cat: "adventure", cost: "$$", dur: "half day", why: "Austin's F1/NASCAR circuit, 20 min from downtown - check what's on (karting, track experiences, events) during our week." },
+    { id: "nascar-final", place: "miami", title: "NASCAR Cup championship race, Homestead-Miami (Sun 8 Nov)", cat: "adventure", cost: "$$", dur: "full day", why: "The 2026 season finale, 45 min from Miami. Clashes with our Austin weekend - only works if we fly into Miami first (see open questions)." },
+
     // Space / rockets
     { id: "space-starbase", place: "starbase", title: "SpaceX Starbase (Starship) + South Padre beaches", cat: "adventure", cost: "$", dur: "1-2 days", why: "~5 h drive from San Antonio. You can see the Starship towers from the road/beach any time; a launch is a bonus - dates are only set weeks ahead and slip often." },
     { id: "space-cape", place: "spacecoast", title: "Watch a Falcon 9 launch on the Space Coast", cat: "adventure", cost: "$$", dur: "2-3 days", why: "The most reliable way to see a SpaceX launch: several per week in 2026. Fly to Orlando; watch from Playalinda Beach or Jetty Park, plus Kennedy Space Center visitor complex." },
@@ -141,7 +167,13 @@ window.TRIP = {
 
     // Southwest
     { id: "lv-redrock", place: "lasvegas", title: "Red Rock Canyon scenic loop", cat: "nature", cost: "$", dur: "half day", why: "30 min from the Strip; timed entry reservation." },
-    { id: "lv-sphere", place: "lasvegas", title: "Show at the Sphere", cat: "night", cost: "$$$", dur: "evening", why: "If you're in Vegas anyway." },
+    { id: "lv-sphere-metallica", place: "lasvegas", title: "Metallica 'Life Burns Faster' at the Sphere", cat: "music", cost: "$$$", dur: "evening", why: "Residency runs 1 Oct 2026 - 13 Mar 2027, so it overlaps our dates. Shows sell out - check dates and book early." },
+    { id: "lv-sphere-oz", place: "lasvegas", title: "The Wizard of Oz at Sphere", cat: "night", cost: "$$", dur: "2h", why: "The fully immersive version of the film on the 16K wraparound screen with wind and effects; usually daily at 11am, 2pm, 5pm and 8pm." },
+    { id: "lv-fountains", place: "lasvegas", title: "The Strip at night + Bellagio fountains", cat: "city", cost: "free", dur: "evening", why: "Free fountain show every 15-30 min after dark; walk from Caesars to the Cosmopolitan." },
+    { id: "lv-fremont", place: "lasvegas", title: "Fremont Street & old downtown", cat: "night", cost: "free", dur: "2-3h", why: "Old-Vegas casinos under the LED canopy, zipline overhead, cheaper drinks." },
+    { id: "lv-cirque", place: "lasvegas", title: "Cirque du Soleil 'O' at Bellagio", cat: "night", cost: "$$$", dur: "2h", why: "The classic water show - one of the best productions in Vegas." },
+    { id: "lv-valleyfire", place: "lasvegas", title: "Valley of Fire State Park", cat: "nature", cost: "$", dur: "half day", why: "1 h from the Strip: glowing red sandstone, Fire Wave hike; perfect November temperatures." },
+    { id: "lv-hoover", place: "lasvegas", title: "Hoover Dam + bypass bridge walk", cat: "culture", cost: "$", dur: "half day", why: "45 min away; walk the bridge for the classic view down onto the dam." },
     { id: "zion-overlook", place: "zion", title: "Canyon Overlook trail", cat: "nature", cost: "$", dur: "1h", why: "Short, huge payoff." },
     { id: "zion-angels", place: "zion", title: "Angels Landing (permit lottery)", cat: "adventure", cost: "$", dur: "half day", why: "Needs a permit - apply in the seasonal lottery." },
     { id: "zion-narrows", place: "zion", title: "Riverside Walk / lower Narrows", cat: "nature", cost: "$", dur: "3h", why: "Water is cold in Nov - drysuit rentals in Springdale." },
