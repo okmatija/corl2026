@@ -62,7 +62,7 @@ async function createFeedback(req, env) {
   const who = people.find(p => p.toLowerCase() === String(b.who || "").toLowerCase());
   if (!who) fail(400, "unknown person");
 
-  const kind = b.kind === "idea" ? "idea" : "general";
+  const kind = ["idea", "plan"].includes(b.kind) ? b.kind : "general";
   const text = clean(b.text, 4000);
   const data = { who, kind, date: new Date().toISOString() };
   let title;
@@ -72,13 +72,21 @@ async function createFeedback(req, env) {
     data.vote = b.vote === "down" ? "down" : "up";
     if (!data.idea) fail(400, "missing idea");
     title = `[${who}] ${data.vote === "up" ? "👍" : "👎"} ${data.ideaTitle || data.idea}`;
+  } else if (kind === "plan") {
+    data.target = clean(b.target, 80);        // "stop:<place>" or "day:<YYYY-MM-DD>"
+    data.targetTitle = clean(b.targetTitle, 120);
+    data.vote = b.vote === "down" ? "down" : "up";
+    if (!/^(stop|day):[\w-]+$/.test(data.target)) fail(400, "bad plan target");
+    title = `[${who}] ${data.vote === "up" ? "👍" : "👎"} Plan: ${data.targetTitle || data.target}`;
   } else {
     if (!text) fail(400, "empty feedback");
     title = `[${who}] ${text.split("\n")[0].slice(0, 70)}`;
   }
 
   const body = [
-    kind === "idea" ? `**${who}** ${data.vote === "up" ? "likes 👍" : "dislikes 👎"} idea \`${data.idea}\` - ${data.ideaTitle}` : `**${who}** wrote:`,
+    kind === "idea" ? `**${who}** ${data.vote === "up" ? "likes 👍" : "dislikes 👎"} idea \`${data.idea}\` - ${data.ideaTitle}`
+      : kind === "plan" ? `**${who}** ${data.vote === "up" ? "likes 👍" : "dislikes 👎"} this part of the plan: \`${data.target}\` - ${data.targetTitle}`
+      : `**${who}** wrote:`,
     "",
     text ? text.split("\n").map(l => "> " + l).join("\n") : "_(no reason given)_",
     "",
@@ -104,7 +112,7 @@ async function listFeedback(env) {
       const res = RESOLUTION_RE.exec(i.body.split(DATA_RE).slice(2).join("") || "");
       out.push({
         number: i.number, url: i.html_url, state: i.state,
-        who: d.who, kind: d.kind, idea: d.idea, ideaTitle: d.ideaTitle, vote: d.vote,
+        who: d.who, kind: d.kind, idea: d.idea, ideaTitle: d.ideaTitle, target: d.target, targetTitle: d.targetTitle, vote: d.vote,
         text: quoted, date: d.date || i.created_at,
         resolution: res ? res[1].trim() : null,
       });

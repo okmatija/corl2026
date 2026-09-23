@@ -15,14 +15,15 @@ Travellers: Matija and Maryna. CoRL 2026: Austin TX, workshops Nov 9, main confe
   If there are no open feedback issues, do nothing (no commit).
 
 ## Feedback = GitHub issues
-Every submission is an issue labelled `feedback` + `from:matija|from:maryna` + `idea|general`.
-The body ends with `<!-- feedback-data {...json...} -->` (who, kind, idea id, vote up/down). The quoted lines are the reason/text.
+Every submission is an issue labelled `feedback` + `from:matija|from:maryna` + `idea|plan|general`.
+The body ends with `<!-- feedback-data {...json...} -->` (who, kind, vote up/down, and either `idea` id or plan `target`).
+`plan` targets are `stop:<place id>` (a whole stop/leg) or `day:<YYYY-MM-DD>` (one day of the plan). The quoted lines are the reason/text.
 The site shows an issue as "done" once closed, plus the text after `**Resolution:**` in the body.
 
 ## "Process feedback" workflow (when the user asks)
 1. `gh issue list -R okmatija/corl2026 -l feedback -s open --json number,title,body,labels --limit 200`
 2. Decide what each item changes. A later vote by the same person on the same idea supersedes an earlier one.
-   Idea votes: 👍 → consider adding to the plan; 👎 → remove/avoid. General notes: budget, dates, must-sees, new ideas (add idea cards).
+   Idea votes: 👍 → consider adding to the plan; 👎 → remove/avoid. Plan votes: 👍 → keep as is; 👎 → rework that stop/day using the reason. General notes: budget, dates, must-sees, new ideas (add idea cards).
 3. Edit `data/trip.js` (plan, ideas, openQuestions, bump `meta.updated`, refresh `meta.status`).
 4. Prepend an entry to `window.RUNS` in `data/runs.js`: start/end ISO UTC times (`date -u +%Y-%m-%dT%H:%M:%SZ` at start and just
    before committing), `by` ("scheduled" or "manual"), model id, issue numbers, a one-line summary. Add `tokens`/`costUsd` only if known.

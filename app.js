@@ -36,9 +36,10 @@
   const vIcon = v => v === "up" ? "👍" : "👎";
 
   // Latest vote per person per idea
-  function votes(ideaId) {
+  // key: an idea id, or a plan target like "stop:austin" / "day:2026-11-08"
+  function votes(key) {
     const out = {};
-    feedback.filter(f => f.kind === "idea" && f.idea === ideaId)
+    feedback.filter(f => (f.kind === "idea" && f.idea === key) || (f.kind === "plan" && f.target === key))
       .sort((a, b) => a.date.localeCompare(b.date))
       .forEach(f => { out[f.who] = f; });
     return out;
@@ -98,7 +99,11 @@
         const obl = T.obligations.filter(o => date >= o.start && date <= o.end).map(o => `<span class="oblig">💼 ${o.who ? esc(o.who) + ": " : ""}${esc(o.title)}</span>`);
         const items = (l.days?.[k] || []).map(s => esc(s).replace(idPattern, id => `<b>${esc(ideas[id].title)}</b>`));
         const lines = [...obl, ...items];
-        return `<div class="day"><div class="date"><b>${fmt(date, { weekday: "short" })}</b>${fmt(date, { day: "numeric", month: "short" })}</div><ul>${lines.map(x => `<li>${x}</li>`).join("") || "<li class='muted'>Free</li>"}</ul></div>`;
+        const key = "day:" + date, v = votes(key);
+        const dayTitle = `${fmt(date)} in ${short(l.place)}`;
+        return `<div class="day"><div class="date"><b>${fmt(date, { weekday: "short" })}</b>${fmt(date, { day: "numeric", month: "short" })}
+          <div class="mini">${voteBtn(key, dayTitle, "up", true)}${voteBtn(key, dayTitle, "down", true)}</div></div>
+          <div><ul>${lines.map(x => `<li>${x}</li>`).join("") || "<li class='muted'>Free</li>"}</ul>${voteChips(v)}</div></div>`;
       }).join("");
       const s = l.stay;
       return `
@@ -110,6 +115,8 @@
             <div class="item-meta">${fmt(l.arrive)} → ${fmt(l.leave)} · ${esc(p.blurb || "")}</div>
             ${s ? `<div class="stay"><div class="item-head"><span>🛏️ ${esc(s.name)}</span>${s.covered ? '<span class="tag ok">paid by work</span>' : `<span class="tag ${s.price <= P.budgetPerNight ? "ok" : "over"}">~${money(s.price)}/nt</span>`}</div>${s.notes ? `<div class="item-meta">${esc(s.notes)}</div>` : ""}</div>` : ""}
             <div class="days">${days}</div>
+            ${voteChips(votes("stop:" + l.place))}
+            <div class="vote">${voteBtn("stop:" + l.place, `Stop: ${p.name}`, "up")}${voteBtn("stop:" + l.place, `Stop: ${p.name}`, "down")}</div>
           </div>
         </div>`;
     }).join("");
@@ -170,8 +177,7 @@
     const v = votes(a.id);
     const mine = who ? v[who]?.vote : null;
     const q = encodeURIComponent(a.title.replace(/\(.*?\)/g, "") + " " + place(a.place).name);
-    const reactions = PEOPLE.filter(p => v[p]).map(p => `
-      <div class="fb ${v[p].vote}"><b>${esc(p)} ${vIcon(v[p].vote)}</b>${v[p].text ? ` ${esc(v[p].text)}` : ""}</div>`).join("");
+    const reactions = voteChips(v);
     return `<article class="idea">
       <div class="item-head"><h3>${esc(a.title)}</h3>${inPlan.has(a.id) ? '<span class="tag star">in plan</span>' : ""}</div>
       <div class="item-meta">📍 ${esc(short(a.place))} · ${CATS[a.cat] || ""} · ${esc(a.dur)} · ${esc(a.cost)}</div>
@@ -182,6 +188,17 @@
         <button data-vote="down" data-idea="${a.id}" class="${mine === "down" ? "on" : ""}">👎 Dislike</button>
       </div>
     </article>`;
+  }
+
+  function voteChips(v) {
+    return PEOPLE.filter(p => v[p]).map(p => `
+      <div class="fb ${v[p].vote}"><b>${esc(p)} ${vIcon(v[p].vote)}</b>${v[p].text ? ` ${esc(v[p].text)}` : ""}</div>`).join("");
+  }
+
+  // Like/Dislike button for a plan stop or day. mini = icon-only (day rows).
+  function voteBtn(key, title, dir, mini) {
+    const on = who && votes(key)[who]?.vote === dir;
+    return `<button class="${on ? "on" : ""}" data-planvote="${dir}" data-target="${esc(key)}" data-title="${esc(title)}" aria-label="${dir === "up" ? "Like" : "Dislike"} ${esc(title)}">${vIcon(dir)}${mini ? "" : dir === "up" ? " Like" : " Dislike"}</button>`;
   }
 
   function viewIdeas() {
@@ -214,7 +231,8 @@
       ${mine.map(f => `
         <div class="card fbitem ${f.state}">
           <div class="item-head">
-            <span>${f.kind === "idea" ? `${vIcon(f.vote)} <b>${esc(f.ideaTitle || ideas[f.idea]?.title || f.idea)}</b>` : "💬 <b>General</b>"}</span>
+            <span>${f.kind === "idea" ? `${vIcon(f.vote)} <b>${esc(f.ideaTitle || ideas[f.idea]?.title || f.idea)}</b>`
+              : f.kind === "plan" ? `${vIcon(f.vote)} <b>Plan · ${esc(f.targetTitle || f.target)}</b>` : "💬 <b>General</b>"}</span>
             <span class="tag ${f.state === "open" ? "over" : "ok"}">${f.state === "open" ? "⏳ open" : "✅ done"}</span>
           </div>
           ${f.text ? `<p>${esc(f.text).replace(/\n/g, "<br>")}</p>` : ""}
@@ -330,6 +348,14 @@
       if (text === null) return;
       el.disabled = true;
       await submit({ who, kind: "idea", idea: idea.id, ideaTitle: idea.title, vote: ds.vote, text: text.trim() });
+      el.disabled = false;
+    }
+    if (ds.planvote) {
+      if (!who) { toast("Tap 👤 at the top to pick who you are"); return; }
+      const text = await ask({ title: `${vIcon(ds.planvote)} ${ds.title}`, body: `Feedback on the plan as ${who}. Reason (optional):`, placeholder: ds.planvote === "up" ? "What do you like?" : "What should change?", ok: "Send" });
+      if (text === null) return;
+      el.disabled = true;
+      await submit({ who, kind: "plan", target: ds.target, targetTitle: ds.title, vote: ds.planvote, text: text.trim() });
       el.disabled = false;
     }
     if (ds.send) {
