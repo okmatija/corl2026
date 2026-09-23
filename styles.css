@@ -197,3 +197,8 @@ dialog textarea, dialog input { margin-top: 4px; }
 .pv { display: inline-block; font-size: 11px; font-weight: 600; padding: 0 6px; border-radius: 999px; white-space: nowrap; }
 .pv.up { background: var(--ok-soft); color: var(--ok); }
 .pv.down { background: var(--warn-soft); color: var(--warn); }
+.question { padding: 8px 0; border-bottom: 1px solid var(--line); }
+.question:last-child { border-bottom: 0; }
+.q-row { display: flex; gap: 10px; align-items: flex-start; justify-content: space-between; font-size: 15px; }
+.q-btn { flex: none; border: 1px solid var(--line); background: var(--bg); border-radius: 10px; padding: 4px 10px; font-size: 13px; white-space: nowrap; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+.question .fb { font-size: 13px; margin: 6px 0 0; }

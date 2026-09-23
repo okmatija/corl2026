@@ -133,7 +133,11 @@
       </div>
       <div class="banner">${esc(T.meta.status)} Updated ${esc(T.meta.updated)}.</div>
       ${autoBanner()}
-      ${T.openQuestions?.length ? `<div class="card"><h3>Open questions</h3><ul class="plain">${T.openQuestions.map(q => `<li>${esc(q)}</li>`).join("")}</ul><p class="muted small" style="margin:6px 0 0">Answer on your own tab: ${PEOPLE.map(p => `<a href="#${p.toLowerCase()}">${esc(p)}</a>`).join(" · ")}</p></div>` : ""}
+      ${T.openQuestions?.length ? `<div class="card"><h3>Open questions</h3>${T.openQuestions.map((q, i) => `
+        <div class="question">
+          <div class="q-row"><span>${esc(q)}</span><button class="q-btn" data-answer="${i}" aria-label="Answer this question">❓ Answer</button></div>
+          ${answers(q).map(f => `<div class="fb up"><b>${esc(f.who)}:</b> ${esc(f.answer)}</div>`).join("")}
+        </div>`).join("")}</div>` : ""}
       <div id="map" role="img" aria-label="Route map"></div>
       ${legs}
       <div class="leg"><div class="dot">✓</div><div class="travel">🏁 ${fmt(end.date)} · ${esc(end.text)}</div></div>
@@ -194,6 +198,16 @@
   function ideaMarks(id) {
     const v = votes(id);
     return PEOPLE.filter(p => v[p]).map(p => ` <span class="pv ${v[p].vote}" title="${esc(v[p].text || "")}">${esc(p)} ${vIcon(v[p].vote)}</span>`).join("");
+  }
+
+  // Answers are general notes whose text starts with "Q: <question>" then "A: <answer>"; latest per person wins.
+  function answers(q) {
+    const out = {};
+    const prefix = "Q: " + q + "\nA: ";
+    feedback.filter(f => f.kind === "general" && f.text?.startsWith(prefix))
+      .sort((a, b) => a.date.localeCompare(b.date))
+      .forEach(f => { out[f.who] = { ...f, answer: f.text.slice(prefix.length) }; });
+    return Object.values(out);
   }
 
   function voteChips(v) {
@@ -362,6 +376,15 @@
       if (text === null) return;
       el.disabled = true;
       await submit({ who, kind: "plan", target: ds.target, targetTitle: ds.title, vote: ds.planvote, text: text.trim() });
+      el.disabled = false;
+    }
+    if (ds.answer) {
+      if (!who) { toast("Tap 👤 at the top to pick who you are"); return; }
+      const q = T.openQuestions[+ds.answer];
+      const text = (await ask({ title: "❓ " + q, body: `Answering as ${who}:`, placeholder: "Your answer", ok: "Send" }))?.trim();
+      if (!text) return;
+      el.disabled = true;
+      await submit({ who, kind: "general", text: `Q: ${q}\nA: ${text}` });
       el.disabled = false;
     }
     if (ds.send) {
