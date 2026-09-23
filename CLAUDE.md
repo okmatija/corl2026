@@ -29,7 +29,9 @@ The site shows an issue as "done" once closed, plus the text after `**Resolution
 2. Decide what each item changes. Read the reason carefully - a 👎 with a reason means "apply the reason", not "delete the item".
    Check your change actually moves the plan towards what they asked (e.g. "save nature for when we're both free" means move
    nature to shared days, not remove it). If the intent is genuinely ambiguous, make no plan change: add an open question
-   quoting them and resolve the issue saying you asked. A later vote by the same person on the same idea supersedes an earlier one.
+   quoting them and resolve the issue saying you asked.
+   Same when feedback CONFLICTS (Matija vs Maryna, or with an earlier decision/work dates) or raises a question you need
+   answered: add a new entry to `openQuestions` that states the options, so they can 💬 Answer it on the Plan page. A later vote by the same person on the same idea supersedes an earlier one.
    Answers to open questions arrive as general notes formatted `Q: <question>` / `A: <answer>`. Use the answer to update the plan,
    then remove (or reword) that entry in `openQuestions` once it's settled.
    Idea votes: 👍 → consider adding to the plan; 👎 → remove/avoid. Plan votes: 👍 → keep as is; 👎 → rework that stop/day using the reason. Plan `vote: "note"` = 💬 comment on a stop (question/idea, no sentiment). General notes: budget, dates, must-sees, new ideas (add idea cards).

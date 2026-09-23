@@ -117,6 +117,7 @@
           <div class="card">
             <div class="item-head"><h3>${esc(p.name)}</h3><span class="tag">${n} night${n > 1 ? "s" : ""}</span></div>
             <div class="item-meta">${fmt(l.arrive)} → ${fmt(l.leave)} · ${esc(p.blurb || "")}</div>
+            ${l.place === "austin" && T.austinMap ? `<p style="margin:8px 0 0"><a href="#austin">🗺️ Map of CoRL venues, Google office & hotel options →</a></p>` : ""}
             ${s ? `<div class="stay"><div class="item-head"><span>🛏️ ${esc(s.name)}</span>${s.covered ? '<span class="tag ok">paid by work</span>' : `<span class="tag ${s.price <= P.budgetPerNight ? "ok" : "over"}">~${money(s.price)}/nt</span>`}</div>${s.notes ? `<div class="item-meta">${esc(s.notes)}</div>` : ""}</div>` : ""}
             <div class="days">${days}</div>
             ${voteChips(votes("stop:" + l.place))}
@@ -137,6 +138,7 @@
         </div>
       </div>
       <div class="banner">${esc(T.meta.status)} Updated ${esc(T.meta.updated)}.</div>
+      ${fbToggle()}
       ${autoBanner()}
       ${T.openQuestions?.length ? `<div class="card"><h3>Open questions</h3>${T.openQuestions.map((q, i) => `
         <div class="question">
@@ -149,8 +151,46 @@
     `;
   }
 
+  // ---------- Austin venues & hotels (#austin) ----------
+  const km = (a, b) => {
+    const r = x => x * Math.PI / 180, dLat = r(b.lat - a.lat), dLng = r(b.lng - a.lng);
+    const h = Math.sin(dLat / 2) ** 2 + Math.cos(r(a.lat)) * Math.cos(r(b.lat)) * Math.sin(dLng / 2) ** 2;
+    return 6371 * 2 * Math.asin(Math.sqrt(h));
+  };
+  const gmaps = addr => `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(addr)}`;
+
+  function viewAustin() {
+    const A = T.austinMap, jw = A.work[0], bass = A.work[2];
+    const dist = h => `${km(h, jw).toFixed(1)} km to JW Marriott · ${km(h, bass).toFixed(1)} km to Bass Hall`;
+    return `
+      <p style="margin:4px 0"><a href="#plan">← Plan</a></p>
+      <h2>Austin: venues & hotels</h2>
+      <p class="muted small">💼 = where Matija works · 🛏️ = hotel options (prices are rough estimates for CoRL week). Tap a pin or name for directions.</p>
+      <div id="amap" role="img" aria-label="Map of Austin venues and hotels"></div>
+      <div class="card"><h3>💼 Work</h3>${A.work.map(w => `<div class="item"><a class="item-title" href="${gmaps(w.address)}" target="_blank" rel="noopener">${esc(w.name)}</a><div class="item-meta">${esc(w.address)}</div></div>`).join("")}</div>
+      <div class="card"><h3>🛏️ Hotel options</h3>${A.hotels.slice().sort((a, b) => km(a, jw) - km(b, jw)).map(h => `<div class="item">
+        <div class="item-head"><a class="item-title" href="${gmaps(h.name + ", " + h.address)}" target="_blank" rel="noopener">${esc(h.name)}</a><span class="tag">~${money(h.price)}/nt</span></div>
+        <div class="item-meta">${esc(dist(h))}${h.note ? " · " + esc(h.note) : ""}</div></div>`).join("")}
+        <p class="muted small" style="margin:8px 0 0">Matija's work covers his room for 7-13 Nov, so this mostly matters for where you'd like to be based.</p></div>`;
+  }
+
+  function drawAustinMap(el) {
+    const A = T.austinMap;
+    map = L.map(el, { scrollWheelZoom: false });
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", { maxZoom: 19, attribution: "© OpenStreetMap" }).addTo(map);
+    const pin = (p, cls, label) => L.marker([p.lat, p.lng], {
+      icon: L.divIcon({ className: "", html: `<div class="apin ${cls}">${label}</div>`, iconSize: [28, 28], iconAnchor: [14, 14] }),
+      zIndexOffset: cls === "work" ? 1000 : 0,
+    }).addTo(map).bindPopup(`<b>${esc(p.name)}</b><br>${p.price ? `~${money(p.price)}/nt<br>` : ""}<a href="${gmaps(p.name + ", " + p.address)}" target="_blank" rel="noopener">Open in Google Maps</a>`);
+    A.hotels.forEach(h => pin(h, "hotel", "🛏️"));
+    A.work.forEach(w => pin(w, "work", "💼"));
+    map.fitBounds([...A.work, ...A.hotels].map(p => [p.lat, p.lng]), { padding: [24, 24] });
+  }
+
   function drawMap() {
     if (map) { map.remove(); map = null; }
+    const amap = document.getElementById("amap");
+    if (amap) { if (window.L) drawAustinMap(amap); return; }
     const el = document.getElementById("map");
     if (!el) return;
     if (!window.L) { el.innerHTML = '<p class="muted" style="padding:12px">Map unavailable offline.</p>'; return; }
@@ -217,6 +257,11 @@
     return Object.values(out);
   }
 
+  function fbToggle() {
+    const n = feedback.filter(f => f.kind !== "general" || isAnswer(f)).length;
+    return `<div class="row"><button class="chip ${ui.showFb ? "on" : ""}" data-togglefb>💬 ${ui.showFb ? "Hide" : "Show"} everyone's feedback${n ? ` (${n})` : ""}</button></div>`;
+  }
+
   function voteChips(v) {
     return PEOPLE.filter(p => v[p]).map(p => `
       <div class="fb ${v[p].vote}"><b>${esc(p)} ${vIcon(v[p].vote)}</b>${v[p].text ? ` ${esc(v[p].text)}` : ""}</div>`).join("");
@@ -235,6 +280,7 @@
     const groups = regions.map(r => ({ r, items: list.filter(a => a.place === r) })).filter(g => g.items.length);
     return `
       <h2>Ideas</h2>
+      ${fbToggle()}
       ${statusBanner()}
       <div class="chips">${FILTERS.map(([k, l]) => `<button class="chip ${ui.filter === k ? "on" : ""}" data-filter="${esc(k)}">${esc(l)}</button>`).join("")}</div>
       <select id="region" aria-label="Region"><option value="all">All places</option>${regions.map(r => `<option value="${r}" ${ui.region === r ? "selected" : ""}>${esc(place(r).name)}</option>`).join("")}</select>
@@ -337,6 +383,7 @@
     if (person) return { tab, render: () => viewPerson(person) };
     if (tab === "ideas") return { tab, render: viewIdeas };
     if (tab === "updates") return { tab, render: viewUpdates };
+    if (tab === "austin") return { tab, render: viewAustin };
     return { tab: "plan", render: viewPlan };
   }
 
@@ -348,7 +395,9 @@
     document.getElementById("view").innerHTML = r.render();
     if (draft && document.getElementById("freeText")) document.getElementById("freeText").value = draft;
     document.querySelectorAll(".tabs a").forEach(a => a.classList.toggle("active", a.dataset.tab === r.tab));
-    if (r.tab === "plan") drawMap(); else if (map) { map.remove(); map = null; }
+    // Others' feedback is hidden by default on Plan/Ideas to reduce clutter; person tabs always show it.
+    document.getElementById("view").classList.toggle("hide-fb", !ui.showFb && ["plan", "ideas"].includes(r.tab));
+    if (r.tab === "plan" || r.tab === "austin") drawMap(); else if (map) { map.remove(); map = null; }
     window.scrollTo(0, keepScroll ? y : 0);
     document.getElementById("whoBtn").textContent = who ? "👤 " + who : "👤 Who are you?";
   }
@@ -370,6 +419,7 @@
       store.set("who", who); toast("You are " + who); return rerender();
     }
     if (ds.filter) { ui.filter = ds.filter; store.set("ui", ui); return rerender(); }
+    if ("togglefb" in ds) { ui.showFb = !ui.showFb; store.set("ui", ui); return rerender(); }
     if (ds.vote) {
       if (!who) { toast("Tap 👤 at the top to pick who you are"); return; }
       const idea = ideas[ds.idea];

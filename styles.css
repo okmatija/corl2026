@@ -205,3 +205,8 @@ dialog textarea, dialog input { margin-top: 4px; }
 .fb.note { background: var(--bg); border: 1px solid var(--line); }
 .fb.note { background: var(--bg); border: 1px solid var(--line); }
 .vote button { white-space: nowrap; padding: 10px 6px; }
+.hide-fb .fb, .hide-fb .pv { display: none; }
+#amap { height: 420px; border-radius: var(--radius); border: 1px solid var(--line); margin: 12px 0; z-index: 1; }
+.apin { width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; font-size: 14px; border: 2px solid #fff; box-shadow: 0 1px 4px rgba(0,0,0,.35); }
+.apin.work { background: #c2410c; }
+.apin.hotel { background: #2563eb; }

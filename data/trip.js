@@ -142,6 +142,28 @@ window.TRIP = {
     { id: "nyc-summit", place: "nyc", title: "Top of the Rock or SUMMIT at sunset", cat: "city", cost: "$$", dur: "2h", why: "Top of the Rock has the Empire State in view." },
   ],
 
+  // Austin map page (#austin). Coordinates are approximate; the map links search by address.
+  // Hotel prices are rough estimates for CoRL week - check live rates / the CoRL hotel portal.
+  austinMap: {
+    work: [
+      { name: "JW Marriott Austin (CoRL venue)", address: "110 E 2nd St, Austin, TX 78701", lat: 30.2649, lng: -97.7441 },
+      { name: "Hilton Austin (CoRL venue)", address: "500 E 4th St, Austin, TX 78701", lat: 30.2654, lng: -97.7389 },
+      { name: "Bass Concert Hall, UT (CoRL venue)", address: "2350 Robert Dedman Dr, Austin, TX 78712", lat: 30.2858, lng: -97.7310 },
+      { name: "Google Austin office (team summit)", address: "500 W 2nd St, Austin, TX 78701", lat: 30.2663, lng: -97.7497 },
+    ],
+    hotels: [
+      { name: "JW Marriott Austin", address: "110 E 2nd St, Austin, TX 78701", lat: 30.2649, lng: -97.7441, price: 380, note: "Is a venue - zero commute." },
+      { name: "Hilton Austin", address: "500 E 4th St, Austin, TX 78701", lat: 30.2654, lng: -97.7389, price: 330, note: "Is a venue." },
+      { name: "Hyatt Place Austin Downtown", address: "211 E 3rd St, Austin, TX 78701", lat: 30.2644, lng: -97.7428, price: 240, note: "Between the two downtown venues." },
+      { name: "Hampton Inn & Suites Austin Downtown", address: "200 San Jacinto Blvd, Austin, TX 78701", lat: 30.2636, lng: -97.7422, price: 230, note: "" },
+      { name: "The LINE Austin", address: "111 E Cesar Chavez St, Austin, TX 78701", lat: 30.2629, lng: -97.7436, price: 300, note: "On Lady Bird Lake - good for Maryna's lake days." },
+      { name: "Fairmont Austin", address: "101 Red River St, Austin, TX 78701", lat: 30.2618, lng: -97.7386, price: 340, note: "" },
+      { name: "Hotel Van Zandt", address: "605 Davis St, Austin, TX 78701", lat: 30.2596, lng: -97.7389, price: 330, note: "Rainey St - lively evenings." },
+      { name: "AT&T Hotel (UT campus)", address: "1900 University Ave, Austin, TX 78705", lat: 30.2818, lng: -97.7401, price: 250, note: "Walk to Bass Hall and the LBJ Library." },
+      { name: "Hotel San José", address: "1316 S Congress Ave, Austin, TX 78704", lat: 30.2513, lng: -97.7490, price: 300, note: "South Congress - nicest area for Maryna, 10 min ride." },
+    ],
+  },
+
   // THE plan. A leg = where you sleep between arrive (check-in) and leave (check-out).
   // days[k] = items for the k-th day of the leg; idea ids are expanded to their titles on the page.
   plan: {
