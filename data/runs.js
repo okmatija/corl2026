@@ -6,5 +6,5 @@ window.RUNS = [
 
 window.AUTOMATION = {
   schedule: "every hour, 06:00-23:00 UK time",
-  routineUrl: "",
+  routineUrl: "https://claude.ai/code/routines/trig_01RbHgoAddVixEGc4gqgDPgb",
 };
