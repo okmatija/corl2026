@@ -9,6 +9,7 @@ Travellers: Matija and Maryna. CoRL 2026: Austin TX, workshops Nov 9, main confe
 - `app.js`, `styles.css`, `index.html` - the viewer. Vanilla JS, mobile-first. Tabs: Plan, Ideas, Matija, Maryna.
 - `worker/` - Cloudflare Worker that turns site submissions into GitHub issues and lists them back. Secrets: GITHUB_TOKEN, TRIP_KEY.
 - `assets/` - user inputs. `assets/private/` is git-ignored: read it, never copy sensitive details (booking refs, addresses, IDs) into tracked files.
+- `assets/private/notes.md` - private facts extracted from work documents (policy, schedule). Read it first when planning.
 - `scripts/resolve.sh` - close a feedback issue with a resolution.
 
 ## Feedback = GitHub issues

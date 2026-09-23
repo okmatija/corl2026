@@ -5,19 +5,21 @@ window.TRIP = {
     title: "CoRL 2026 · USA trip",
     travellers: ["Matija", "Maryna"],
     updated: "2026-09-23",
-    status: "First draft - dates outside the conference are assumptions until we get your itinerary.",
+    status: "Work dates are confirmed. Everything after Fri 13 Nov (when Matija finishes at 16:00) is a proposal - the end date is a guess.",
   },
 
+  // Matija's work commitments. Maryna is free the whole time.
   obligations: [
-    { id: "corl-ws", title: "CoRL workshops", start: "2026-11-09", end: "2026-11-09", place: "austin", where: "JW Marriott Austin", notes: "Workshop day." },
-    { id: "corl-main", title: "CoRL main conference", start: "2026-11-10", end: "2026-11-12", place: "austin", where: "JW Marriott Austin", notes: "Main conference days. Maryna explores Austin solo during the day." },
+    { who: "Matija", title: "CoRL main conference", start: "2026-11-09", end: "2026-11-11", where: "JW Marriott / Hilton Austin / Bass Hall (UT)" },
+    { who: "Matija", title: "CoRL workshops + team social (evening)", start: "2026-11-12", end: "2026-11-12" },
+    { who: "Matija", title: "Team summit, until 16:00", start: "2026-11-13", end: "2026-11-13" },
   ],
 
   openQuestions: [
-    "Where are you flying from, and which airports work for arriving/departing?",
-    "How many days in total can you take (i.e. latest return date)?",
-    "Is Maryna joining for the whole trip including the conference week?",
-    "Are you OK renting a car and driving 4-6 h on some days?",
+    "Flying from London? Arriving together on Sat 7 Nov?",
+    "Latest date to be back home (how long can the holiday part be)?",
+    "Maryna, Mon 9 - Fri 13 Nov: stay in Austin with day trips, or a side trip (New Orleans, Houston, San Antonio...)? Vote on the 'Maryna:' idea cards.",
+    "OK renting a car for the road trip after the conference, with some 4-6 h driving days?",
     "Any must-sees already on your list?",
   ],
 
@@ -54,6 +56,13 @@ window.TRIP = {
     { id: "atx-blanton", place: "austin", title: "Blanton Museum + Ellsworth Kelly's 'Austin'", cat: "culture", cost: "$", dur: "2h", why: "Kelly's light-filled chapel is a must for art fans." },
     { id: "atx-hamilton", place: "austin", title: "Hamilton Pool Preserve", cat: "nature", cost: "$", dur: "half day", why: "Collapsed grotto with waterfall; reservation required - check if open." },
     { id: "atx-bats", place: "austin", title: "Congress Avenue bat bridge", cat: "nature", cost: "free", dur: "30m", why: "Season is Mar-Oct; by November most bats have left - low odds." },
+
+    // Maryna's options while Matija works (Mon 9 - Fri 13 Nov)
+    { id: "mar-nola", place: "neworleans", title: "Maryna: side trip to New Orleans (Mon-Thu)", cat: "adventure", cost: "$$$", dur: "3-4 days", why: "~1.5 h direct flight from Austin. Walkable and easy solo; jazz, food, streetcars. Back in Austin Thu night." },
+    { id: "mar-houston", place: "houston", title: "Maryna: 1-2 nights in Houston", cat: "culture", cost: "$$", dur: "1-2 days", why: "~2.5 h by bus. Space Center, Menil Collection, Rothko Chapel, great food." },
+    { id: "mar-sa", place: "sanantonio", title: "Maryna: overnight in San Antonio", cat: "culture", cost: "$$", dur: "1-2 days", why: "~1.5 h by bus. River Walk, Mission trail by bike, Pearl district. (Then skip it at the end of the road trip.)" },
+    { id: "mar-wine", place: "fredericksburg", title: "Maryna: Hill Country wine day tour", cat: "food", cost: "$$", dur: "1 day", why: "Guided tours leave from Austin - no car needed." },
+    { id: "mar-food", place: "austin", title: "Maryna: Austin food tour or cooking class", cat: "food", cost: "$$", dur: "3h", why: "Nice way to meet people solo; lots of options on East 6th / South Congress." },
 
     // Fredericksburg / Hill Country
     { id: "fbg-rock", place: "fredericksburg", title: "Hike Enchanted Rock", cat: "nature", cost: "$", dur: "3h", why: "Huge pink granite dome; book a state-park day pass in advance." },
@@ -123,24 +132,24 @@ window.TRIP = {
   // days[k] = items for the k-th day of the leg; idea ids are expanded to their titles on the page.
   plan: {
     name: "Texas road trip",
-    summary: "Conference in Austin, then a loop through Hill Country, the West Texas desert and Big Bend, ending in San Antonio. One rental car, no extra flights.",
+    summary: "A weekend together in Austin, then Maryna explores while Matija works (Mon-Fri). From Friday evening: a road trip through Hill Country, the West Texas desert and Big Bend, ending in San Antonio.",
     budgetPerNight: 200,
     legs: [
       { place: "austin", arrive: "2026-11-07", leave: "2026-11-13",
-        travel: "✈️ Fly into Austin (AUS)",
-        stay: { name: "Airbnb in East Austin / Travis Heights", price: 160, notes: "Kitchen + space for 6 nights; ride-share to the venue. Alt: Hyatt Place Downtown ~$240, JW Marriott (venue) ~$380." },
+        travel: "✈️ Fly into Austin (AUS) together",
+        stay: { name: "Downtown hotel near the venues", covered: true, notes: "Paid by Matija's work for 7-13 Nov. Check that Maryna can share the room." },
         days: [
           ["Arrive, recover from jet lag", "atx-tacos", "atx-soco"],
-          ["atx-barton", "atx-bbq", "atx-bonnell"],
-          ["Maryna: atx-wildflower"],
-          ["Maryna: atx-blanton, atx-capitol", "Evening: atx-music"],
-          ["Maryna: atx-kayak"],
-          ["Evening: celebrate the end of CoRL"],
+          ["Together: atx-barton", "atx-bbq", "atx-bonnell"],
+          ["Maryna: atx-wildflower", "Evening together: atx-music"],
+          ["Maryna: atx-blanton, atx-capitol"],
+          ["Maryna: atx-kayak or a side trip (see Ideas)"],
+          ["mar-food"],
         ] },
       { place: "fredericksburg", arrive: "2026-11-13", leave: "2026-11-15",
-        travel: "🚗 Pick up rental car · 1.5 h drive",
+        travel: "🚗 Pick up rental car; leave Austin after 16:00 · 1.5 h drive",
         stay: { name: "Guesthaus / cottage near Main St", price: 180, notes: "" },
-        days: [["fbg-wine", "Dinner on Main St"], ["fbg-rock (early start)", "fbg-luck"]] },
+        days: [["Drive after work", "Late dinner on Main St"], ["fbg-rock (early start)", "fbg-wine", "fbg-luck"]] },
       { place: "marfa", arrive: "2026-11-15", leave: "2026-11-16",
         travel: "🚗 5 h drive via I-10",
         stay: { name: "Hotel Saint George", price: 260, notes: "Few rooms in Marfa - book early. Budget alt: motel in Alpine ~$110." },
@@ -154,6 +163,6 @@ window.TRIP = {
         stay: { name: "Airbnb in King William district", price: 140, notes: "Walkable to the River Walk." },
         days: [["Long drive", "sa-riverwalk"], ["sa-missions", "sa-pearl", "sa-alamo"]] },
     ],
-    end: { date: "2026-11-21", text: "Drive back to Austin (1.3 h) or fly out of San Antonio (SAT)" },
+    end: { date: "2026-11-21", text: "Fly home from San Antonio (SAT) - the end date is a guess" },
   },
 };

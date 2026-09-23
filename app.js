@@ -95,7 +95,7 @@
       const p = place(l.place);
       const days = Array.from({ length: n }, (_, k) => {
         const date = addDays(l.arrive, k);
-        const obl = T.obligations.filter(o => date >= o.start && date <= o.end).map(o => `<span class="oblig">${esc(o.title)}</span>`);
+        const obl = T.obligations.filter(o => date >= o.start && date <= o.end).map(o => `<span class="oblig">💼 ${o.who ? esc(o.who) + ": " : ""}${esc(o.title)}</span>`);
         const items = (l.days?.[k] || []).map(s => esc(s).replace(idPattern, id => `<b>${esc(ideas[id].title)}</b>`));
         const lines = [...obl, ...items];
         return `<div class="day"><div class="date"><b>${fmt(date, { weekday: "short" })}</b>${fmt(date, { day: "numeric", month: "short" })}</div><ul>${lines.map(x => `<li>${x}</li>`).join("") || "<li class='muted'>Free</li>"}</ul></div>`;
@@ -108,7 +108,7 @@
           <div class="card">
             <div class="item-head"><h3>${esc(p.name)}</h3><span class="tag">${n} night${n > 1 ? "s" : ""}</span></div>
             <div class="item-meta">${fmt(l.arrive)} → ${fmt(l.leave)} · ${esc(p.blurb || "")}</div>
-            ${s ? `<div class="stay"><div class="item-head"><span>🛏️ ${esc(s.name)}</span><span class="tag ${s.price <= P.budgetPerNight ? "ok" : "over"}">~${money(s.price)}/nt</span></div>${s.notes ? `<div class="item-meta">${esc(s.notes)}</div>` : ""}</div>` : ""}
+            ${s ? `<div class="stay"><div class="item-head"><span>🛏️ ${esc(s.name)}</span>${s.covered ? '<span class="tag ok">paid by work</span>' : `<span class="tag ${s.price <= P.budgetPerNight ? "ok" : "over"}">~${money(s.price)}/nt</span>`}</div>${s.notes ? `<div class="item-meta">${esc(s.notes)}</div>` : ""}</div>` : ""}
             <div class="days">${days}</div>
           </div>
         </div>`;
@@ -121,7 +121,7 @@
         <p class="muted" style="margin:4px 0">${esc(P.summary)}</p>
         <div class="stats">
           <div class="stat"><b>${fmt(P.legs[0].arrive, { day: "numeric", month: "short" })} – ${fmt(end.date, { day: "numeric", month: "short" })}</b><span>${nights} nights</span></div>
-          <div class="stat"><b>${money(lodging)}</b><span>lodging est. · budget ${money(P.budgetPerNight)}/nt</span></div>
+          <div class="stat"><b>${money(lodging)}</b><span>our lodging est. (excl. work-paid nights) · budget ${money(P.budgetPerNight)}/nt</span></div>
         </div>
       </div>
       <div class="banner">${esc(T.meta.status)} Updated ${esc(T.meta.updated)}.</div>
