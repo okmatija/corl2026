@@ -97,7 +97,7 @@
       const days = Array.from({ length: n }, (_, k) => {
         const date = addDays(l.arrive, k);
         const obl = T.obligations.filter(o => date >= o.start && date <= o.end).map(o => `<span class="oblig">💼 ${o.who ? esc(o.who) + ": " : ""}${esc(o.title)}</span>`);
-        const items = (l.days?.[k] || []).map(s => esc(s).replace(idPattern, id => `<b>${esc(ideas[id].title)}</b>`));
+        const items = (l.days?.[k] || []).map(s => esc(s).replace(idPattern, id => `<b>${esc(ideas[id].title)}</b>${ideaMarks(id)}`));
         const lines = [...obl, ...items];
         const key = "day:" + date, v = votes(key);
         const dayTitle = `${fmt(date)} in ${short(l.place)}`;
@@ -188,6 +188,12 @@
         <button data-vote="down" data-idea="${a.id}" class="${mine === "down" ? "on" : ""}">👎 Dislike</button>
       </div>
     </article>`;
+  }
+
+  // Compact "Matija 👍" marks shown after an idea's title inside the plan
+  function ideaMarks(id) {
+    const v = votes(id);
+    return PEOPLE.filter(p => v[p]).map(p => ` <span class="pv ${v[p].vote}" title="${esc(v[p].text || "")}">${esc(p)} ${vIcon(v[p].vote)}</span>`).join("");
   }
 
   function voteChips(v) {

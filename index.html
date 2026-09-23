@@ -13,7 +13,11 @@
   <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="icons/icon-180.png">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
-  <link rel="stylesheet" href="styles.css">
+  <script>
+    // GitHub Pages lets browsers cache files for 10 min; a timestamp on our own files makes every refresh load the latest plan.
+    window.ASSET_V = Date.now();
+    document.write('<link rel="stylesheet" href="styles.css?v=' + window.ASSET_V + '">');
+  </script>
 </head>
 <body>
   <header class="top">
@@ -51,9 +55,13 @@
   <div id="toast" role="status" aria-live="polite"></div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
-  <script src="data/trip.js"></script>
-  <script src="data/config.js"></script>
-  <script src="data/runs.js"></script>
-  <script src="app.js"></script>
+  <script>
+    (function () {
+      var v = window.ASSET_V;
+      ["data/trip.js", "data/config.js", "data/runs.js", "app.js"].forEach(function (src) {
+        document.write('<script src="' + src + "?v=" + v + '"><\/script>');
+      });
+    })();
+  </script>
 </body>
 </html>
