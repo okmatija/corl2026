@@ -1,0 +1,5 @@
+assets/private/*
+!assets/private/README.md
+.DS_Store
+Thumbs.db
+.claude/
