@@ -10,7 +10,8 @@ Travellers: Matija and Maryna. CoRL 2026: Austin TX, workshops Nov 9, main confe
 - `worker/` - Cloudflare Worker that turns site submissions into GitHub issues and lists them back. Secrets: GITHUB_TOKEN, TRIP_KEY.
 - `assets/` - user inputs. `assets/private/` is git-ignored: read it, never copy sensitive details (booking refs, addresses, IDs) into tracked files.
 - `assets/private/notes.md` - private facts extracted from work documents (policy, schedule). Read it first when planning.
-- `scripts/resolve.sh` - close a feedback issue with a resolution.
+- `scripts/resolve.sh` - close a feedback issue with a resolution (needs `gh`; in cloud runs use the GitHub MCP tools to do the same: append `---
+**Resolution:** ...` to the body, comment, close).
 - `data/runs.js` - update history shown on the #updates page. A scheduled cloud routine processes feedback hourly 06:00-23:00 UK.
   If there are no open feedback issues, do nothing (no commit).
 
@@ -22,7 +23,10 @@ The site shows an issue as "done" once closed, plus the text after `**Resolution
 
 ## "Process feedback" workflow (when the user asks)
 1. `gh issue list -R okmatija/corl2026 -l feedback -s open --json number,title,body,labels --limit 200`
-2. Decide what each item changes. A later vote by the same person on the same idea supersedes an earlier one.
+2. Decide what each item changes. Read the reason carefully - a 👎 with a reason means "apply the reason", not "delete the item".
+   Check your change actually moves the plan towards what they asked (e.g. "save nature for when we're both free" means move
+   nature to shared days, not remove it). If the intent is genuinely ambiguous, make no plan change: add an open question
+   quoting them and resolve the issue saying you asked. A later vote by the same person on the same idea supersedes an earlier one.
    Answers to open questions arrive as general notes formatted `Q: <question>` / `A: <answer>`. Use the answer to update the plan,
    then remove (or reword) that entry in `openQuestions` once it's settled.
    Idea votes: 👍 → consider adding to the plan; 👎 → remove/avoid. Plan votes: 👍 → keep as is; 👎 → rework that stop/day using the reason. Plan `vote: "note"` = 💬 comment on a stop (question/idea, no sentiment). General notes: budget, dates, must-sees, new ideas (add idea cards).
