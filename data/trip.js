@@ -4,7 +4,7 @@ window.TRIP = {
   meta: {
     title: "CoRL 2026 · USA trip",
     travellers: ["Matija", "Maryna"],
-    updated: "2026-09-23",
+    updated: "2026-09-24",
     status: "Work dates are confirmed. After Fri 13 Nov (Matija done at 16:00) this is a two-week proposal, flying home Fri 27 Nov - see the open questions.",
   },
 
@@ -18,7 +18,7 @@ window.TRIP = {
   openQuestions: [
     "Flying from London? Arriving together on Sat 7 Nov?",
     "Warm leg after Texas: Florida (Miami + Keys, as now in the plan), or San Diego / Puerto Rico instead? Vote on the 'Warm alternative' cards or answer here.",
-    "New York over Thanksgiving (Thu 26 Nov): fun (the parade!) but it's the busiest, priciest travel week of the year. Keep NYC at the end, or do it on a different trip?",
+    "Thanksgiving with Maja & Amit (Thu 26 Nov): dinner at their place (bring something?) or a restaurant (book by October)? Where are they based - should we stay near them? And do we want a 3rd night in New York to have more time with them?",
     "Return: flying home on Fri 27 Nov from New York - does that match 'two weeks after CoRL' for you?",
     "Maryna, Mon 9 - Fri 13 Nov: stay in Austin with day trips, or a side trip (New Orleans, Houston, San Antonio...)? Vote on the 'Maryna:' idea cards.",
     "OK renting a car for the road trip after the conference, with some 4-6 h driving days?",
@@ -26,6 +26,7 @@ window.TRIP = {
     "Vegas: where should it go? Options: (a) swap Key West for 3 nights in Vegas (Sphere + Valley of Fire), flying Austin/San Antonio -> Vegas; (b) replace all of Florida with Vegas + the Grand Canyon; (c) add Vegas at the end and fly home a few days later.",
     "NASCAR: the Cup championship race is Sun 8 Nov at Homestead-Miami - the day before CoRL. Only possible by flying into Miami first (Fri 6 Nov) and on to Austin on Sunday night. Worth it, or do the Texas Motor Speedway drive/ride-along (Fort Worth, a full day) instead?",
     "Theme parks: add Orlando (Disney World / Universal) to the Florida leg? It would take 2-3 nights, e.g. from Key West or NYC.",
+    "Concerts: the bands we grew up with (Linkin Park, AC/DC, Iron Maiden, Foo Fighters, Okean Elzy) aren't touring the US in November 2026. Metallica at the Sphere is the big exception, but it needs Vegas. Should I keep checking for new announcements, or is it worth building Vegas in for Metallica?",
     "Any must-sees already on your list?",
   ],
 
@@ -68,6 +69,7 @@ window.TRIP = {
     { id: "atx-capitol", place: "austin", title: "Texas State Capitol", cat: "culture", cost: "free", dur: "1h", why: "Free tours, bigger than the US Capitol (Texans will tell you)." },
     { id: "atx-bonnell", place: "austin", title: "Sunset at Mount Bonnell", cat: "nature", cost: "free", dur: "1h", why: "Short climb, best sunset over Lake Austin." },
     { id: "atx-kayak", place: "austin", title: "Kayak / SUP on Lady Bird Lake", cat: "nature", cost: "$", dur: "2h", why: "Skyline views from the water, rentals near Zilker." },
+    { id: "atx-stubbs", place: "austin", title: "Rock show at Stubb's or Mohawk", cat: "music", cost: "$$", dur: "evening", why: "Austin's classic outdoor rock stages. November line-ups are announced late - check what's on during CoRL week." },
     { id: "atx-music", place: "austin", title: "Live music: Continental Club / Broken Spoke", cat: "music", cost: "$", dur: "evening", why: "Broken Spoke gives two-step lessons - great post-conference night." },
     { id: "atx-wildflower", place: "austin", title: "Lady Bird Johnson Wildflower Center", cat: "nature", cost: "$", dur: "2-3h", why: "Good solo day for Maryna during the conference." },
     { id: "atx-blanton", place: "austin", title: "Blanton Museum + Ellsworth Kelly's 'Austin'", cat: "culture", cost: "$", dur: "2h", why: "Kelly's light-filled chapel is a must for art fans." },
@@ -192,6 +194,8 @@ window.TRIP = {
     { id: "nyc-highline", place: "nyc", title: "High Line + Little Island + Chelsea Market", cat: "city", cost: "free", dur: "half day", why: "Great first-day walk." },
     { id: "nyc-broadway", place: "nyc", title: "Broadway show", cat: "night", cost: "$$$", dur: "evening", why: "TKTS booth for same-day discounts." },
     { id: "nyc-brooklyn", place: "nyc", title: "Walk Brooklyn Bridge to DUMBO", cat: "city", cost: "free", dur: "2h", why: "Go early morning or at dusk." },
+    { id: "nyc-rock", place: "nyc", title: "Thanksgiving Eve rock show (Beacon Theatre / Irving Plaza / Brooklyn Steel)", cat: "music", cost: "$$", dur: "evening", why: "The night before Thanksgiving is a big going-out night; classic and alt-rock acts often play these venues. Check listings nearer the time." },
+    { id: "nyc-veselka", place: "nyc", title: "Veselka + the East Village's Ukrainian corner", cat: "food", cost: "$", dur: "2h", why: "Legendary Ukrainian diner (varenyky, borscht) at the heart of Little Ukraine; the Ukrainian Museum is a few blocks away." },
     { id: "nyc-jazz", place: "nyc", title: "Village Vanguard jazz", cat: "music", cost: "$$", dur: "evening", why: "Legendary basement club." },
     { id: "nyc-summit", place: "nyc", title: "Top of the Rock or SUMMIT at sunset", cat: "city", cost: "$$", dur: "2h", why: "Top of the Rock has the Empire State in view." },
   ],
@@ -263,7 +267,7 @@ window.TRIP = {
       { place: "nyc", arrive: "2026-11-25", leave: "2026-11-27",
         travel: "🚗 Drive back to Miami (~3.5 h), ✈️ fly to New York (~3 h)",
         stay: { name: "Hotel in Midtown or Long Island City", price: 400, notes: "Thanksgiving week is peak - book early. Long Island City is cheaper and one stop from Midtown." },
-        days: [["Long travel day", "Evening: balloon inflation by the Natural History Museum"], ["Thanksgiving: nyc-parade", "nyc-central", "Thanksgiving dinner (book a restaurant well ahead)"]] },
+        days: [["Long travel day", "Evening: balloon inflation by the Natural History Museum"], ["Thanksgiving: nyc-parade", "nyc-central", "Thanksgiving dinner with Maja & Amit"]] },
     ],
     end: { date: "2026-11-27", text: "Morning at the Met or the High Line, then fly home from New York (JFK/EWR) in the evening" },
   },

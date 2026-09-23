@@ -33,7 +33,8 @@
   const money = n => "$" + Math.round(n).toLocaleString("en-US");
   const place = id => T.places[id] || { name: id };
   const short = id => place(id).name.split(",")[0].split(" (")[0];
-  const TYPE_ICON = { city: "🏙️", nature: "🌲", beach: "🏖️" };
+  const STATES = { TX: "texas", FL: "florida", NY: "new york", CA: "california", NV: "nevada", AZ: "arizona", UT: "utah", LA: "louisiana", PR: "puerto rico" };
+  const TYPE_ICON ={ city: "🏙️", nature: "🌲", beach: "🏖️" };
   const placeLabel = id => `${TYPE_ICON[place(id).type] || "📍"} ${place(id).name}`;
   const vIcon = v => ({ up: "👍", down: "👎", note: "💬" })[v] || "👍";
 
@@ -223,7 +224,9 @@
     const mine = who ? v[who]?.vote : null;
     const q = encodeURIComponent(a.title.replace(/\(.*?\)/g, "") + " " + place(a.place).name);
     const reactions = voteChips(v);
-    return `<article class="idea">
+    const state = STATES[place(a.place).name.split(", ").pop()] || "";
+    const text = norm([a.title, a.why, place(a.place).name, state, place(a.place).type, a.cat, CATS[a.cat], a.cost, a.dur, inPlan.has(a.id) ? "in plan" : ""].join(" "));
+    return `<article class="idea" data-text="${esc(text)}">
       <div class="item-head"><h3>${esc(a.title)}</h3>${inPlan.has(a.id) ? '<span class="tag star">in plan</span>' : ""}</div>
       <div class="item-meta">📍 ${esc(short(a.place))} · ${CATS[a.cat] || ""} · ${esc(a.dur)} · ${esc(a.cost)}</div>
       <p>${esc(a.why)} <a href="https://www.google.com/maps/search/?api=1&query=${q}" target="_blank" rel="noopener">map</a></p>
@@ -257,10 +260,53 @@
       <h2>Ideas</h2>
       ${statusBanner()}
       <div class="chips">${FILTERS.map(([k, l]) => `<button class="chip ${ui.filter === k ? "on" : ""}" data-filter="${esc(k)}">${esc(l)}</button>`).join("")}</div>
+      <input type="search" id="ideaSearch" placeholder="🔍 Search ideas (e.g. gators, rock, beach)" value="${esc(ui.q || "")}" autocomplete="off" aria-label="Search ideas">
       <select id="region" aria-label="Region"><option value="all">All places</option>${regions.map(r => `<option value="${r}" ${ui.region === r ? "selected" : ""}>${esc(placeLabel(r))}</option>`).join("")}</select>
-      <p class="muted small">${list.length} idea${list.length === 1 ? "" : "s"}</p>
-      ${groups.map(g => `<h3 class="region">${esc(placeLabel(g.r))}</h3>${g.items.map(ideaCard).join("")}`).join("") || '<p class="muted">Nothing matches this filter.</p>'}
+      <p class="muted small" id="ideaCount">${list.length} idea${list.length === 1 ? "" : "s"}</p>
+      ${groups.map(g => `<section class="region-group"><h3 class="region">${esc(placeLabel(g.r))}</h3>${g.items.map(ideaCard).join("")}</section>`).join("") || '<p class="muted">Nothing matches this filter.</p>'}
+      <p class="muted" id="noMatch" hidden>No ideas match your search.</p>
     `;
+  }
+
+  // ---------- fuzzy search (Ideas page) ----------
+  // Every query word must appear in the card, either as a substring or as a word within a small edit distance
+  // (1 typo for words of 4+ letters, 2 for 7+), so "aligator", "nascr" or "disny" still match.
+  const norm = s => String(s || "").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^a-z0-9$ ]+/g, " ");
+  function editDistance(a, b, max) {
+    if (Math.abs(a.length - b.length) > max) return max + 1;
+    let prev = Array.from({ length: b.length + 1 }, (_, i) => i);
+    for (let i = 1; i <= a.length; i++) {
+      const cur = [i];
+      for (let j = 1; j <= b.length; j++) cur[j] = Math.min(prev[j] + 1, cur[j - 1] + 1, prev[j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1));
+      if (Math.min(...cur) > max) return max + 1;
+      prev = cur;
+    }
+    return prev[b.length];
+  }
+  function fuzzyMatch(text, words) {
+    const tokens = text.split(" ").filter(Boolean);
+    return words.every(w => {
+      if (text.includes(w)) return true;
+      const max = w.length >= 7 ? 2 : w.length >= 4 ? 1 : 0;
+      return max > 0 && tokens.some(t => editDistance(w, t.slice(0, w.length + max), max) <= max);
+    });
+  }
+  function applySearch() {
+    const input = document.getElementById("ideaSearch");
+    if (!input) return;
+    const words = norm(input.value).split(" ").filter(w => w.length > 1);
+    let shown = 0;
+    document.querySelectorAll(".region-group").forEach(g => {
+      let any = false;
+      g.querySelectorAll(".idea").forEach(card => {
+        const ok = !words.length || fuzzyMatch(card.dataset.text, words);
+        card.hidden = !ok;
+        if (ok) { any = true; shown++; }
+      });
+      g.hidden = !any;
+    });
+    document.getElementById("ideaCount").textContent = `${shown} idea${shown === 1 ? "" : "s"}`;
+    document.getElementById("noMatch").hidden = shown > 0 || !words.length;
   }
 
   function viewPerson(name) {
@@ -370,6 +416,7 @@
     if (draft && document.getElementById("freeText")) document.getElementById("freeText").value = draft;
     document.querySelectorAll(".tabs a").forEach(a => a.classList.toggle("active", a.dataset.tab === r.tab));
     if (r.tab === "plan" || r.tab === "austin") drawMap(); else if (map) { map.remove(); map = null; }
+    if (r.tab === "ideas") applySearch();
     window.scrollTo(0, keepScroll ? y : 0);
     document.getElementById("whoBtn").textContent = who ? "👤 " + who : "👤 Who are you?";
   }
@@ -429,6 +476,9 @@
   });
   document.addEventListener("change", e => {
     if (e.target.id === "region") { ui.region = e.target.value; store.set("ui", ui); rerender(); }
+  });
+  document.addEventListener("input", e => {
+    if (e.target.id === "ideaSearch") { ui.q = e.target.value; store.set("ui", ui); applySearch(); }
   });
 
   window.addEventListener("hashchange", () => render(false));

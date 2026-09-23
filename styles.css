@@ -207,3 +207,5 @@ dialog textarea, dialog input { margin-top: 4px; }
 .apin.work { background: #c2410c; }
 .apin.hotel { background: #2563eb; }
 .run { font-size: 13px; margin-top: 4px; padding: 6px 8px; background: var(--bg); border-radius: 8px; }
+input[type=search] { width: 100%; border: 1px solid var(--line); background: var(--card); border-radius: 10px; padding: 10px 12px; font-size: 16px; margin: 4px 0 8px; }
+.idea[hidden], .region-group[hidden] { display: none; }
