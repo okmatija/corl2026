@@ -62,6 +62,7 @@ window.TRIP = {
     { id: "atx-mckinney", place: "austin", title: "McKinney Falls State Park", cat: "nature", cost: "$", dur: "half day", why: "Waterfalls, limestone pools and cypress trails 20 min from downtown. Book a day pass." },
     { id: "atx-greenbelt", place: "austin", title: "Barton Creek Greenbelt hike", cat: "nature", cost: "free", dur: "2-3h", why: "Wooded canyon trail starting right by Barton Springs; creek may be dry in Nov." },
     { id: "atx-bats", place: "austin", title: "Congress Avenue bat bridge", cat: "nature", cost: "free", dur: "30m", why: "Season is Mar-Oct; by November most bats have left - low odds." },
+    { id: "atx-zilker", place: "austin", title: "Zilker Botanical Garden", cat: "nature", cost: "$", dur: "1-2h", why: "Japanese Garden, cactus and rose gardens right by Zilker Park - a quieter option than Barton Springs." },
 
     // Maryna's options while Matija works (Mon 9 - Fri 13 Nov)
     { id: "mar-nola", place: "neworleans", title: "Maryna: side trip to New Orleans (Mon-Thu)", cat: "adventure", cost: "$$$", dur: "3-4 days", why: "~1.5 h direct flight from Austin. Walkable and easy solo; jazz, food, streetcars. Back in Austin Thu night." },
@@ -162,7 +163,7 @@ window.TRIP = {
       { place: "fredericksburg", arrive: "2026-11-13", leave: "2026-11-15",
         travel: "🚗 Pick up rental car; leave Austin after 16:00 · 1.5 h drive",
         stay: { name: "Guesthaus / cottage near Main St", price: 180, notes: "" },
-        days: [["Drive after work", "Late dinner on Main St"], ["fbg-rock (early start)", "fbg-wine", "fbg-luck"]] },
+        days: [["Drive after work", "Late dinner on Main St"], ["fbg-wine", "fbg-luck"]] },
       { place: "marfa", arrive: "2026-11-15", leave: "2026-11-16",
         travel: "🚗 5 h drive via I-10",
         stay: { name: "Hotel Saint George", price: 260, notes: "Few rooms in Marfa - book early. Budget alt: motel in Alpine ~$110." },
