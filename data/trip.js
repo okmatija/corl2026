@@ -20,6 +20,7 @@ window.TRIP = {
     "Latest date to be back home (how long can the holiday part be)?",
     "Maryna, Mon 9 - Fri 13 Nov: stay in Austin with day trips, or a side trip (New Orleans, Houston, San Antonio...)? Vote on the 'Maryna:' idea cards.",
     "OK renting a car for the road trip after the conference, with some 4-6 h driving days?",
+    "SpaceX: worth adding 2 days for Starbase (Texas) or a Space Coast trip (Florida, most reliable launches)? Vote on the rocket idea cards - I'll check the launch schedule closer to the date.",
     "Any must-sees already on your list?",
   ],
 
@@ -37,6 +38,8 @@ window.TRIP = {
     grandcanyon:    { name: "Grand Canyon (South Rim)", lat: 36.0544, lng: -112.1401, blurb: "Needs no introduction. Sunrise & sunset on the rim." },
     sedona:         { name: "Sedona, AZ",            lat: 34.8697, lng: -111.7610, blurb: "Red rock hiking, late fall colours in Oak Creek Canyon." },
     phoenix:        { name: "Phoenix, AZ",           lat: 33.4484, lng: -112.0740, blurb: "Departure airport (PHX)." },
+    starbase:       { name: "Starbase / South Padre, TX", lat: 25.9971, lng: -97.1560, blurb: "SpaceX Starship site at Boca Chica, next to the Gulf beaches of South Padre Island." },
+    spacecoast:     { name: "Space Coast, FL",       lat: 28.3922, lng: -80.6077, blurb: "Cape Canaveral / Kennedy Space Center - the busiest launch site in the US." },
     nyc:            { name: "New York City",         lat: 40.7128, lng: -74.0060,  blurb: "Museums, Broadway, late-fall Central Park." },
   },
 
@@ -66,6 +69,11 @@ window.TRIP = {
     { id: "mar-sa", place: "sanantonio", title: "Maryna: overnight in San Antonio", cat: "culture", cost: "$$", dur: "1-2 days", why: "~1.5 h by bus. River Walk, Mission trail by bike, Pearl district. (Then skip it at the end of the road trip.)" },
     { id: "mar-wine", place: "fredericksburg", title: "Maryna: Hill Country wine day tour", cat: "food", cost: "$$", dur: "1 day", why: "Guided tours leave from Austin - no car needed." },
     { id: "mar-food", place: "austin", title: "Maryna: Austin food tour or cooking class", cat: "food", cost: "$$", dur: "3h", why: "Nice way to meet people solo; lots of options on East 6th / South Congress." },
+
+    // Space / rockets
+    { id: "space-starbase", place: "starbase", title: "SpaceX Starbase (Starship) + South Padre beaches", cat: "adventure", cost: "$", dur: "1-2 days", why: "~5 h drive from San Antonio. You can see the Starship towers from the road/beach any time; a launch is a bonus - dates are only set weeks ahead and slip often." },
+    { id: "space-cape", place: "spacecoast", title: "Watch a Falcon 9 launch on the Space Coast", cat: "adventure", cost: "$$", dur: "2-3 days", why: "The most reliable way to see a SpaceX launch: several per week in 2026. Fly to Orlando; watch from Playalinda Beach or Jetty Park, plus Kennedy Space Center visitor complex." },
+    { id: "space-mcgregor", place: "austin", title: "SpaceX McGregor engine test site (drive-by)", cat: "adventure", cost: "free", dur: "half day", why: "1.5 h north of Austin near Waco. No tours or launches - only engine tests you may hear from outside. Low odds, fun detour with Waco's Magnolia/Dr Pepper museum." },
 
     // Fredericksburg / Hill Country
     { id: "fbg-rock", place: "fredericksburg", title: "Hike Enchanted Rock", cat: "nature", cost: "$", dur: "3h", why: "Huge pink granite dome; book a state-park day pass in advance." },
