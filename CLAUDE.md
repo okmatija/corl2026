@@ -22,6 +22,10 @@ The body ends with `<!-- feedback-data {...json...} -->` (who, kind, vote up/dow
 The site shows an issue as "done" once closed, plus the text after `**Resolution:**` in the body.
 
 ## "Process feedback" workflow (when the user asks)
+0. Interactive sessions: first add the label `in-progress` to every open issue you're about to handle
+   (`gh issue edit N --add-label in-progress`) so the hourly agent skips them; remove it if you stop without resolving.
+   Scheduled runs: skip issues labelled `in-progress` or `site`, and `git fetch` right before pushing - if the issues
+   you handled were closed meanwhile, discard your changes.
 1. `gh issue list -R okmatija/corl2026 -l feedback -s open --json number,title,body,labels --limit 200`
    Requests to change the WEBSITE itself (layout, new pages/features, how feedback is shown) are not plan changes:
    scheduled runs must NOT close them - add the label `site`, leave them open, and move on. They are handled in an
