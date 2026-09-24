@@ -125,7 +125,7 @@
           <div class="card">
             <div class="item-head"><h3>${esc(p.name)}</h3><span class="tag">${n} night${n > 1 ? "s" : ""}</span></div>
             <div class="item-meta">${fmt(l.arrive)} → ${fmt(l.leave)} · ${esc(p.blurb || "")}</div>
-            ${l.place === "austin" && T.austinMap ? `<p style="margin:8px 0 0"><a href="#austin">🗺️ Map of CoRL venues, Google office & hotel options →</a></p>` : ""}
+            ${detailsBtn("stop:" + l.place)}
             ${s ? `<div class="stay"><div class="item-head"><span>🛏️ ${esc(s.name)}</span>${s.covered ? '<span class="tag ok">paid by work</span>' : `<span class="tag ${s.price <= P.budgetPerNight ? "ok" : "over"}">~${money(s.price)}/nt</span>`}</div>${s.notes ? `<div class="item-meta">${esc(s.notes)}</div>` : ""}</div>` : ""}
             <div class="days">${days}</div>
             <div class="vote">${["up", "down", "note"].map(dir => voteBtn("stop:" + l.place, `Stop: ${p.name}`, dir)).join("")}</div>
@@ -151,7 +151,7 @@
       <div id="map" role="img" aria-label="Route map"></div>
       ${legs}
       ${travelCard(P.legs.at(-1).place, null, end.date, end.text, "travel:home")}
-      <div class="leg"><div class="dot">✓</div><div class="travel">🏁 Home · ${fmt(end.date)}</div></div>
+      <div class="leg"><div class="dot">✓</div><div class="travel">🏁 ${esc(T.plan.home || "Home")} · ${fmt(end.date)}</div></div>
     `;
   }
 
@@ -180,9 +180,31 @@
         <p class="muted small" style="margin:8px 0 0">Matija's work covers his room for 7-13 Nov, so this mostly matters for where you'd like to be based.</p></div>`;
   }
 
+  // "📄 Details" button for any stop/travel card that has an entry in TRIP.details (same keys as plan feedback targets)
+  function detailsBtn(key) {
+    const dd = T.details?.[key];
+    if (!dd) return "";
+    return `<a class="details-btn" href="${esc(dd.href || "#details/" + key)}">📄 Details</a>`;
+  }
+
+  function viewDetails(key) {
+    const dd = T.details?.[key];
+    if (!dd) return `<p><a href="#plan">← Plan</a></p><p class="muted">No details here yet.</p>`;
+    return `
+      <p style="margin:4px 0"><a href="#plan">← Plan</a></p>
+      <h2>${esc(dd.title || key)}</h2>
+      ${dd.intro ? `<p class="muted">${esc(dd.intro)}</p>` : ""}
+      ${(dd.sections || []).map(sec => `<div class="card"><h3>${esc(sec.title)}</h3>${(sec.items || []).map(it => `
+        <div class="item">
+          <span class="item-title">${it.link ? `<a href="${esc(it.link)}" target="_blank" rel="noopener">${esc(it.name)}</a>` : esc(it.name)}</span>
+          ${it.text ? `<div class="item-meta">${esc(it.text)}</div>` : ""}
+        </div>`).join("")}</div>`).join("")}
+      <p class="muted small">Prices are estimates - check live rates before booking. Want something changed or added here? Use 💬 on the card in the plan.</p>`;
+  }
+
   // Card for a journey between stops (from/to = place ids; null = home). Same 👍 👎 💬 buttons as a stop.
   function travelCard(from, to, date, text, key) {
-    const name = id => id ? short(id) : "Home";
+    const name = id => id ? short(id) : (T.plan.home || "Home");
     const route = `${name(from)} → ${name(to)}`;
     const icon = /✈️/.test(text || "") ? "✈️" : /🚗/.test(text || "") ? "🚗" : "🧳";
     const details = esc((text || "").replace(/^(✈️|🚗)\s*/u, "")).replace(idPattern, id => `<b>${esc(ideas[id].title)}</b>`);
@@ -192,6 +214,7 @@
         <div class="card travel-card">
           <div class="item-head"><span class="item-title">${icon} ${esc(route)}</span><span class="tag">${fmt(date)}</span></div>
           ${details ? `<div class="item-meta">${details}${dir ? ` · <a href="${dir}" target="_blank" rel="noopener">directions</a>` : ""}</div>` : ""}
+          ${detailsBtn(key)}
           <div class="vote">${["up", "down", "note"].map(d => voteBtn(key, `Travel: ${route}`, d)).join("")}</div>
         </div>
       </div>`;
@@ -418,11 +441,12 @@
           <li>💬 - write something: comments, answers to open questions, replies to each other, and anything else on the Feedback tab</li>
           <li>🤖 the dropdown next to Send picks which Claude model actions it: Sonnet (default, balanced), Haiku (small &amp; fast) or Opus (most thorough, for tricky requests)</li>
           <li>Pick who you are with the name badge at the top right (blue = Matija, pink = Maryna)</li>
+          <li>📄 Details on a stop or journey opens a page with more (maps, hotels, car hire…). Ask for one on anything with 💬</li>
         </ul>
       </div>
-      <h2>Plan updates & usage</h2>
+      <h2>🤖 Your trip agents</h2>
       <div class="card">
-        <p style="margin:0">A scheduled Claude agent checks for new feedback <b>${esc(window.AUTOMATION?.schedule || "")}</b>. If there's nothing new it stops straight away, and nothing is logged here. When there is feedback it updates the plan, closes the GitHub issues with a note, and adds a row below.</p>
+        <p style="margin:0">Three Claude agents check for new feedback <b>${esc(window.AUTOMATION?.schedule || "")}</b>, one per model: Haiku at :00, Sonnet at :20 and Opus at :40 past the hour. Each only picks up feedback sent to its model. If there's nothing new it stops straight away. Otherwise it updates the plan, closes the feedback with a note (the ✅ you see on the Feedback tab) and adds an entry to the changelog below.</p>
         <div class="stats">
           <div class="stat"><b>${runs.length}</b><span>updates</span></div>
           <div class="stat"><b>${issues}</b><span>feedback items handled</span></div>
@@ -431,10 +455,16 @@
         </div>
         <p class="muted small" style="margin:8px 0 0">Tokens and cost are filled in only when they can be measured, which isn't always possible for scheduled runs. Runs are covered by Matija's Claude subscription usage rather than billed separately.</p>
       </div>
+      <h2>📜 Changelog</h2>
       ${runs.map(r => `<div class="card">
-        <div class="item-head"><b>${time(r)}</b><span class="tag">${r.by === "scheduled" ? "🤖 scheduled" : "💬 manual"}</span></div>
+        <div class="item-head"><b>${time(r)}</b><span class="tag">${r.by === "scheduled" ? "🤖 " + esc(MODEL_NAME[Object.keys(MODEL_NAME).find(k => (r.model || "").includes(k))] || "scheduled") : "💬 with Matija"}</span></div>
         <p style="margin:6px 0">${esc(r.summary)}</p>
-        <div class="item-meta">${mins(r)} min · ${esc(r.model || "")} · issues ${(r.issues || []).map(n => `<a href="https://github.com/okmatija/corl2026/issues/${n}" target="_blank" rel="noopener">#${n}</a>`).join(" ")}${r.tokens ? ` · ${Math.round(r.tokens / 1000)}k tokens` : ""}${r.costUsd ? ` · ~$${r.costUsd.toFixed(2)}` : ""}</div>
+        ${(r.issues || []).length ? `<ul class="plain changelog-items">${r.issues.map(n => {
+          const f = feedback.find(x => x.number === n);
+          const label = f ? `${esc(f.who)} ${fbLabel(f)}` : "feedback";
+          return `<li><a href="https://github.com/okmatija/corl2026/issues/${n}" target="_blank" rel="noopener">#${n}</a> ${label}</li>`;
+        }).join("")}</ul>` : ""}
+        <div class="item-meta">${mins(r)} min${r.tokens ? ` · ${Math.round(r.tokens / 1000)}k tokens` : ""}${r.costUsd ? ` · ~$${r.costUsd.toFixed(2)}` : ""}</div>
       </div>`).join("") || '<p class="muted">No updates yet.</p>'}
     `;
   }
@@ -481,6 +511,7 @@
     if (tab === "ideas") return { tab, render: viewIdeas };
     if (tab === "updates" || tab === "about") return { tab: "about", render: viewUpdates };
     if (tab === "austin") return { tab, render: viewAustin };
+    if (tab.startsWith("details/")) return { tab: "details", render: () => viewDetails(tab.slice(8)) };
     return { tab: "plan", render: viewPlan };
   }
 

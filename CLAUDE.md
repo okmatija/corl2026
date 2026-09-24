@@ -56,6 +56,10 @@ The site shows an issue as "done" once closed, plus the text after `**Resolution
 6. Report back a short summary of changes.
 
 ## Conventions
+- 📄 Details pages are a standard idiom: add an entry to `TRIP.details` keyed like a plan target (`stop:<place>`,
+  `travel:<place>`, `travel:home`) with `{ title, intro, sections: [{ title, items: [{ name, text, link }] }] }` (or `{ href }`
+  to an existing page). The card then shows a "📄 Details" button. When feedback asks for "more details" on something, do this.
+- `plan.home` ("London") is where the trip starts and ends.
 - Plan legs: `arrive`/`leave` are check-in/check-out; `days[k]` lists items for day k (the LAST leg has one extra entry for
   its departure day, shown in that stop's card); idea ids inside strings are expanded to titles.
 - Stay prices are estimates - label them so; never present them as quotes.

@@ -4,7 +4,7 @@ window.TRIP = {
   meta: {
     title: "CoRL 2026 · USA trip",
     travellers: ["Matija", "Maryna"],
-    updated: "2026-09-24T11:22Z",
+    updated: "2026-09-24T11:44Z",
     status: "Work dates are confirmed. After Fri 13 Nov (Matija done at 16:00) this is a two-week proposal, flying home Fri 27 Nov - see the open questions.",
   },
 
@@ -16,10 +16,8 @@ window.TRIP = {
   ],
 
   openQuestions: [
-    "Flying from London? Arriving together on Sat 7 Nov?",
     "Warm leg after Texas: Florida (Miami + Keys, as now in the plan), or San Diego / Puerto Rico instead? Vote on the 'Warm alternative' cards or answer here.",
     "Thanksgiving with Maja & Amit (Thu 26 Nov, they're in Cobble Hill, Brooklyn - we'll stay nearby, not with them): dinner at their place (bring something?) or a restaurant (book by October)? And do we want a 3rd night in New York to have more time with them and a less rushed morning at the 9/11 Memorial & Museum before the Fri 27 Nov flight home (it currently fits on departure morning, but only if we don't linger)?",
-    "Return: flying home on Fri 27 Nov from New York - does that match 'two weeks after CoRL' for you?",
     "Maryna, Mon 9 - Fri 13 Nov: stay in Austin with day trips, or a side trip (New Orleans, Houston, San Antonio...)? Vote on the 'Maryna:' idea cards.",
     "OK renting a car for the road trip after the conference, with some 4-6 h driving days?",
     "SpaceX: with Florida in the plan, we could swap a Keys day for the Space Coast if a launch is scheduled then (I'll check the schedule nearer the time). Interested?",
@@ -222,15 +220,46 @@ window.TRIP = {
     ],
   },
 
+  // "📄 Details" pages, keyed like plan feedback targets ("stop:<place>", "travel:<place>", "travel:home").
+  // Either { href } to an existing page, or { title, intro, sections: [{ title, items: [{ name, text, link }] }] }.
+  // Prices are estimates. Any stop or travel card with an entry here gets a Details button.
+  details: {
+    "stop:austin": { href: "#austin" },
+    "travel:fredericksburg": {
+      title: "🚗 Car hire for the Texas road trip",
+      intro: "One rental covers Fri 13 - Fri 20 Nov: pick up in Austin after the team summit, drop off at San Antonio airport before the flight to Miami. Avis and Budget are the same company (Avis Budget Group) and both have desks at both airports.",
+      sections: [
+        { title: "Pick up - Fri 13 Nov, after 16:00", items: [
+          { name: "Avis / Budget - Austin airport (AUS)", text: "The safe choice: the airport rental centre stays open late, so a pickup after the 16:00 summit finish is easy. ~20 min by Uber from downtown.", link: "https://www.budget.com/en/locations/us/tx/austin/aus" },
+          { name: "Budget - Downtown (1104 N I-35 at 11th St)", text: "Closest to the venues but open only until 18:00 on weekdays - tight after a 16:00 finish.", link: "https://www.budget.com/en/locations/us/tx/austin/a2s" },
+        ] },
+        { title: "Drop off - Fri 20 Nov", items: [
+          { name: "Avis / Budget - San Antonio airport (SAT)", text: "Return before the flight to Miami. One-way rentals usually add a drop-off fee - compare with returning to Austin, but that costs a 1.5 h detour and a flight from AUS instead.", link: "https://www.avis.com/en/locations/nam/us/tx/san-antonio/sat" },
+        ] },
+        { title: "Rough cost (estimate)", items: [
+          { name: "7 days, mid-size car", text: "Comparison sites show Avis/Budget at AUS from roughly $40-65 a day before taxes, airport fees and the one-way fee - plan on about $450-650 all-in. Book a free-cancellation rate and re-check prices nearer the time.", link: "https://www.kayak.com/Budget-Car-Rentals-Austin.ABUDGET.22863.cl.ksp" },
+        ] },
+        { title: "For UK drivers", items: [
+          { name: "What to bring", text: "Full UK photocard licence (most suppliers want it held 12+ months), passport, and a credit card in the main driver's name for the deposit. An International Driving Permit is normally not needed." },
+          { name: "Insurance", text: "A car-hire excess policy bought in the UK is usually much cheaper than the desk's damage waiver. Add Maryna as a second driver when booking if you want to share the long drives." },
+        ] },
+        { title: "Later: the Florida car (Sun 22 - Wed 25 Nov)", items: [
+          { name: "Miami airport (MIA), round trip", text: "A separate rental for the Everglades and the Keys; Avis and Budget are both in MIA's Rental Car Center. Returning to MIA avoids a one-way fee.", link: "https://www.avis.com/en/locations/nam/us/fl/miami/mia" },
+        ] },
+      ],
+    },
+  },
+
   // THE plan. A leg = where you sleep between arrive (check-in) and leave (check-out).
   // days[k] = items for the k-th day of the leg; idea ids are expanded to their titles on the page.
   plan: {
+    home: "London",
     name: "Texas road trip, Florida & New York",
     summary: "A nature-heavy weekend together in Austin, then Maryna explores while Matija works (Mon-Fri). From Friday evening: a road trip through Hill Country, the West Texas desert and Big Bend, then fly to warm Florida (Miami, the Everglades and the Keys) and finish with Thanksgiving in New York.",
     budgetPerNight: 200,
     legs: [
       { place: "austin", arrive: "2026-11-07", leave: "2026-11-13",
-        travel: "✈️ Fly into Austin (AUS) together",
+        travel: "✈️ Fly London → Austin (AUS) together",
         stay: { name: "Downtown hotel near the venues", covered: true, notes: "Paid by Matija's work for 7-13 Nov. Check that Maryna can share the room." },
         days: [
           ["Arrive, recover from jet lag", "atx-lbj if you land by early afternoon (otherwise Matija can pop over on a lunch break - it's next to Bass Hall)", "atx-soco", "Dinner: atx-bbq (Terry Black's is walk-in)"],
@@ -269,6 +298,6 @@ window.TRIP = {
         stay: { name: "Hotel in Brooklyn Heights / Downtown Brooklyn, or Midtown", price: 400, notes: "Maja & Amit are in Cobble Hill, Brooklyn - not staying with them, but aim for <=30 min away (Brooklyn Heights/Downtown Brooklyn is closest; Midtown also works via subway). Thanksgiving week is peak - book early." },
         days: [["Long travel day", "Evening: balloon inflation by the Natural History Museum"], ["Relaxed Thanksgiving morning (skip the Macy's parade crowds): nyc-central", "Thanksgiving dinner with Maja & Amit"], ["Morning: nyc-911memorial (open Fri 9am-7pm; book ahead - it's closed on Thanksgiving Day itself) or the Met / High Line", "Check out and head to the airport"]] },
     ],
-    end: { date: "2026-11-27", text: "✈️ Evening flight home from New York (JFK/EWR)" },
+    end: { date: "2026-11-27", text: "✈️ Evening flight New York (JFK/EWR) → London together" },
   },
 };
