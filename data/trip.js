@@ -4,7 +4,7 @@ window.TRIP = {
   meta: {
     title: "CoRL 2026 · USA trip",
     travellers: ["Matija", "Maryna"],
-    updated: "2026-09-24T12:01Z",
+    updated: "2026-09-24T13:24Z",
     status: "Work dates are confirmed. After Fri 13 Nov (Matija done at 16:00) this is a two-week proposal, flying home Fri 27 Nov - see the open questions.",
   },
 
@@ -266,10 +266,13 @@ window.TRIP = {
       sections: [
         { title: "Pick up - Fri 13 Nov, after 16:00", items: [
           { name: "Avis / Budget - Austin airport (AUS)", text: "The safe choice: the airport rental centre stays open late, so a pickup after the 16:00 summit finish is easy. ~20 min by Uber from downtown.", link: "https://www.budget.com/en/locations/us/tx/austin/aus" },
+          { name: "📍 Map: Austin airport rental centre", text: "Consolidated Rental Car Facility at Austin-Bergstrom (AUS).", link: "https://www.google.com/maps/search/?api=1&query=Avis%20Budget%20Rental%20Car%20Center%2C%20Austin-Bergstrom%20International%20Airport%2C%20Austin%2C%20TX" },
           { name: "Budget - Downtown (1104 N I-35 at 11th St)", text: "Closest to the venues but open only until 18:00 on weekdays - tight after a 16:00 finish.", link: "https://www.budget.com/en/locations/us/tx/austin/a2s" },
+          { name: "📍 Map: Budget Downtown", text: "1104 N I-35 at 11th St, Austin, TX.", link: "https://www.google.com/maps/search/?api=1&query=Budget%20Car%20Rental%2C%201104%20N%20I-35%2C%20Austin%2C%20TX%2078702" },
         ] },
         { title: "Drop off - Fri 20 Nov", items: [
           { name: "Avis / Budget - San Antonio airport (SAT)", text: "Return before the flight to Miami. One-way rentals usually add a drop-off fee - compare with returning to Austin, but that costs a 1.5 h detour and a flight from AUS instead.", link: "https://www.avis.com/en/locations/nam/us/tx/san-antonio/sat" },
+          { name: "📍 Map: San Antonio airport rental centre", text: "Avis/Budget Rental Car Center at San Antonio International Airport (SAT).", link: "https://www.google.com/maps/search/?api=1&query=Avis%20Budget%20Rental%20Car%20Center%2C%20San%20Antonio%20International%20Airport%2C%20San%20Antonio%2C%20TX" },
         ] },
         { title: "Rough cost (estimate)", items: [
           { name: "7 days, mid-size car", text: "Comparison sites show Avis/Budget at AUS from roughly $40-65 a day before taxes, airport fees and the one-way fee - plan on about $450-650 all-in. Book a free-cancellation rate and re-check prices nearer the time.", link: "https://www.kayak.com/Budget-Car-Rentals-Austin.ABUDGET.22863.cl.ksp" },
@@ -280,6 +283,7 @@ window.TRIP = {
         ] },
         { title: "Later: the Florida car (Sun 22 - Wed 25 Nov)", items: [
           { name: "Miami airport (MIA), round trip", text: "A separate rental for the Everglades and the Keys; Avis and Budget are both in MIA's Rental Car Center. Returning to MIA avoids a one-way fee.", link: "https://www.avis.com/en/locations/nam/us/fl/miami/mia" },
+          { name: "📍 Map: Miami airport rental centre", text: "Rental Car Center at Miami International Airport (MIA).", link: "https://www.google.com/maps/search/?api=1&query=Rental%20Car%20Center%2C%20Miami%20International%20Airport%2C%20Miami%2C%20FL" },
         ] },
       ],
     },
