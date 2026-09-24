@@ -312,3 +312,6 @@ input[type=search] { width: 100%; border: 1px solid var(--line); background: var
 .stay-links .details-btn { margin: 0; padding: 4px 10px; font-size: 13px; background: var(--card); }
 .idea .item-head .details-btn { margin: 0; padding: 3px 8px; font-size: 12px; flex: none; }
 .day .mini { gap: 4px; }
+.link-btns { display: flex; gap: 6px; flex: none; align-items: center; flex-wrap: wrap; justify-content: flex-end; }
+.travel-card .link-btns { justify-content: flex-start; margin-top: 6px; }
+.link-btns .details-btn { margin: 0; padding: 4px 10px; font-size: 13px; background: var(--card); }

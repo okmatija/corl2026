@@ -128,7 +128,7 @@
             <div class="item-head"><h3>${esc(p.name)}</h3><span class="tag">${n} night${n > 1 ? "s" : ""}</span></div>
             <div class="item-meta">${fmt(l.arrive)} → ${fmt(l.leave)} · ${esc(p.blurb || "")}</div>
             ${s ? `<div class="stay"><div class="item-head"><span>🛏️ ${esc(s.name)}</span>${s.covered ? '<span class="tag ok">paid by work</span>' : `<span class="tag ${s.price <= P.budgetPerNight ? "ok" : "over"}">~${money(s.price)}/nt</span>`}</div>${s.notes ? `<div class="item-meta">${esc(s.notes)}</div>` : ""}
-              <div class="stay-links"><a href="${gmaps(s.name + ", " + p.name)}" target="_blank" rel="noopener">🗺️ Map</a>${detailsBtn("stay:" + l.place)}</div></div>` : ""}
+              <div class="stay-links">${mapBtn(gmaps(s.name + ", " + p.name))}${detailsBtn("stay:" + l.place)}</div></div>` : ""}
             <div class="days">${days}</div>
             <div class="vote">${detailsBtn("stop:" + l.place)}${commentBtn("stop:" + l.place, `Stop: ${p.name}`)}</div>
           </div>
@@ -257,6 +257,10 @@
   }
 
   // "📜 Details" button for any stop/travel card that has an entry in TRIP.details (same keys as plan feedback targets)
+  // Small icon link-buttons, same style as 📜 Details
+  const mapBtn = url => `<a class="details-btn" href="${esc(url)}" target="_blank" rel="noopener">🗺️ Map</a>`;
+  const webBtn = url => `<a class="details-btn" href="${esc(url)}" target="_blank" rel="noopener">🔗 Website</a>`;
+
   function detailsBtn(key) {
     const dd = T.details?.[key];
     return `<a class="details-btn" href="${esc(dd?.href || "#details/" + key)}">📜 Details</a>`;
@@ -322,7 +326,8 @@
     return `<div class="leg travel-leg">
         <div class="card travel-card">
           <div class="item-head"><span class="item-title">${icon} ${esc(route)}</span><span class="tag">${fmt(date)}</span></div>
-          ${details ? `<div class="item-meta">${details}${dir ? ` · <a href="${dir}" target="_blank" rel="noopener">directions</a>` : ""}</div>` : ""}
+          ${details ? `<div class="item-meta">${details}</div>` : ""}
+          ${dir ? `<div class="link-btns">${mapBtn(dir)}</div>` : ""}
           <div class="vote">${detailsBtn(key)}${commentBtn(key, `Travel: ${route}`)}</div>
         </div>
       </div>`;
@@ -381,9 +386,9 @@
     const state = STATES[place(a.place).name.split(", ").pop()] || "";
     const text = norm([a.title, a.why, place(a.place).name, state, place(a.place).type, a.cat, CATS[a.cat], a.cost, a.dur, inPlan.has(a.id) ? "in plan" : ""].join(" "));
     return `<article class="idea" data-text="${esc(text)}">
-      <div class="item-head"><h3>${esc(a.title)}</h3>${T.details?.["idea:" + a.id] ? detailsBtn("idea:" + a.id) : ""}</div>
+      <div class="item-head"><h3>${esc(a.title)}</h3><span class="link-btns">${mapBtn(`https://www.google.com/maps/search/?api=1&query=${q}`)}${a.link ? webBtn(a.link) : ""}${T.details?.["idea:" + a.id] ? detailsBtn("idea:" + a.id) : ""}</span></div>
       <div class="item-meta">📍 ${esc(short(a.place))} · ${CATS[a.cat] || ""} · ${esc(a.dur)} · ${esc(a.cost)}</div>
-      <p>${esc(a.why)} <a href="https://www.google.com/maps/search/?api=1&query=${q}" target="_blank" rel="noopener">map</a>${a.link ? ` · <a href="${esc(a.link)}" target="_blank" rel="noopener">website / book</a>` : ""}</p>
+      <p>${esc(a.why)}</p>
       ${reactions}
       <div class="vote">
         ${inPlan.has(a.id) ? `<button class="on" data-removeplan="${a.id}" aria-label="In plan - tap to ask to remove it">📌 In plan</button>` : `<button data-addplan="${a.id}">📌 Add to plan</button>`}
