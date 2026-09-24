@@ -101,7 +101,8 @@
     const P = T.plan;
     const nights = P.legs.reduce((n, l) => n + nightsBetween(l.arrive, l.leave), 0);
     const lodging = P.legs.reduce((n, l) => n + (l.stay?.price || 0) * nightsBetween(l.arrive, l.leave), 0);
-    const expand = s => esc(s).replace(idPattern, id => `<b>${esc(ideas[id].title)}</b>`);
+    const expand = s => esc(s).replace(idPattern, id => ideas[id].link
+      ? `<a href="${esc(ideas[id].link)}" target="_blank" rel="noopener"><b>${esc(ideas[id].title)}</b></a>` : `<b>${esc(ideas[id].title)}</b>`);
     const legs = P.legs.map((l, i) => {
       const n = nightsBetween(l.arrive, l.leave);
       const p = place(l.place);
@@ -279,7 +280,7 @@
     return `<article class="idea" data-text="${esc(text)}">
       <div class="item-head"><h3>${esc(a.title)}</h3>${inPlan.has(a.id) ? '<span class="tag star">in plan</span>' : ""}</div>
       <div class="item-meta">📍 ${esc(short(a.place))} · ${CATS[a.cat] || ""} · ${esc(a.dur)} · ${esc(a.cost)}</div>
-      <p>${esc(a.why)} <a href="https://www.google.com/maps/search/?api=1&query=${q}" target="_blank" rel="noopener">map</a></p>
+      <p>${esc(a.why)} <a href="https://www.google.com/maps/search/?api=1&query=${q}" target="_blank" rel="noopener">map</a>${a.link ? ` · <a href="${esc(a.link)}" target="_blank" rel="noopener">website / book</a>` : ""}</p>
       ${reactions}
       <div class="vote">
         <button data-vote="up" data-idea="${a.id}" class="${mine === "up" ? "on" : ""}">👍 Like</button>
@@ -444,7 +445,7 @@
           <li>📄 Details on a stop or journey opens a page with more (maps, hotels, car hire…). Ask for one on anything with 💬</li>
         </ul>
       </div>
-      <h2>🤖 Your trip agents</h2>
+      <h2>🤖 Agent usage</h2>
       <div class="card">
         <p style="margin:0">Three Claude agents check for new feedback <b>${esc(window.AUTOMATION?.schedule || "")}</b>, one per model: Haiku at :00, Sonnet at :20 and Opus at :40 past the hour. Each only picks up feedback sent to its model. If there's nothing new it stops straight away. Otherwise it updates the plan, closes the feedback with a note (the ✅ you see on the Feedback tab) and adds an entry to the changelog below.</p>
         <div class="stats">

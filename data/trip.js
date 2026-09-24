@@ -57,7 +57,7 @@ window.TRIP = {
 
 
   // Idea cards. Region groups them on the Ideas page; ideas outside the plan's regions are alternatives to vote on.
-  // cat: nature | food | culture | music | city | night | adventure
+  // cat: nature | food | culture | music | city | night | adventure. Optional link: official website / booking page.
   ideas: [
     // Austin
     { id: "atx-barton", place: "austin", title: "Swim at Barton Springs Pool", cat: "nature", cost: "$", dur: "2h", why: "Spring-fed pool at ~20°C all year - locals swim in November too." },
@@ -195,7 +195,7 @@ window.TRIP = {
     { id: "nyc-veselka", place: "nyc", title: "Veselka + the East Village's Ukrainian corner", cat: "food", cost: "$", dur: "2h", why: "Legendary Ukrainian diner (varenyky, borscht) at the heart of Little Ukraine; the Ukrainian Museum is a few blocks away." },
     { id: "nyc-jazz", place: "nyc", title: "Village Vanguard jazz", cat: "music", cost: "$$", dur: "evening", why: "Legendary basement club." },
     { id: "nyc-summit", place: "nyc", title: "Top of the Rock or SUMMIT at sunset", cat: "city", cost: "$$", dur: "2h", why: "Top of the Rock has the Empire State in view." },
-    { id: "nyc-911memorial", place: "nyc", title: "9/11 Memorial & Museum", cat: "culture", cost: "$$", dur: "half day", why: "Outdoor Memorial is free, daily 8am-8pm. Museum (~$33pp estimate) is open Wed-Mon 9am-7pm, last entry 5:30pm (closed Tuesdays) - but closed on Thanksgiving Day itself. Book timed tickets online up to 6 months ahead; first-come first-served tickets release Mondays 7am ET." },
+    { id: "nyc-911memorial", place: "nyc", link: "https://www.911memorial.org/visit/visit-museum-1", title: "9/11 Memorial & Museum", cat: "culture", cost: "$$", dur: "half day", why: "Outdoor Memorial is free, daily 8am-8pm. Museum (~$33pp estimate) is open Wed-Mon 9am-7pm, last entry 5:30pm (closed Tuesdays) - but closed on Thanksgiving Day itself. Book timed tickets online up to 6 months ahead; first-come first-served tickets release Mondays 7am ET." },
   ],
 
   // Austin map page (#austin). Coordinates are approximate; the map links search by address.
