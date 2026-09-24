@@ -149,7 +149,7 @@
       </div>
       ${T.openQuestions?.length ? `<details class="card questions-card" id="openQuestions" ${ui.qClosed ? "" : "open"}><summary><h3>Open questions (${T.openQuestions.length})</h3></summary>${T.openQuestions.map((q, i) => `
         <div class="question">
-          <div class="q-row"><span>${esc(q)}</span><button class="q-btn" data-answer="${i}" aria-label="Reply to this question">💬 Reply</button></div>
+          <div class="q-row"><span>${esc(q)}</span><button class="q-btn" data-answer="${i}" aria-label="Comment on this question">💬 Comment</button></div>
         </div>`).join("")}</details>` : ""}
       <div id="map" role="img" aria-label="Route map"></div>
       ${legs}
