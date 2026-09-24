@@ -81,7 +81,7 @@
   }
 
   async function submit(payload) {
-    if (!API) { toast("Feedback service isn't connected yet"); return false; }
+    if (!API) { toast("Comments aren't connected yet"); return false; }
     const key = await passcode();
     if (!key) return false;
     try {
@@ -339,7 +339,7 @@
     const state = STATES[place(a.place).name.split(", ").pop()] || "";
     const text = norm([a.title, a.why, place(a.place).name, state, place(a.place).type, a.cat, CATS[a.cat], a.cost, a.dur, inPlan.has(a.id) ? "in plan" : ""].join(" "));
     return `<article class="idea" data-text="${esc(text)}">
-      <div class="item-head"><h3>${esc(a.title)}</h3>${inPlan.has(a.id) ? '<span class="tag star">📌 in plan</span>' : ""}</div>
+      <div class="item-head"><h3>${esc(a.title)}</h3></div>
       <div class="item-meta">📍 ${esc(short(a.place))} · ${CATS[a.cat] || ""} · ${esc(a.dur)} · ${esc(a.cost)}</div>
       <p>${esc(a.why)} <a href="https://www.google.com/maps/search/?api=1&query=${q}" target="_blank" rel="noopener">map</a>${a.link ? ` · <a href="${esc(a.link)}" target="_blank" rel="noopener">website / book</a>` : ""}</p>
       ${reactions}
@@ -369,7 +369,7 @@
     const groups = regions.map(r => ({ r, items: list.filter(a => a.place === r) })).filter(g => g.items.length);
     return `
       <h2>Ideas</h2>
-      <div class="banner info">💡 These cards are suggestions from Claude. Want more, or something specific? Ask on the <a href="#feedback">💬 Feedback</a> tab (e.g. "ideas for a rainy day in Austin") and the hourly agent will add new cards. 📌 Add to plan puts an idea into the plan; 💬 Comment for anything else.</div>
+      <div class="banner info">💡 These cards are suggestions from Claude. Want more, or something specific? Ask on the <a href="#comments">💬 Comments</a> tab (e.g. "ideas for a rainy day in Austin") and the hourly agent will add new cards. 📌 Add to plan puts an idea into the plan; 💬 Comment for anything else.</div>
       ${statusBanner()}
       <div class="chips fb-filters" role="group" aria-label="Filter ideas">
         ${PEOPLE.map(p => toggleChip("ideawho", p, esc(p), (ui.ideaWho || []).includes(p))).join("")}
@@ -448,23 +448,23 @@
       .sort((a, b) => b.date.localeCompare(a.date));
     const open = list.filter(f => f.state === "open").length;
     return `
-      <h2>Feedback</h2>
+      <h2>Comments</h2>
       ${statusBanner()}
       <div class="card composer ${tint(who)}">
         ${who ? `
-        <h3>💬 Add feedback as ${esc(who)}</h3>
+        <h3>💬 Add comment as ${esc(who)}</h3>
         <p class="muted small" style="margin:0 0 8px">Ask the agent to make a change, e.g. add a specific idea, generate new ideas, change the plan, set a budget…</p>
         <textarea id="freeText" rows="4" placeholder="e.g. Add ideas for a rainy day in Austin. Move the Everglades to the morning."></textarea>
         <div class="row send-row" style="margin-top:8px">
           <select id="freeModel" class="model-select" aria-label="Claude model to action this" title="Claude model to action this">${modelOptions("sonnet")}</select>
           <button class="primary" data-send>💬 Send</button>
         </div>` : `
-        <h3>💬 Add feedback</h3>
+        <h3>💬 Add comment</h3>
         <p class="muted small" style="margin:0 0 8px">Who are you?</p>
         <div class="row">${PEOPLE.map(p => `<button class="chip ${tint(p)}" data-setwho="${esc(p)}">👤 ${esc(p)}</button>`).join("")}</div>`}
       </div>
-      <h2 class="section-title">Feedback history</h2>
-      <div class="chips fb-filters" role="group" aria-label="Filter feedback">
+      <h2 class="section-title">Comment history</h2>
+      <div class="chips fb-filters" role="group" aria-label="Filter comments">
         ${PEOPLE.map(p => toggleChip("fbwho", p, esc(p), whoSel.includes(p))).join("")}
         <span class="chip-sep"></span>
         ${FB_TYPES.map(([k, l]) => toggleChip("fbtype", k, l, typeSel.includes(k))).join("")}
@@ -481,7 +481,7 @@
           <div class="item-meta">${esc(when(f.date))}${f.model ? ` · 🤖 ${MODEL_NAME[f.model] || esc(f.model)}` : ""}${f.url ? ` · <a href="${esc(f.url)}" target="_blank" rel="noopener">#${f.number}</a>` : ""}</div>
           ${f.number ? replies(f.number).map(r => `<div class="reply ${tint(r.who)}"><b>${esc(r.who)} ${vIcon(r.vote)}</b> ${esc(r.text)} <span class="muted small">· ${esc(when(r.date))}</span></div>`).join("") : ""}
           ${f.number && f.kind !== "reply" ? `<div class="row end"><button class="reply-btn" data-reply="${f.number}" data-replywho="${esc(f.who)}" data-replytitle="${esc(fbLabel(f).replace(/<[^>]+>/g, ""))}">💬 Comment</button></div>` : ""}
-        </div>`).join("") || '<p class="muted">No feedback yet.</p>'}
+        </div>`).join("") || '<p class="muted">No comments yet.</p>'}
     `;
   }
 
@@ -499,19 +499,19 @@
         <p style="margin:0 0 8px">Matija & Maryna's plan for CoRL 2026 in Austin and a two-week holiday afterwards. Claude agents read what you say and update the plan every hour.</p>
         <ul class="plain">
           <li><b>👤 Pick who you are</b> with the name badge at the top right (blue = Matija, pink = Maryna).</li>
-          <li><b>💬 Comment</b> on anything - a stop, a journey, a single day, an idea, an open question or each other's feedback. In the pop-up you can add an optional 👍 or 👎.</li>
+          <li><b>💬 Comment</b> on anything - a stop, a journey, a single day, an idea, an open question or each other's comments. In the pop-up you can add an optional 👍 or 👎.</li>
           <li><b>📌 Add to plan</b> on an idea asks the agent to fit it into the plan.</li>
-          <li><b>💬 Feedback tab</b> - ask the agent for anything else: new ideas, changes, a budget… and see everything you've both said (filter by person, 👍, 👎).</li>
+          <li><b>💬 Comments tab</b> - ask the agent for anything else: new ideas, changes, a budget… and see everything you've both said (filter by person, 👍, 👎).</li>
           <li><b>🤖 Model</b> - the dropdown next to Send picks which Claude handles it: Sonnet (default), Haiku (quick) or Opus (most thorough).</li>
           <li><b>📄 Details</b> on a stop or journey opens more (maps, hotels, flights, car hire). Ask for one on anything with 💬.</li>
         </ul>
       </div>
       <h2>🤖 Agent usage</h2>
       <div class="card">
-        <p style="margin:0">Three Claude agents check for new feedback <b>${esc(window.AUTOMATION?.schedule || "")}</b>, one per model: Haiku at :00, Sonnet at :20 and Opus at :40 past the hour. Each only picks up feedback sent to its model. If there's nothing new it stops straight away. Otherwise it updates the plan, closes the feedback with a note (the ✅ you see on the Feedback tab) and adds an entry to the changelog below.</p>
+        <p style="margin:0">Three Claude agents check for new comments <b>${esc(window.AUTOMATION?.schedule || "")}</b>, one per model: Haiku at :00, Sonnet at :20 and Opus at :40 past the hour. Each only picks up comments sent to its model. If there's nothing new it stops straight away. Otherwise it updates the plan, closes the comment with a note (the ✅ you see on the Comments tab) and adds an entry to the changelog below.</p>
         <div class="stats">
           <div class="stat"><b>${runs.length}</b><span>updates</span></div>
-          <div class="stat"><b>${issues}</b><span>feedback items handled</span></div>
+          <div class="stat"><b>${issues}</b><span>comments handled</span></div>
           <div class="stat"><b>${totalMin} min</b><span>total agent time</span></div>
           <div class="stat"><b>${tokens ? Math.round(tokens / 1000) + "k" : "–"}</b><span>tokens${cost ? " · ~$" + cost.toFixed(2) : ""}</span></div>
         </div>
@@ -523,7 +523,7 @@
         <p style="margin:6px 0">${esc(r.summary)}</p>
         ${(r.issues || []).length ? `<ul class="plain changelog-items">${r.issues.map(n => {
           const f = feedback.find(x => x.number === n);
-          const label = f ? `${esc(f.who)} ${fbLabel(f)}` : "feedback";
+          const label = f ? `${esc(f.who)} ${fbLabel(f)}` : "comment";
           return `<li><a href="https://github.com/okmatija/corl2026/issues/${n}" target="_blank" rel="noopener">#${n}</a> ${label}</li>`;
         }).join("")}</ul>` : ""}
         <div class="item-meta">${mins(r)} min${r.tokens ? ` · ${Math.round(r.tokens / 1000)}k tokens` : ""}${r.costUsd ? ` · ~$${r.costUsd.toFixed(2)}` : ""}</div>
@@ -532,16 +532,16 @@
   }
 
   function statusBanner() {
-    if (loadState === "off") return '<div class="banner">Feedback service not connected yet - voting is disabled.</div>';
-    if (loadState === "error") return '<div class="banner">Couldn\'t load the latest feedback (showing last saved copy).</div>';
+    if (loadState === "off") return '<div class="banner">Comments are not connected yet - sending is disabled.</div>';
+    if (loadState === "error") return '<div class="banner">Couldn\'t load the latest comments (showing last saved copy).</div>';
     return "";
   }
 
   // ---------- dialog ----------
-  // Every feedback pop-up looks like the Feedback tab's box: "<emoji> Add feedback as <you>", then what it's about.
+  // Every comment pop-up looks like the Comments tab's box: "<emoji> Add comment as <you>", then what it's about.
   // sentiment: show the optional 👍/👎 toggle (the choice is left in dlgVote).
   const feedbackDialog = (icon, subject, placeholder, sentiment = true) =>
-    ask({ title: `${icon} Add feedback as ${who}`, body: subject, placeholder, ok: "💬 Send", model: true, as: who, sentiment });
+    ask({ title: icon === "📌" ? `📌 Add to plan as ${who}` : `${icon} Add comment as ${who}`, body: subject, placeholder, ok: "💬 Send", model: true, as: who, sentiment });
 
   // model: show the 🤖 model picker (its value is left in dlgModel for the caller); as: tint the dialog for that person
   function ask({ title, body, placeholder, input, ok = "OK", model, as, sentiment }) {
@@ -571,9 +571,9 @@
   function route() {
     const tab = (location.hash.slice(1) || "plan").toLowerCase();
     const person = PEOPLE.find(p => p.toLowerCase() === tab);
-    // Old per-person links (#matija / #maryna) open the Feedback tab filtered to that person
-    if (person) { ui.fbWho = [person]; store.set("ui", ui); history.replaceState(null, "", "#feedback"); return { tab: "feedback", render: viewFeedback }; }
-    if (tab === "feedback") return { tab, render: viewFeedback };
+    // Old per-person links (#matija / #maryna) open the Comments tab filtered to that person
+    if (person) { ui.fbWho = [person]; store.set("ui", ui); history.replaceState(null, "", "#comments"); return { tab: "comments", render: viewFeedback }; }
+    if (tab === "comments" || tab === "feedback") return { tab: "comments", render: viewFeedback };
     if (tab === "ideas") return { tab, render: viewIdeas };
     if (tab === "updates" || tab === "about") return { tab: "about", render: viewUpdates };
     if (tab === "austin") return { tab, render: viewAustin };

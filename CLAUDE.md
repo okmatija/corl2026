@@ -6,7 +6,7 @@ Travellers: Matija and Maryna. CoRL 2026: Austin TX, workshops Nov 9, main confe
 ## Files
 - `data/trip.js` - everything shown: meta, obligations, openQuestions, places, ideas (idea cards), plan (the ONE plan). Edit this, not the HTML.
 - `data/config.js` - `FEEDBACK_API` = URL of the Cloudflare Worker.
-- `app.js`, `styles.css`, `index.html` - the viewer. Vanilla JS, mobile-first. Tabs: Plan, Ideas, Feedback (composer + filterable history, cards tinted blue=Matija / pink=Maryna), ℹ️ Help (#about: guide + update history).
+- `app.js`, `styles.css`, `index.html` - the viewer. Vanilla JS, mobile-first. Tabs: Plan, Ideas, Comments (#comments; composer + filterable history, cards tinted blue=Matija / pink=Maryna), ℹ️ Help (#about: guide + update history).
 - `worker/` - Cloudflare Worker that turns site submissions into GitHub issues and lists them back. Secrets: GITHUB_TOKEN, TRIP_KEY.
 - `assets/` - user inputs. `assets/private/` is git-ignored: read it, never copy sensitive details (booking refs, addresses, IDs) into tracked files.
 - `assets/private/notes.md` - private facts extracted from work documents (policy, schedule). Read it first when planning.
@@ -15,7 +15,8 @@ Travellers: Matija and Maryna. CoRL 2026: Austin TX, workshops Nov 9, main confe
 - `data/runs.js` - update history shown on the #updates page. A scheduled cloud routine processes feedback hourly 06:00-23:00 UK.
   If there are no open feedback issues, do nothing (no commit).
 
-## Feedback = GitHub issues
+## Comments (a.k.a. feedback) = GitHub issues
+The site calls them "comments"; internally they are still `feedback` (label, kinds, Worker, this file).
 Every submission is an issue labelled `feedback` + `from:matija|from:maryna` + `idea|plan|reply|general` + `model:haiku|sonnet|opus`.
 `model:*` = which Claude model the sender picked to action it. There is one hourly routine per model (Sonnet, the default, also takes
 issues with no model label); interactive sessions handle any model. `reply` = a comment on another feedback item
