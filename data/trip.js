@@ -4,7 +4,7 @@ window.TRIP = {
   meta: {
     title: "CoRL 2026 · USA trip",
     travellers: ["Matija", "Maryna"],
-    updated: "2026-09-24T11:44Z",
+    updated: "2026-09-24T12:01Z",
     status: "Work dates are confirmed. After Fri 13 Nov (Matija done at 16:00) this is a two-week proposal, flying home Fri 27 Nov - see the open questions.",
   },
 
@@ -25,6 +25,7 @@ window.TRIP = {
     "NASCAR: the Cup championship race is Sun 8 Nov at Homestead-Miami - the day before CoRL. Tickets are on sale now (~$100-250pp estimate for a good grandstand seat, more for premium/hospitality). Checked flights: American has a 9:45pm nonstop Miami -> Austin (backup 10:13pm) landing well before Monday's conference start, so it's logistically doable if we fly into Miami first (Fri 6 Nov) - tight on race day (leave right after the trophy presentation), but workable. Worth it, or do the Texas Motor Speedway drive/ride-along (Fort Worth, a full day) instead?",
     "Theme parks: add Orlando (Disney World / Universal) to the Florida leg? It would take 2-3 nights, e.g. from Key West or NYC.",
     "Concerts: the bands we grew up with (Linkin Park, AC/DC, Iron Maiden, Foo Fighters, Okean Elzy) aren't touring the US in November 2026. Metallica at the Sphere is the big exception, but it needs Vegas. Should I keep checking for new announcements, or is it worth building Vegas in for Metallica?",
+    "Flights: Matija might fly business (BA Club Suite, London → Austin nonstop). Should Maryna fly business too, both take premium economy together, or split cabins on the same flight? See the 📄 Details on the London → Austin card.",
     "Any must-sees already on your list?",
   ],
 
@@ -225,6 +226,40 @@ window.TRIP = {
   // Prices are estimates. Any stop or travel card with an entry here gets a Details button.
   details: {
     "stop:austin": { href: "#austin" },
+    "travel:austin": {
+      title: "✈️ Flights London → Austin (Sat 7 Nov)",
+      intro: "British Airways is the only nonstop: Heathrow → Austin in about 10.5 hours, roughly 11-14 flights a week, leaving Heathrow late morning to mid-afternoon and landing in Austin the same afternoon/evening. Virgin Atlantic stopped flying this route in January 2024.",
+      sections: [
+        { title: "Nonstop - British Airways (LHR → AUS)", items: [
+          { name: "Economy", text: "Comparison sites show London → Austin return from roughly £450 (estimate; November is usually one of the cheaper months for transatlantic flights).", link: "https://www.kayak.co.uk/flight-routes/London-Heathrow-LHR/Austin-Bergstrom-AUS" },
+          { name: "Business - Club Suite", text: "Fully flat seat with a door and direct aisle access. Business fares on Austin-London have been seen from about $2,600 return, but published fares are often much higher (~$4,500) - worth tracking prices, using Avios, or bidding for an upgrade.", link: "https://www.britishairways.com/content/flights/usa/texas/austin" },
+          { name: "Premium Economy (World Traveller Plus)", text: "A middle ground if you want to sit together in more comfort: wider seat, more recline, better food - usually well below business fares." },
+        ] },
+        { title: "Business for Matija, Maryna too?", items: [
+          { name: "Options", text: "Both economy; both premium economy; or Matija in Club Suite and Maryna in economy or premium (same flight, different cabins). If Matija's ticket is booked through work, check which cabin the travel policy allows. See the open question on the Plan page." },
+        ] },
+        { title: "One-stop alternatives (cheaper, longer)", items: [
+          { name: "Via a US hub", text: "American (via Dallas), United (via Houston/Chicago) or Delta (via Atlanta) - typically 14-16 hours door to door. Only worth it if much cheaper or for the airline's lounge/status." },
+        ] },
+        { title: "Before you fly", items: [
+          { name: "Entry to the US", text: "UK passports need an approved ESTA (apply online, well before travel). Other passports may need a US visa instead, which can take months - check each passport's requirements early.", link: "https://esta.cbp.dhs.gov/" },
+          { name: "Arriving at AUS", text: "Austin airport is ~20 minutes from downtown by Uber/taxi." },
+        ] },
+      ],
+    },
+    "travel:home": {
+      title: "✈️ Flights New York → London (Fri 27 Nov)",
+      intro: "Plenty of nonstops from JFK and Newark: British Airways, Virgin Atlantic, American, Delta, United and JetBlue. Evening departures (roughly 6-11 pm) land in London the next morning after ~7 hours.",
+      sections: [
+        { title: "Choosing a flight", items: [
+          { name: "Evening flight (the plan)", text: "Leaves time for the 9/11 Museum or the Met in the morning. Allow ~1-1.5 h to JFK/Newark from Brooklyn or Midtown, more on the Friday after Thanksgiving." },
+          { name: "Business on the way home", text: "An overnight flight is where a flat bed helps most - BA Club Suite, Virgin Upper Class and others fly this route. Same options as the outbound: same cabin together, or split cabins." },
+        ] },
+        { title: "Heads-up", items: [
+          { name: "Thanksgiving weekend", text: "The Friday after Thanksgiving is busy and pricier - book early, and check whether an open-jaw ticket (London → Austin, New York → London) is cheaper than two one-ways." },
+        ] },
+      ],
+    },
     "travel:fredericksburg": {
       title: "🚗 Car hire for the Texas road trip",
       intro: "One rental covers Fri 13 - Fri 20 Nov: pick up in Austin after the team summit, drop off at San Antonio airport before the flight to Miami. Avis and Budget are the same company (Avis Budget Group) and both have desks at both airports.",
