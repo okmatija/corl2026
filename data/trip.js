@@ -4,7 +4,7 @@ window.TRIP = {
   meta: {
     title: "CoRL 2026 · USA trip",
     travellers: ["Matija", "Maryna"],
-    updated: "2026-09-24T10:01Z",
+    updated: "2026-09-24T11:22Z",
     status: "Work dates are confirmed. After Fri 13 Nov (Matija done at 16:00) this is a two-week proposal, flying home Fri 27 Nov - see the open questions.",
   },
 
@@ -18,7 +18,7 @@ window.TRIP = {
   openQuestions: [
     "Flying from London? Arriving together on Sat 7 Nov?",
     "Warm leg after Texas: Florida (Miami + Keys, as now in the plan), or San Diego / Puerto Rico instead? Vote on the 'Warm alternative' cards or answer here.",
-    "Thanksgiving with Maja & Amit (Thu 26 Nov, they're in Cobble Hill, Brooklyn - we'll stay nearby, not with them): dinner at their place (bring something?) or a restaurant (book by October)? And do we want a 3rd night in New York to have more time with them?",
+    "Thanksgiving with Maja & Amit (Thu 26 Nov, they're in Cobble Hill, Brooklyn - we'll stay nearby, not with them): dinner at their place (bring something?) or a restaurant (book by October)? And do we want a 3rd night in New York to have more time with them and a less rushed morning at the 9/11 Memorial & Museum before the Fri 27 Nov flight home (it currently fits on departure morning, but only if we don't linger)?",
     "Return: flying home on Fri 27 Nov from New York - does that match 'two weeks after CoRL' for you?",
     "Maryna, Mon 9 - Fri 13 Nov: stay in Austin with day trips, or a side trip (New Orleans, Houston, San Antonio...)? Vote on the 'Maryna:' idea cards.",
     "OK renting a car for the road trip after the conference, with some 4-6 h driving days?",
@@ -97,7 +97,6 @@ window.TRIP = {
     { id: "kw-snorkel", place: "keywest", title: "Reef snorkel trip", cat: "nature", cost: "$$", dur: "half day", why: "The only living coral barrier reef in the continental US." },
     { id: "kw-oldtown", place: "keywest", title: "Old Town by bike + Hemingway House", cat: "culture", cost: "$", dur: "half day", why: "Flat, pastel streets; the six-toed cats at Hemingway's house." },
     { id: "kw-tortugas", place: "keywest", title: "Dry Tortugas National Park day trip", cat: "nature", cost: "$$$", dur: "full day", why: "Ferry to a 19th-century fort on a remote island with great snorkelling. Books out - reserve early." },
-    { id: "nyc-parade", place: "nyc", title: "Macy's Thanksgiving Day Parade (Thu 26 Nov)", cat: "city", cost: "free", dur: "morning", why: "Giant balloons down Central Park West; arrive by 6-7am for a spot, or watch the balloon inflation the evening before." },
     { id: "sd-coast", place: "sandiego", title: "Warm alternative: San Diego (La Jolla, beaches, Balboa Park)", cat: "nature", cost: "$$", dur: "3-4 days", why: "Dry, sunny ~21°C; sea lions at La Jolla Cove, coastal walks, great tacos. Direct flights from Texas." },
     { id: "pr-island", place: "sanjuan", title: "Warm alternative: Puerto Rico (Old San Juan, El Yunque, bio bay)", cat: "adventure", cost: "$$", dur: "3-4 days", why: "Hottest option (~29°C): colourful old town, rainforest hikes, kayaking a glowing bioluminescent bay." },
 
@@ -198,6 +197,7 @@ window.TRIP = {
     { id: "nyc-veselka", place: "nyc", title: "Veselka + the East Village's Ukrainian corner", cat: "food", cost: "$", dur: "2h", why: "Legendary Ukrainian diner (varenyky, borscht) at the heart of Little Ukraine; the Ukrainian Museum is a few blocks away." },
     { id: "nyc-jazz", place: "nyc", title: "Village Vanguard jazz", cat: "music", cost: "$$", dur: "evening", why: "Legendary basement club." },
     { id: "nyc-summit", place: "nyc", title: "Top of the Rock or SUMMIT at sunset", cat: "city", cost: "$$", dur: "2h", why: "Top of the Rock has the Empire State in view." },
+    { id: "nyc-911memorial", place: "nyc", title: "9/11 Memorial & Museum", cat: "culture", cost: "$$", dur: "half day", why: "Outdoor Memorial is free, daily 8am-8pm. Museum (~$33pp estimate) is open Wed-Mon 9am-7pm, last entry 5:30pm (closed Tuesdays) - but closed on Thanksgiving Day itself. Book timed tickets online up to 6 months ahead; first-come first-served tickets release Mondays 7am ET." },
   ],
 
   // Austin map page (#austin). Coordinates are approximate; the map links search by address.
@@ -267,8 +267,8 @@ window.TRIP = {
       { place: "nyc", arrive: "2026-11-25", leave: "2026-11-27",
         travel: "🚗 Drive back to Miami (~3.5 h), ✈️ fly to New York (~3 h)",
         stay: { name: "Hotel in Brooklyn Heights / Downtown Brooklyn, or Midtown", price: 400, notes: "Maja & Amit are in Cobble Hill, Brooklyn - not staying with them, but aim for <=30 min away (Brooklyn Heights/Downtown Brooklyn is closest; Midtown also works via subway). Thanksgiving week is peak - book early." },
-        days: [["Long travel day", "Evening: balloon inflation by the Natural History Museum"], ["Thanksgiving: nyc-parade", "nyc-central", "Thanksgiving dinner with Maja & Amit"]] },
+        days: [["Long travel day", "Evening: balloon inflation by the Natural History Museum"], ["Relaxed Thanksgiving morning (skip the Macy's parade crowds): nyc-central", "Thanksgiving dinner with Maja & Amit"]] },
     ],
-    end: { date: "2026-11-27", text: "Morning at the Met or the High Line, then fly home from New York (JFK/EWR) in the evening" },
+    end: { date: "2026-11-27", text: "Morning at nyc-911memorial (open Fri 9am-7pm; book ahead - it's closed on Thanksgiving Day itself) or the Met/High Line, then fly home from New York (JFK/EWR) in the evening" },
   },
 };

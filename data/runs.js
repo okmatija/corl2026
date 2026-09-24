@@ -1,6 +1,7 @@
 // Log of plan updates made from feedback (newest first). Appended by Claude on every run that changes something.
 // { start, end: ISO UTC, by: "scheduled" | "manual", model, issues: [numbers], summary, tokens?: number, costUsd?: number }
 window.RUNS = [
+  { start: "2026-09-24T11:21:01Z", end: "2026-09-24T11:22:34Z", by: "scheduled", model: "claude-sonnet-5", issues: [28, 29], summary: "Dropped the Macy's parade from Thanksgiving morning (Matija: not our thing, too busy) - kept Central Park; added a 9/11 Memorial & Museum idea card with hours/booking (closed Thanksgiving Day, open Fri 27 Nov) and slotted it into the departure morning." },
   { start: "2026-09-24T11:12:06Z", end: "2026-09-24T11:12:54Z", by: "scheduled", model: "claude-haiku-4-5-20251001", issues: [26, 27], summary: "Resolved 2 test replies to closed issue #19; no plan changes." },
   { start: "2026-09-24T10:10:00Z", end: "2026-09-24T10:25:00Z", by: "manual", model: "claude-opus-5-5", issues: [], summary: "One Feedback tab replaces the Matija/Maryna tabs: composer + history with who/type toggle filters, blue/pink cards; Ideas page explains how to ask for more ideas." },
   { start: "2026-09-24T09:45:00Z", end: "2026-09-24T10:05:00Z", by: "manual", model: "claude-opus-5-5", issues: [18, 19, 20, 21, 22, 23, 25], summary: "ⓘ About page, model picker (Haiku/Sonnet/Opus, one hourly routine each), times on feedback, Trip Summary box, replies between you two, blue/pink colours; repaired the broken update log." },
