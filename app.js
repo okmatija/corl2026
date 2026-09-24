@@ -502,11 +502,9 @@
       <div class="card">
         <p style="margin:0 0 8px">Matija & Maryna's plan for CoRL 2026 in Austin and a two-week holiday afterwards. Claude agents read what you say and update the plan every hour.</p>
         <ul class="plain">
-          <li><b>👤 Pick who you are</b> with the name badge at the top right (blue = Matija, pink = Maryna).</li>
-          <li><b>💬 Comment</b> on anything - a stop, a journey, a single day, an idea, an open question or each other's comments. In the pop-up you can add an optional 👍 or 👎.</li>
+          <li><b>👤 Pick who you are</b> with the name badge at the top right.</li>
+          <li><b>💬 Comment</b> on anything - a stop, a journey, a day, an idea etc. - and add an optional 👍 or 👎 sentiment and pick the model to action the comment: Sonnet (default), Haiku (quick) or Opus (most thorough).</li>
           <li><b>📌 Add to plan</b> on an idea asks the agent to fit it into the plan; tapping <b>📌 In plan</b> asks it to take the idea out again.</li>
-          <li><b>💬 Comments tab</b> - ask the agent for anything else: new ideas, changes, a budget… and see everything you've both said (filter by person, 👍, 👎).</li>
-          <li><b>🤖 Model</b> - the dropdown next to Send picks which Claude handles it: Sonnet (default), Haiku (quick) or Opus (most thorough).</li>
           <li><b>📄 Details</b> on a stop or journey opens more (maps, hotels, flights, car hire). Ask for one on anything with 💬.</li>
         </ul>
       </div>
