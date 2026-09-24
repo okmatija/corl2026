@@ -140,7 +140,7 @@
           <div class="stat"><b>${fmt(P.legs[0].arrive, { day: "numeric", month: "short" })} – ${fmt(end.date, { day: "numeric", month: "short" })}</b><span>${nights} nights</span></div>
           <div class="stat"><b>${money(lodging)}</b><span>our lodging est. (excl. work-paid nights) · budget ${money(P.budgetPerNight)}/nt</span></div>
         </div>
-        <p class="muted small" style="margin:10px 0 0">Updated ${esc(when(T.meta.updated))} · 🤖 Claude checks feedback ${esc(window.AUTOMATION?.schedule || "")} · <a href="#about">ⓘ About & history</a></p>
+        <p class="muted small" style="margin:10px 0 0">Updated ${esc(when(T.meta.updated))} · 🤖 Claude checks feedback ${esc(window.AUTOMATION?.schedule || "")} · <a href="#about">ⓘ Help & history</a></p>
       </div>
       ${T.openQuestions?.length ? `<div class="card"><h3>Open questions</h3>${T.openQuestions.map((q, i) => `
         <div class="question">

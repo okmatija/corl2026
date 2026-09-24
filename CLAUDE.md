@@ -6,7 +6,7 @@ Travellers: Matija and Maryna. CoRL 2026: Austin TX, workshops Nov 9, main confe
 ## Files
 - `data/trip.js` - everything shown: meta, obligations, openQuestions, places, ideas (idea cards), plan (the ONE plan). Edit this, not the HTML.
 - `data/config.js` - `FEEDBACK_API` = URL of the Cloudflare Worker.
-- `app.js`, `styles.css`, `index.html` - the viewer. Vanilla JS, mobile-first. Tabs: Plan, Ideas, Feedback (composer + filterable history, cards tinted blue=Matija / pink=Maryna). ⓘ -> #about.
+- `app.js`, `styles.css`, `index.html` - the viewer. Vanilla JS, mobile-first. Tabs: Plan, Ideas, Feedback (composer + filterable history, cards tinted blue=Matija / pink=Maryna), ⓘ Help (#about: guide + update history).
 - `worker/` - Cloudflare Worker that turns site submissions into GitHub issues and lists them back. Secrets: GITHUB_TOKEN, TRIP_KEY.
 - `assets/` - user inputs. `assets/private/` is git-ignored: read it, never copy sensitive details (booking refs, addresses, IDs) into tracked files.
 - `assets/private/notes.md` - private facts extracted from work documents (policy, schedule). Read it first when planning.
