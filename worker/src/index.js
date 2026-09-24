@@ -64,8 +64,8 @@ async function createFeedback(req, env) {
 
   const kind = ["idea", "plan", "reply"].includes(b.kind) ? b.kind : "general";
   const text = clean(b.text, 4000);
-  // Which Claude model should action this (each model has its own hourly routine). Small model by default.
-  const model = ["haiku", "sonnet", "opus"].includes(b.model) ? b.model : "haiku";
+  // Which Claude model should action this (each model has its own hourly routine). Sonnet by default.
+  const model = ["haiku", "sonnet", "opus"].includes(b.model) ? b.model : "sonnet";
   const data = { who, kind, model, date: new Date().toISOString() };
   let title;
   if (kind === "idea") {

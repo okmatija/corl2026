@@ -17,7 +17,7 @@ Travellers: Matija and Maryna. CoRL 2026: Austin TX, workshops Nov 9, main confe
 
 ## Feedback = GitHub issues
 Every submission is an issue labelled `feedback` + `from:matija|from:maryna` + `idea|plan|reply|general` + `model:haiku|sonnet|opus`.
-`model:*` = which Claude model the sender picked to action it. There is one hourly routine per model (Haiku also takes
+`model:*` = which Claude model the sender picked to action it. There is one hourly routine per model (Sonnet, the default, also takes
 issues with no model label); interactive sessions handle any model. `reply` = a comment on another feedback item
 (`replyTo` issue number, `replyToWho`): read the original issue for context; act on it if it changes the plan, otherwise
 resolve it as noted.

@@ -22,7 +22,7 @@
   let loadState = API ? "loading" : "off";
   const ui = store.get("ui", { filter: "all", region: "all" });
   let map = null;
-  let dlgModel = "haiku";   // model picked in the last feedback dialog
+  let dlgModel = "sonnet";   // model picked in the last feedback dialog
 
   // ---------- helpers ----------
   const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
@@ -37,7 +37,7 @@
   const STATES = { TX: "texas", FL: "florida", NY: "new york", CA: "california", NV: "nevada", AZ: "arizona", UT: "utah", LA: "louisiana", PR: "puerto rico" };
   const TYPE_ICON ={ city: "🏙️", nature: "🌲", beach: "🏖️" };
   const placeLabel = id => `${TYPE_ICON[place(id).type] || "📍"} ${place(id).name}`;
-  // Which Claude model actions a piece of feedback (each has its own hourly routine). Small model is the default.
+  // Which Claude model actions a piece of feedback (each has its own hourly routine). Sonnet is the default.
   const MODELS = [["haiku", "🤖 Haiku"], ["sonnet", "🤖 Sonnet"], ["opus", "🤖 Opus"]];
   const modelOptions = sel => MODELS.map(([k, l]) => `<option value="${k}" ${k === sel ? "selected" : ""}>${l}</option>`).join("");
   const MODEL_NAME = { haiku: "Haiku", sonnet: "Sonnet", opus: "Opus" };
@@ -349,10 +349,10 @@
       <div class="card composer ${tint(who)}">
         ${who ? `
         <h3>💬 Add feedback as ${esc(who)}</h3>
-        <p class="muted small" style="margin:0 0 8px">Anything: must-sees, budget per night, where to stay, dates, dealbreakers… (not you? tap the name badge at the top)</p>
-        <textarea id="freeText" rows="4" placeholder="e.g. Budget ~150/night. I'd love a day at the beach."></textarea>
+        <p class="muted small" style="margin:0 0 8px">Ask the agent to make a change, e.g. add a specific idea, generate new ideas, change the plan, set a budget…</p>
+        <textarea id="freeText" rows="4" placeholder="e.g. Add ideas for a rainy day in Austin. Move the Everglades to the morning."></textarea>
         <div class="row send-row" style="margin-top:8px">
-          <select id="freeModel" class="model-select" aria-label="Claude model to action this" title="Claude model to action this">${modelOptions("haiku")}</select>
+          <select id="freeModel" class="model-select" aria-label="Claude model to action this" title="Claude model to action this">${modelOptions("sonnet")}</select>
           <button class="primary" data-send>💬 Send</button>
         </div>` : `
         <h3>💬 Add feedback</h3>
@@ -396,7 +396,7 @@
         <ul class="plain">
           <li>👍 / 👎 - quick like or dislike (ideas, stops, days)</li>
           <li>💬 - write something: comments, answers to open questions, replies to each other, and anything else on the Feedback tab</li>
-          <li>🤖 the dropdown next to Send picks which Claude model actions it: Haiku (default, small &amp; fast), Sonnet (balanced) or Opus (most thorough, for tricky requests)</li>
+          <li>🤖 the dropdown next to Send picks which Claude model actions it: Sonnet (default, balanced), Haiku (small &amp; fast) or Opus (most thorough, for tricky requests)</li>
           <li>Pick who you are with the name badge at the top right (blue = Matija, pink = Maryna)</li>
         </ul>
       </div>
@@ -432,7 +432,7 @@
       const dlg = document.getElementById("dlg");
       dlg.className = tint(as);
       document.getElementById("dlgModel").hidden = !model;
-      document.getElementById("dlgModel").innerHTML = modelOptions("haiku");
+      document.getElementById("dlgModel").innerHTML = modelOptions("sonnet");
       dlg.querySelector("h3").textContent = title;
       dlg.querySelector("p").textContent = body || "";
       const ta = dlg.querySelector("textarea");
