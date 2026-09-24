@@ -64,7 +64,7 @@ to the person saying what you changed.
 
 ## Conventions
 - 📜 Details pages are a standard idiom: add an entry to `TRIP.details` keyed like a plan target (`stop:<place>`,
-  `travel:<place>`, `travel:home`) with `{ title, intro, sections: [{ title, items: [{ name, text, link }] }] }` (or `{ href }`
+  `travel:<place>`, `travel:home`), or `stay:<place>` / `idea:<idea id>` with `{ title, intro, sections: [{ title, items: [{ name, text, link }] }] }` (or `{ href }`
   to an existing page). The card then shows a "📜 Details" button. When feedback asks for "more details" on something, do this.
 - Ideas can have `link` (official website / booking page): shown on the idea card and makes the idea's name a link in the plan.
   Add one whenever feedback asks for a booking/website link.

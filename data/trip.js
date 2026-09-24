@@ -221,11 +221,14 @@ window.TRIP = {
     ],
   },
 
-  // "📜 Details" pages, keyed like plan feedback targets ("stop:<place>", "travel:<place>", "travel:home").
+  // "📜 Details" pages, keyed like plan feedback targets ("stop:<place>", "travel:<place>", "travel:home"), plus
+  // "stay:<place>" (the stop's place to stay) and "idea:<idea id>" (shows 📜 Details on that idea card).
+  // Stops, journeys and stays without an entry get an automatic page built from the plan.
   // Either { href } to an existing page, or { title, intro, sections: [{ title, items: [{ name, text, link }] }] }.
   // Prices are estimates. Any stop or travel card with an entry here gets a Details button.
   details: {
     "stop:austin": { href: "#austin" },
+    "stay:austin": { href: "#austin" },
     "travel:austin": {
       title: "✈️ Flights London → Austin (Sat 7 Nov)",
       intro: "British Airways is the only nonstop: Heathrow → Austin in about 10.5 hours, roughly 11-14 flights a week, leaving Heathrow late morning to mid-afternoon and landing in Austin the same afternoon/evening. Virgin Atlantic stopped flying this route in January 2024.",

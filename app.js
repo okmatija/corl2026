@@ -24,7 +24,7 @@
   let map = null;
   let dlgModel = "sonnet";   // model picked in the last feedback dialog
   let dlgVote = null;        // optional 👍/👎 picked in the last feedback dialog
-  let openIdea = null;       // idea shown in the ✨ pop-up
+  let openDay = null;        // { date, title } shown in the 📜 day pop-up
 
   // ---------- helpers ----------
   const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
@@ -116,7 +116,7 @@
         const key = "day:" + date;
         const dayTitle = `${fmt(date)} in ${short(l.place)}`;
         return `<div class="day"><div class="date"><b>${fmt(date, { weekday: "short" })}</b>${fmt(date, { day: "numeric", month: "short" })}
-          <div class="mini">${commentBtn(key, dayTitle, true)}</div></div>
+          <div class="mini"><button data-daydetails="${date}" data-title="${esc(dayTitle)}" aria-label="Idea cards for ${esc(dayTitle)}">📜</button>${commentBtn(key, dayTitle, true)}</div></div>
           <div><ul>${lines.map(x => `<li>${x}</li>`).join("") || "<li class='muted'>Free</li>"}</ul></div></div>`;
       }).join("");
       const s = l.stay;
@@ -127,10 +127,10 @@
           <div class="card">
             <div class="item-head"><h3>${esc(p.name)}</h3><span class="tag">${n} night${n > 1 ? "s" : ""}</span></div>
             <div class="item-meta">${fmt(l.arrive)} → ${fmt(l.leave)} · ${esc(p.blurb || "")}</div>
-            ${detailsBtn("stop:" + l.place)}
-            ${s ? `<div class="stay"><div class="item-head"><span>🛏️ ${esc(s.name)}</span>${s.covered ? '<span class="tag ok">paid by work</span>' : `<span class="tag ${s.price <= P.budgetPerNight ? "ok" : "over"}">~${money(s.price)}/nt</span>`}</div>${s.notes ? `<div class="item-meta">${esc(s.notes)}</div>` : ""}</div>` : ""}
+            ${s ? `<div class="stay"><div class="item-head"><span>🛏️ ${esc(s.name)}</span>${s.covered ? '<span class="tag ok">paid by work</span>' : `<span class="tag ${s.price <= P.budgetPerNight ? "ok" : "over"}">~${money(s.price)}/nt</span>`}</div>${s.notes ? `<div class="item-meta">${esc(s.notes)}</div>` : ""}
+              <div class="stay-links"><a href="${gmaps(s.name + ", " + p.name)}" target="_blank" rel="noopener">🗺️ Map</a>${detailsBtn("stay:" + l.place)}</div></div>` : ""}
             <div class="days">${days}</div>
-            <div class="vote">${commentBtn("stop:" + l.place, `Stop: ${p.name}`)}</div>
+            <div class="vote">${detailsBtn("stop:" + l.place)}${commentBtn("stop:" + l.place, `Stop: ${p.name}`)}</div>
           </div>
         </div>`;
     }).join("");
@@ -241,21 +241,63 @@
     <p class="muted small" style="margin:6px 0 0">Rough estimates for 2 people: hotels from the plan, flights & car hire from the 📜 Details pages, things to do from each idea's $ rating. Austin nights are paid by work.</p>`;
   }
 
-  // An idea mentioned in the plan: its name (linked to its website if it has one) + a ✨ button that pops up its idea card
+  // An idea mentioned in the plan: its name, linked to its website if it has one
   function ideaRef(id) {
     const a = ideas[id], name = `<b>${esc(a.title)}</b>`;
-    return `${a.link ? `<a href="${esc(a.link)}" target="_blank" rel="noopener">${name}</a>` : name}<button class="idea-ref" data-showidea="${id}" aria-label="Show the idea card for ${esc(a.title)}">✨</button>`;
+    return a.link ? `<a href="${esc(a.link)}" target="_blank" rel="noopener">${name}</a>` : name;
+  }
+
+  // Idea cards for one day of the plan (the 📜 day pop-up)
+  function dayIdeas({ date, title }) {
+    const P = T.plan, ids = [];
+    P.legs.forEach(l => (l.days || []).forEach((items, k) => {
+      if (addDays(l.arrive, k) === date) items.forEach(x => (x.match(idPattern) || []).forEach(id => ids.includes(id) || ids.push(id)));
+    }));
+    return `<h3 style="margin:4px 4px 8px">📜 ${esc(title)}</h3>${ids.map(id => ideaCard(ideas[id])).join("") || '<p class="muted" style="margin:4px">No idea cards for this day - it\'s free time, travel or work.</p>'}`;
   }
 
   // "📜 Details" button for any stop/travel card that has an entry in TRIP.details (same keys as plan feedback targets)
   function detailsBtn(key) {
     const dd = T.details?.[key];
-    if (!dd) return "";
-    return `<a class="details-btn" href="${esc(dd.href || "#details/" + key)}">📜 Details</a>`;
+    return `<a class="details-btn" href="${esc(dd?.href || "#details/" + key)}">📜 Details</a>`;
+  }
+
+  // Automatic details page for a stop / journey / stay that has no written TRIP.details entry yet
+  function autoDetails(key) {
+    const [kind, id] = key.split(":");
+    const P = T.plan, legIdx = P.legs.findIndex(l => l.place === id), l = P.legs[legIdx], p = place(id);
+    const sec = (title, items) => ({ title, items });
+    if (kind === "stay" && l?.stay) {
+      const st = l.stay;
+      return { title: `🛏️ ${st.name}`, intro: `${p.name} · ${fmt(l.arrive)} → ${fmt(l.leave)} (${nightsBetween(l.arrive, l.leave)} nights)`, sections: [
+        sec("Where to stay", [
+          { name: st.name, text: [st.covered ? "Paid by Matija's work." : `~${money(st.price)} a night (estimate).`, st.notes].filter(Boolean).join(" ") },
+          { name: "🗺️ Map", link: gmaps(st.name + ", " + p.name) },
+          { name: "Compare prices (Google Hotels)", link: `https://www.google.com/travel/hotels?q=${encodeURIComponent(st.name + " " + p.name)}` },
+        ]) ] };
+    }
+    if (kind === "stop" && l) {
+      const n = nightsBetween(l.arrive, l.leave) + (legIdx === P.legs.length - 1 ? 1 : 0);
+      return { title: p.name, intro: `${fmt(l.arrive)} → ${fmt(l.leave)} · ${p.blurb || ""}`, sections: [
+        ...(l.stay ? [sec("Where to stay", [{ name: `🛏️ ${l.stay.name}`, text: l.stay.notes || "", link: "#details/stay:" + id }])] : []),
+        sec("Day by day", Array.from({ length: n }, (_, k) => ({ name: fmt(addDays(l.arrive, k)), text: (l.days?.[k] || []).map(x => x.replace(idPattern, i => ideas[i].title)).join(" · ") || "Free" }))),
+        sec("On the map", [{ name: `🗺️ ${p.name}`, link: gmaps(p.name) }]),
+      ] };
+    }
+    if (kind === "travel") {
+      const to = id === "home" ? null : id, from = id === "home" ? P.legs.at(-1).place : legIdx > 0 ? P.legs[legIdx - 1].place : null;
+      const nm = x => x ? short(x) : (P.home || "Home");
+      const text = id === "home" ? P.end?.text : l?.travel;
+      const a = from && place(from), b = to && place(to);
+      return { title: `${nm(from)} → ${nm(to)}`, intro: (text || "").replace(idPattern, i => ideas[i].title), sections: [
+        ...(a && b ? [sec("Route", [{ name: "🗺️ Directions", link: `https://www.google.com/maps/dir/?api=1&origin=${a.lat},${a.lng}&destination=${b.lat},${b.lng}` }])] : []),
+      ] };
+    }
+    return null;
   }
 
   function viewDetails(key) {
-    const dd = T.details?.[key];
+    const written = T.details?.[key], dd = written || autoDetails(key);
     if (!dd) return `<p><a href="#plan">← Plan</a></p><p class="muted">No details here yet.</p>`;
     return `
       <p style="margin:4px 0"><a href="#plan">← Plan</a></p>
@@ -263,10 +305,10 @@
       ${dd.intro ? `<p class="muted">${esc(dd.intro)}</p>` : ""}
       ${(dd.sections || []).map(sec => `<div class="card"><h3>${esc(sec.title)}</h3>${(sec.items || []).map(it => `
         <div class="item">
-          <span class="item-title">${it.link ? `<a href="${esc(it.link)}" target="_blank" rel="noopener">${esc(it.name)}</a>` : esc(it.name)}</span>
+          <span class="item-title">${it.link ? `<a href="${esc(it.link)}"${it.link.startsWith("#") ? "" : ' target="_blank" rel="noopener"'}>${esc(it.name)}</a>` : esc(it.name)}</span>
           ${it.text ? `<div class="item-meta">${esc(it.text)}</div>` : ""}
         </div>`).join("")}</div>`).join("")}
-      <p class="muted small">Prices are estimates - check live rates before booking. Want something changed or added here? Use 💬 on the card in the plan.</p>`;
+      <p class="muted small">${written ? "Prices are estimates - check live rates before booking. " : "This page is put together from the plan. "}Want more here? 💬 Comment on the card in the plan and ask the agent for details.</p>`;
   }
 
   // Card for a journey between stops (from/to = place ids; null = home). Same 👍 👎 💬 buttons as a stop.
@@ -281,8 +323,7 @@
         <div class="card travel-card">
           <div class="item-head"><span class="item-title">${icon} ${esc(route)}</span><span class="tag">${fmt(date)}</span></div>
           ${details ? `<div class="item-meta">${details}${dir ? ` · <a href="${dir}" target="_blank" rel="noopener">directions</a>` : ""}</div>` : ""}
-          ${detailsBtn(key)}
-          <div class="vote">${commentBtn(key, `Travel: ${route}`)}</div>
+          <div class="vote">${detailsBtn(key)}${commentBtn(key, `Travel: ${route}`)}</div>
         </div>
       </div>`;
   }
@@ -340,7 +381,7 @@
     const state = STATES[place(a.place).name.split(", ").pop()] || "";
     const text = norm([a.title, a.why, place(a.place).name, state, place(a.place).type, a.cat, CATS[a.cat], a.cost, a.dur, inPlan.has(a.id) ? "in plan" : ""].join(" "));
     return `<article class="idea" data-text="${esc(text)}">
-      <div class="item-head"><h3>${esc(a.title)}</h3></div>
+      <div class="item-head"><h3>${esc(a.title)}</h3>${T.details?.["idea:" + a.id] ? detailsBtn("idea:" + a.id) : ""}</div>
       <div class="item-meta">📍 ${esc(short(a.place))} · ${CATS[a.cat] || ""} · ${esc(a.dur)} · ${esc(a.cost)}</div>
       <p>${esc(a.why)} <a href="https://www.google.com/maps/search/?api=1&query=${q}" target="_blank" rel="noopener">map</a>${a.link ? ` · <a href="${esc(a.link)}" target="_blank" rel="noopener">website / book</a>` : ""}</p>
       ${reactions}
@@ -600,7 +641,7 @@
     if (r.tab === "plan" || r.tab === "austin") drawMap(); else if (map) { map.remove(); map = null; }
     if (r.tab === "ideas") applySearch();
     const ideaDlg = document.getElementById("ideaDlg");
-    if (ideaDlg.open && openIdea) document.getElementById("ideaDlgBody").innerHTML = ideaCard(ideas[openIdea]);
+    if (ideaDlg.open && openDay) document.getElementById("ideaDlgBody").innerHTML = dayIdeas(openDay);
     window.scrollTo(0, keepScroll ? y : 0);
     const badge = document.getElementById("whoBtn");
     badge.textContent = who || "Who are you?";
@@ -630,9 +671,9 @@
       ui[key] = [...cur]; store.set("ui", ui); return rerender();
     }
     if (ds.ideaplan) { ui.ideaPlan = !ui.ideaPlan; store.set("ui", ui); return rerender(); }
-    if (ds.showidea) {   // ✨ in the plan: show that idea's card, exactly as in the Ideas list
-      openIdea = ds.showidea;
-      document.getElementById("ideaDlgBody").innerHTML = ideaCard(ideas[openIdea]);
+    if (ds.daydetails) {   // 📜 on a day: that day's idea cards, exactly as in the Ideas list
+      openDay = { date: ds.daydetails, title: ds.title };
+      document.getElementById("ideaDlgBody").innerHTML = dayIdeas(openDay);
       document.getElementById("ideaDlg").showModal();
       return;
     }
