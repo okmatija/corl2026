@@ -128,7 +128,7 @@
             <div class="item-head"><h3>${esc(p.name)}</h3><span class="tag">${n} night${n > 1 ? "s" : ""}</span></div>
             <div class="item-meta">${fmt(l.arrive)} → ${fmt(l.leave)} · ${esc(p.blurb || "")}</div>
             ${s ? `<div class="stay"><div class="item-head"><span>🛏️ ${esc(s.name)}</span>${s.covered ? '<span class="tag ok">paid by work</span>' : `<span class="tag ${s.price <= P.budgetPerNight ? "ok" : "over"}">~${money(s.price)}/nt</span>`}</div>${s.notes ? `<div class="item-meta">${esc(s.notes)}</div>` : ""}
-              <div class="stay-links">${mapBtn(gmaps(s.name + ", " + p.name))}${detailsBtn("stay:" + l.place)}</div></div>` : ""}
+              <div class="stay-links">${detailsBtn("stay:" + l.place)}${mapBtn(gmaps(s.name + ", " + p.name))}</div></div>` : ""}
             <div class="days">${days}</div>
             <div class="vote">${detailsBtn("stop:" + l.place)}${commentBtn("stop:" + l.place, `Stop: ${p.name}`)}</div>
           </div>
@@ -142,7 +142,7 @@
         <p class="muted" style="margin:4px 0">${esc(P.summary)}</p>
         <div class="stats">
           <div class="stat"><b>${fmt(P.legs[0].arrive, { day: "numeric", month: "short" })} – ${fmt(end.date, { day: "numeric", month: "short" })}</b><span>${nights} nights</span></div>
-          <div class="stat"><b>${money(costs.total)}</b><span>estimated total for 2 (excl. work-paid nights, food & shopping)</span></div>
+          <div class="stat"><b>${money(costs.total)}</b><span>(excl. work-paid nights, food & shopping)</span></div>
         </div>
         ${costCharts(costs)}
         <p class="muted small" style="margin:10px 0 0">Updated ${esc(when(T.meta.updated))}</p>
@@ -238,8 +238,7 @@
     return `<div class="pies">
       ${pie("Cost by type", COST_TYPES.map(([k, l]) => ({ label: l, amount: c.byType[k] })))}
       ${pie("Cost per day, by stop", c.byStop.map(x => ({ label: x.label, amount: x.amount, sub: `${x.days}d · ~${money(x.amount / x.days)}/day` })))}
-    </div>
-    <p class="muted small" style="margin:6px 0 0">Rough estimates for 2 people: hotels from the plan, flights & car hire from the 📜 Details pages, things to do from each idea's $ rating. Austin nights are paid by work.</p>`;
+    </div>`;
   }
 
   // An idea mentioned in the plan: its name, linked to its website if it has one
@@ -259,7 +258,7 @@
 
   // "📜 Details" button for any stop/travel card that has an entry in TRIP.details (same keys as plan feedback targets)
   // Small icon link-buttons, same style as 📜 Details
-  const mapBtn = url => `<a class="details-btn" href="${esc(url)}" target="_blank" rel="noopener">📍 Map</a>`;
+  const mapBtn = (url, label = "📍 Map") => `<a class="details-btn" href="${esc(url)}" target="_blank" rel="noopener">${label}</a>`;
   const webBtn = url => `<a class="details-btn" href="${esc(url)}" target="_blank" rel="noopener">🔗 Website</a>`;
 
   function detailsBtn(key) {
@@ -295,7 +294,7 @@
       const text = id === "home" ? P.end?.text : l?.travel;
       const a = from && place(from), b = to && place(to);
       return { title: `${nm(from)} → ${nm(to)}`, intro: (text || "").replace(idPattern, i => ideas[i].title), sections: [
-        ...(a && b ? [sec("Route", [{ name: "📍 Directions", link: `https://www.google.com/maps/dir/?api=1&origin=${a.lat},${a.lng}&destination=${b.lat},${b.lng}` }])] : []),
+        ...(a && b ? [sec("Route", [{ name: "📍 Route", link: `https://www.google.com/maps/dir/?api=1&origin=${a.lat},${a.lng}&destination=${b.lat},${b.lng}` }])] : []),
       ] };
     }
     return null;
@@ -328,7 +327,7 @@
         <div class="card travel-card">
           <div class="item-head"><span class="item-title">${icon} ${esc(route)}</span><span class="tag">${fmt(date)}</span></div>
           ${details ? `<div class="item-meta">${details}</div>` : ""}
-          ${dir ? `<div class="link-btns">${mapBtn(dir)}</div>` : ""}
+          ${dir ? `<div class="link-btns">${mapBtn(dir, "📍 Route")}</div>` : ""}
           <div class="vote">${detailsBtn(key)}${commentBtn(key, `Travel: ${route}`)}</div>
         </div>
       </div>`;
@@ -527,16 +526,16 @@
         <span class="chip-sep"></span>
         ${FB_TYPES.map(([k, l]) => toggleChip("fbtype", k, l, typeSel.includes(k))).join("")}
       </div>
-      <p class="muted small">${all.length} comment${all.length === 1 ? "" : "s"} · ${open} waiting for the agent · ${all.length - open} done</p>
+      <p class="muted small">${all.length} comment${all.length === 1 ? "" : "s"} · ${open} pending</p>
       ${list.map(f => `
         <div class="card fbitem ${f.state} ${tint(f.who)}">
           <div class="item-head">
             <span><span class="who-name">${esc(f.who)}</span> ${fbLabel(f)}</span>
-            <span class="tag ${f.state === "open" ? "over" : "ok"}">${f.state === "open" ? "⏳ open" : "✅ done"}</span>
+            ${f.state === "open" ? `<span class="tag over">⏳ pending</span>` : ""}
           </div>
           ${f.text ? `<p>${esc(fbText(f)).replace(/\n/g, "<br>")}</p>` : ""}
           <div class="item-meta">${esc(when(f.date))}${f.model ? ` · 🤖 ${MODEL_NAME[f.model] || esc(f.model)}` : ""}${f.url ? ` · <a href="${esc(f.url)}" target="_blank" rel="noopener">#${f.number}</a>` : ""}</div>
-          ${thread(f).map(r => `<div class="reply ${tint(r.who)}">${r.state ? `<span class="reply-state" title="${r.state === "open" ? "waiting for the agent" : "done"}">${r.state === "open" ? "⏳" : "✅"}</span>` : ""}<b>${whoLabel(r.who)}${r.who === AGENT ? "" : " " + vIcon(r.vote)}</b> ${esc(r.text)} <span class="muted small">· ${esc(when(r.date))}</span></div>`).join("")}
+          ${thread(f).map(r => `<div class="reply ${tint(r.who)}">${r.state === "open" ? `<span class="reply-state" title="pending - waiting for the agent">⏳</span>` : ""}<b>${whoLabel(r.who)}${r.who === AGENT ? "" : " " + vIcon(r.vote)}</b> ${esc(r.text)} <span class="muted small">· ${esc(when(r.date))}</span></div>`).join("")}
           ${f.number && f.kind !== "reply" ? `<div class="row end"><button class="reply-btn" data-reply="${f.number}" data-replywho="${esc(f.who)}" data-replytitle="${esc(fbLabel(f).replace(/<[^>]+>/g, ""))}">💬 Comment</button></div>` : ""}
         </div>`).join("") || '<p class="muted">No comments yet.</p>'}
     `;
