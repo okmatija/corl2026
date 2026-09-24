@@ -330,7 +330,7 @@
     const notes = feedback.filter(f => f.kind === "idea" && f.idea === a.id && f.vote === "note" && f.text).sort((x, y) => x.date.localeCompare(y.date));
     const agentNotes = feedback.filter(f => f.kind === "idea" && f.idea === a.id && f.resolution).sort((x, y) => (x.closedAt || x.date).localeCompare(y.closedAt || y.date));
     const reactions = voteChips(v) + notes.map(f => `<div class="fb ${tint(f.who)}"><b>${esc(f.who)} 💬</b> ${esc(f.text)}</div>`).join("")
-      + agentNotes.map(f => `<div class="fb ${tint(AGENT)}"><b>🤖 Claude</b> ${esc(f.resolution)}</div>`).join("");
+      + agentNotes.map(f => `<div class="fb ${tint(AGENT)}"><b>Agent 💬</b> ${esc(f.resolution)}</div>`).join("");
     const state = STATES[place(a.place).name.split(", ").pop()] || "";
     const text = norm([a.title, a.why, place(a.place).name, state, place(a.place).type, a.cat, CATS[a.cat], a.cost, a.dur, inPlan.has(a.id) ? "in plan" : ""].join(" "));
     return `<article class="idea" data-text="${esc(text)}">
@@ -367,7 +367,7 @@
       <div class="banner info">💡 These cards are suggestions from Claude. Want more, or something specific? Ask on the <a href="#comments">💬 Comments</a> tab (e.g. "ideas for a rainy day in Austin") and the hourly agent will add new cards. 📌 Add to plan puts an idea into the plan; 💬 Comment for anything else.</div>
       ${statusBanner()}
       <div class="chips fb-filters" role="group" aria-label="Filter ideas">
-        ${[...PEOPLE, AGENT].map(p => toggleChip("ideawho", p, p === AGENT ? "🤖 Claude" : `💬 ${esc(p)}`, (ui.ideaWho || []).includes(p))).join("")}
+        ${[...PEOPLE, AGENT].map(p => toggleChip("ideawho", p, p === AGENT ? "Agent 💬" : `💬 ${esc(p)}`, (ui.ideaWho || []).includes(p))).join("")}
         <span class="chip-sep"></span>
         ${toggleChip("ideaplan", "plan", "📌 In plan", !!ui.ideaPlan)}
       </div>
@@ -434,7 +434,7 @@
   // Thread under a comment: people's replies + the agent's comment, oldest first
   const thread = f => [...feedback.filter(r => r.kind === "reply" && r.replyTo === f.number), agentComment(f)]
     .filter(Boolean).sort((a, b) => a.date.localeCompare(b.date));
-  const whoLabel = w => w === AGENT ? "🤖 Claude" : esc(w);
+  const whoLabel = w => w === AGENT ? "Agent 💬" : esc(w);
 
   // 👍 / 👎 votes vs everything written (general notes, answers, replies, plan comments)
   const fbType = f => f.vote === "up" || f.vote === "add" ? "up" : f.vote === "down" ? "down" : "general";
