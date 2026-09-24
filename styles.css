@@ -282,9 +282,11 @@ input[type=search] { width: 100%; border: 1px solid var(--line); background: var
 .questions-card[open] > summary { margin-bottom: 4px; }
 
 /* Optional sentiment toggle in the feedback pop-up */
-.sentiment { display: flex; align-items: center; gap: 8px; margin: 0 0 8px; }
+.dlg-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
+.dlg-head h3 { margin: 4px 0; }
+.sentiment { display: flex; align-items: center; gap: 6px; flex: none; margin-left: auto; }
 .sentiment[hidden] { display: none; }
-.sentiment button { border: 1px solid var(--line); background: var(--card); border-radius: 999px; min-width: 48px; height: 36px; font-size: 17px; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+.sentiment button { border: 1px solid var(--line); background: var(--card); border-radius: 999px; min-width: 44px; height: 36px; font-size: 17px; cursor: pointer; -webkit-tap-highlight-color: transparent; }
 .sentiment button.on { border-color: var(--accent); background: var(--accent-soft); }
 .vote button.on[disabled] { opacity: 1; cursor: default; }
 .day .mini button { padding: 2px 8px; }

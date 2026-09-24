@@ -549,7 +549,7 @@
       const dlg = document.getElementById("dlg");
       dlgVote = null;
       document.getElementById("dlgSentiment").hidden = !sentiment;
-      document.querySelectorAll("#dlgSentiment [data-sent]").forEach(b => b.classList.remove("on"));
+      document.querySelectorAll("#dlgSentiment [data-sent]").forEach(b => { b.classList.remove("on"); b.setAttribute("aria-pressed", "false"); });
       dlg.className = tint(as);
       document.getElementById("dlgModel").hidden = !model;
       document.getElementById("dlgModel").innerHTML = modelOptions("sonnet");
@@ -622,7 +622,7 @@
     if (ds.ideaplan) { ui.ideaPlan = !ui.ideaPlan; store.set("ui", ui); return rerender(); }
     if (ds.sent) {   // 👍/👎 toggle inside the pop-up
       dlgVote = dlgVote === ds.sent ? null : ds.sent;
-      document.querySelectorAll("#dlgSentiment [data-sent]").forEach(b => b.classList.toggle("on", b.dataset.sent === dlgVote));
+      document.querySelectorAll("#dlgSentiment [data-sent]").forEach(b => { b.classList.toggle("on", b.dataset.sent === dlgVote); b.setAttribute("aria-pressed", b.dataset.sent === dlgVote); });
       return;
     }
     const needWho = () => { if (!who) toast("Tap your name at the top to pick who you are"); return !who; };

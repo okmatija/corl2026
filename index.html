@@ -41,13 +41,15 @@
 
   <dialog id="dlg">
     <form method="dialog">
-      <h3></h3>
-      <p class="muted small"></p>
-      <div class="sentiment" id="dlgSentiment" hidden>
-        <button type="button" data-sent="up" aria-label="Positive">👍</button>
-        <button type="button" data-sent="down" aria-label="Negative">👎</button>
-        <span class="muted small">optional</span>
+      <div class="dlg-head">
+        <h3></h3>
+        <!-- optional sentiment: both off = neutral; tap to toggle; only one can be on -->
+        <div class="sentiment" id="dlgSentiment" role="group" aria-label="Sentiment (optional)" hidden>
+          <button type="button" data-sent="up" aria-label="Positive" aria-pressed="false">👍</button>
+          <button type="button" data-sent="down" aria-label="Negative" aria-pressed="false">👎</button>
+        </div>
       </div>
+      <p class="muted small"></p>
       <textarea rows="4"></textarea>
       <input type="text" autocomplete="off" hidden>
       <div class="row end send-row" style="margin-top:10px">
