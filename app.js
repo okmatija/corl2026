@@ -24,6 +24,7 @@
   let map = null;
   let dlgModel = "sonnet";   // model picked in the last feedback dialog
   let dlgVote = null;        // optional 👍/👎 picked in the last feedback dialog
+  let openIdea = null;       // idea shown in the ✨ pop-up
 
   // ---------- helpers ----------
   const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
@@ -102,8 +103,7 @@
     const P = T.plan;
     const nights = P.legs.reduce((n, l) => n + nightsBetween(l.arrive, l.leave), 0);
     const costs = costBreakdown();
-    const expand = s => esc(s).replace(idPattern, id => ideas[id].link
-      ? `<a href="${esc(ideas[id].link)}" target="_blank" rel="noopener"><b>${esc(ideas[id].title)}</b></a>` : `<b>${esc(ideas[id].title)}</b>`);
+    const expand = s => esc(s).replace(idPattern, ideaRef);
     const legs = P.legs.map((l, i) => {
       const n = nightsBetween(l.arrive, l.leave);
       const p = place(l.place);
@@ -238,14 +238,20 @@
       ${pie("Cost by type", COST_TYPES.map(([k, l]) => ({ label: l, amount: c.byType[k] })))}
       ${pie("Cost per day, by stop", c.byStop.map(x => ({ label: x.label, amount: x.amount, sub: `${x.days}d · ~${money(x.amount / x.days)}/day` })))}
     </div>
-    <p class="muted small" style="margin:6px 0 0">Rough estimates for 2 people: hotels from the plan, flights & car hire from the 📄 Details pages, things to do from each idea's $ rating. Austin nights are paid by work.</p>`;
+    <p class="muted small" style="margin:6px 0 0">Rough estimates for 2 people: hotels from the plan, flights & car hire from the 📜 Details pages, things to do from each idea's $ rating. Austin nights are paid by work.</p>`;
   }
 
-  // "📄 Details" button for any stop/travel card that has an entry in TRIP.details (same keys as plan feedback targets)
+  // An idea mentioned in the plan: its name (linked to its website if it has one) + a ✨ button that pops up its idea card
+  function ideaRef(id) {
+    const a = ideas[id], name = `<b>${esc(a.title)}</b>`;
+    return `${a.link ? `<a href="${esc(a.link)}" target="_blank" rel="noopener">${name}</a>` : name}<button class="idea-ref" data-showidea="${id}" aria-label="Show the idea card for ${esc(a.title)}">✨</button>`;
+  }
+
+  // "📜 Details" button for any stop/travel card that has an entry in TRIP.details (same keys as plan feedback targets)
   function detailsBtn(key) {
     const dd = T.details?.[key];
     if (!dd) return "";
-    return `<a class="details-btn" href="${esc(dd.href || "#details/" + key)}">📄 Details</a>`;
+    return `<a class="details-btn" href="${esc(dd.href || "#details/" + key)}">📜 Details</a>`;
   }
 
   function viewDetails(key) {
@@ -268,7 +274,7 @@
     const name = id => id ? short(id) : (T.plan.home || "Home");
     const route = `${name(from)} → ${name(to)}`;
     const icon = /✈️/.test(text || "") ? "✈️" : /🚗/.test(text || "") ? "🚗" : "🧳";
-    const details = esc((text || "").replace(/^(✈️|🚗)\s*/u, "")).replace(idPattern, id => `<b>${esc(ideas[id].title)}</b>`);
+    const details = esc((text || "").replace(/^(✈️|🚗)\s*/u, "")).replace(idPattern, ideaRef);
     const a = from && place(from), b = to && place(to);
     const dir = a && b && a.lat && b.lat ? `https://www.google.com/maps/dir/?api=1&origin=${a.lat},${a.lng}&destination=${b.lat},${b.lng}${icon === "🚗" ? "&travelmode=driving" : ""}` : "";
     return `<div class="leg travel-leg">
@@ -505,10 +511,10 @@
           <li><b>👤 Pick who you are</b> with the name badge at the top right.</li>
           <li><b>💬 Comment</b> on anything - a stop, a journey, a day, an idea etc. - and add an optional 👍 or 👎 sentiment and pick the model to action the comment: Sonnet (default), Haiku (quick) or Opus (most thorough).</li>
           <li><b>📌 Add to plan</b> on an idea asks the agent to fit it into the plan; tapping <b>📌 In plan</b> asks it to take the idea out again.</li>
-          <li><b>📄 Details</b> on a stop or journey opens more (maps, hotels, flights, car hire). Ask for one on anything with 💬.</li>
+          <li><b>📜 Details</b> on a stop or journey opens more (maps, hotels, flights, car hire). Ask for one on anything with 💬.</li>
         </ul>
       </div>
-      <h2>🤖 Agent usage</h2>
+      <h2>Agent usage</h2>
       <div class="card">
         <p style="margin:0">Three Claude agents check for new comments <b>${esc(window.AUTOMATION?.schedule || "")}</b>, one per model: Haiku at :00, Sonnet at :20 and Opus at :40 past the hour. Each only picks up comments sent to its model. If there's nothing new it stops straight away. Otherwise it updates the plan, closes the comment with a note (the ✅ you see on the Comments tab) and adds an entry to the changelog below.</p>
         <div class="stats">
@@ -519,7 +525,7 @@
         </div>
         <p class="muted small" style="margin:8px 0 0">Tokens and cost are filled in only when they can be measured, which isn't always possible for scheduled runs. Runs are covered by Matija's Claude subscription usage rather than billed separately.</p>
       </div>
-      <h2>📜 Changelog</h2>
+      <h2>Changelog</h2>
       ${runs.map(r => `<div class="card">
         <div class="item-head"><b>${time(r)}</b><span class="tag">${r.by === "scheduled" ? "🤖 " + esc(MODEL_NAME[Object.keys(MODEL_NAME).find(k => (r.model || "").includes(k))] || "scheduled") : "💬 with Matija"}</span></div>
         <p style="margin:6px 0">${esc(r.summary)}</p>
@@ -593,6 +599,8 @@
     document.querySelectorAll(".tabs a").forEach(a => a.classList.toggle("active", a.dataset.tab === r.tab));
     if (r.tab === "plan" || r.tab === "austin") drawMap(); else if (map) { map.remove(); map = null; }
     if (r.tab === "ideas") applySearch();
+    const ideaDlg = document.getElementById("ideaDlg");
+    if (ideaDlg.open && openIdea) document.getElementById("ideaDlgBody").innerHTML = ideaCard(ideas[openIdea]);
     window.scrollTo(0, keepScroll ? y : 0);
     const badge = document.getElementById("whoBtn");
     badge.textContent = who || "Who are you?";
@@ -622,6 +630,12 @@
       ui[key] = [...cur]; store.set("ui", ui); return rerender();
     }
     if (ds.ideaplan) { ui.ideaPlan = !ui.ideaPlan; store.set("ui", ui); return rerender(); }
+    if (ds.showidea) {   // ✨ in the plan: show that idea's card, exactly as in the Ideas list
+      openIdea = ds.showidea;
+      document.getElementById("ideaDlgBody").innerHTML = ideaCard(ideas[openIdea]);
+      document.getElementById("ideaDlg").showModal();
+      return;
+    }
     if (ds.sent) {   // 👍/👎 toggle inside the pop-up
       dlgVote = dlgVote === ds.sent ? null : ds.sent;
       document.querySelectorAll("#dlgSentiment [data-sent]").forEach(b => { b.classList.toggle("on", b.dataset.sent === dlgVote); b.setAttribute("aria-pressed", b.dataset.sent === dlgVote); });

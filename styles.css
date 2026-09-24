@@ -300,3 +300,8 @@ input[type=search] { width: 100%; border: 1px solid var(--line); background: var
 .chip.tint-claude-chip { border-color: var(--agent-line); }
 .chip.tint-claude-chip.on { background: var(--agent-line); border-color: var(--agent-line); color: var(--ink); }
 .reply-state { float: right; margin-left: 6px; font-size: 13px; }
+
+/* ✨ idea reference in the plan + its pop-up */
+.idea-ref { border: 0; background: none; padding: 0 2px; margin-left: 2px; font-size: 14px; cursor: pointer; vertical-align: baseline; -webkit-tap-highlight-color: transparent; }
+.idea-dlg { padding: 10px; background: var(--bg); }
+.idea-dlg .idea { margin: 0; }

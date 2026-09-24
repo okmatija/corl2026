@@ -25,7 +25,7 @@ window.TRIP = {
     "NASCAR: the Cup championship race is Sun 8 Nov at Homestead-Miami - the day before CoRL. Tickets are on sale now (~$100-250pp estimate for a good grandstand seat, more for premium/hospitality). Checked flights: American has a 9:45pm nonstop Miami -> Austin (backup 10:13pm) landing well before Monday's conference start, so it's logistically doable if we fly into Miami first (Fri 6 Nov) - tight on race day (leave right after the trophy presentation), but workable. Worth it, or do the Texas Motor Speedway drive/ride-along (Fort Worth, a full day) instead?",
     "Theme parks: add Orlando (Disney World / Universal) to the Florida leg? It would take 2-3 nights, e.g. from Key West or NYC.",
     "Concerts: the bands we grew up with (Linkin Park, AC/DC, Iron Maiden, Foo Fighters, Okean Elzy) aren't touring the US in November 2026. Metallica at the Sphere is the big exception, but it needs Vegas. Should I keep checking for new announcements, or is it worth building Vegas in for Metallica?",
-    "Flights: Matija might fly business (BA Club Suite, London → Austin nonstop). Should Maryna fly business too, both take premium economy together, or split cabins on the same flight? See the 📄 Details on the London → Austin card.",
+    "Flights: Matija might fly business (BA Club Suite, London → Austin nonstop). Should Maryna fly business too, both take premium economy together, or split cabins on the same flight? See the 📜 Details on the London → Austin card.",
     "Any must-sees already on your list?",
   ],
 
@@ -221,7 +221,7 @@ window.TRIP = {
     ],
   },
 
-  // "📄 Details" pages, keyed like plan feedback targets ("stop:<place>", "travel:<place>", "travel:home").
+  // "📜 Details" pages, keyed like plan feedback targets ("stop:<place>", "travel:<place>", "travel:home").
   // Either { href } to an existing page, or { title, intro, sections: [{ title, items: [{ name, text, link }] }] }.
   // Prices are estimates. Any stop or travel card with an entry here gets a Details button.
   details: {
