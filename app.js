@@ -426,6 +426,10 @@
   }
 
   // ---------- dialog ----------
+  // Every feedback pop-up looks like the Feedback tab's box: "<emoji> Add feedback as <you>", then what it's about.
+  const feedbackDialog = (icon, subject, placeholder) =>
+    ask({ title: `${icon} Add feedback as ${who}`, body: subject, placeholder, ok: "💬 Send", model: true, as: who });
+
   // model: show the 🤖 model picker (its value is left in dlgModel for the caller); as: tint the dialog for that person
   function ask({ title, body, placeholder, input, ok = "OK", model, as }) {
     return new Promise(resolve => {
@@ -502,7 +506,7 @@
     if (ds.vote) {
       if (!who) { toast("Tap 👤 at the top to pick who you are"); return; }
       const idea = ideas[ds.idea];
-      const text = await ask({ title: `${vIcon(ds.vote)} ${idea.title}`, body: `Voting as ${who}. Reason (optional):`, placeholder: ds.vote === "up" ? "Why do you like it?" : "Why not?", ok: "Send", model: true, as: who });
+      const text = await feedbackDialog(vIcon(ds.vote), idea.title, ds.vote === "up" ? "e.g. Sounds amazing, let's do it! (reason optional)" : "e.g. Too far out of the way. (reason optional)");
       if (text === null) return;
       el.disabled = true;
       await submit({ who, kind: "idea", idea: idea.id, ideaTitle: idea.title, vote: ds.vote, text: text.trim(), model: dlgModel });
@@ -511,8 +515,8 @@
     if (ds.planvote) {
       if (!who) { toast("Tap 👤 at the top to pick who you are"); return; }
       const note = ds.planvote === "note";
-      const text = await ask({ title: `${vIcon(ds.planvote)} ${ds.title}`, body: note ? `Comment as ${who}:` : `Feedback on the plan as ${who}. Reason (optional):`,
-        placeholder: note ? "Question, idea, anything…" : ds.planvote === "up" ? "What do you like?" : "What should change?", ok: "Send", model: true, as: who });
+      const text = await feedbackDialog(vIcon(ds.planvote), ds.title,
+        note ? "e.g. Is one night here enough?" : ds.planvote === "up" ? "e.g. Perfect, keep this. (reason optional)" : "e.g. Too packed - drop one thing. (reason optional)");
       if (text === null || (note && !text.trim())) return;
       el.disabled = true;
       await submit({ who, kind: "plan", target: ds.target, targetTitle: ds.title, vote: ds.planvote, text: text.trim(), model: dlgModel });
@@ -521,7 +525,7 @@
     if (ds.answer) {
       if (!who) { toast("Tap 👤 at the top to pick who you are"); return; }
       const q = T.openQuestions[+ds.answer];
-      const text = (await ask({ title: "💬 " + q, body: `Answering as ${who}:`, placeholder: "Your answer", ok: "Send", model: true, as: who }))?.trim();
+      const text = (await feedbackDialog("💬", q, "e.g. Yes - and we'd rather…"))?.trim();
       if (!text) return;
       el.disabled = true;
       await submit({ who, kind: "general", text: `Q: ${q}\nA: ${text}`, model: dlgModel });
@@ -529,7 +533,7 @@
     }
     if (ds.reply) {
       if (!who) { toast("Tap 👤 at the top to pick who you are"); return; }
-      const text = (await ask({ title: `💬 Reply to ${ds.replywho}`, body: ds.replytitle, placeholder: "Your reply", ok: "Send", model: true, as: who }))?.trim();
+      const text = (await feedbackDialog("💬", `Reply to ${ds.replywho}: ${ds.replytitle}`, "e.g. Agreed! Or maybe…"))?.trim();
       if (!text) return;
       el.disabled = true;
       await submit({ who, kind: "reply", replyTo: +ds.reply, replyToWho: ds.replywho, text, model: dlgModel });

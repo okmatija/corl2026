@@ -243,3 +243,6 @@ input[type=search] { width: 100%; border: 1px solid var(--line); background: var
 .fb-filters { gap: 5px; }
 .fb-filters .chip { padding: 6px 10px; }
 .fb-filters .chip-sep { margin: 0 1px; }
+#dlg .send-row { gap: 6px; }
+#dlg .send-row button { padding: 11px 12px; }
+#dlg .send-row .model-select { min-width: 110px; }
