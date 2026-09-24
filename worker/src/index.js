@@ -75,10 +75,10 @@ async function createFeedback(req, env) {
     if (!data.idea) fail(400, "missing idea");
     title = `[${who}] ${data.vote === "up" ? "👍" : "👎"} ${data.ideaTitle || data.idea}`;
   } else if (kind === "plan") {
-    data.target = clean(b.target, 80);        // "stop:<place>" or "day:<YYYY-MM-DD>"
+    data.target = clean(b.target, 80);        // "stop:<place>", "day:<YYYY-MM-DD>" or "travel:<place>|home"
     data.targetTitle = clean(b.targetTitle, 120);
     data.vote = ["down", "note"].includes(b.vote) ? b.vote : "up";   // note = 💬 comment, no sentiment
-    if (!/^(stop|day):[\w-]+$/.test(data.target)) fail(400, "bad plan target");
+    if (!/^(stop|day|travel):[\w-]+$/.test(data.target)) fail(400, "bad plan target");
     if (data.vote === "note" && !text) fail(400, "empty comment");
     title = `[${who}] ${{ up: "👍", down: "👎", note: "💬" }[data.vote]} Plan: ${data.targetTitle || data.target}`;
   } else if (kind === "reply") {

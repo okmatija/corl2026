@@ -22,7 +22,8 @@ issues with no model label); interactive sessions handle any model. `reply` = a 
 (`replyTo` issue number, `replyToWho`): read the original issue for context; act on it if it changes the plan, otherwise
 resolve it as noted.
 The body ends with `<!-- feedback-data {...json...} -->` (who, kind, vote up/down, and either `idea` id or plan `target`).
-`plan` targets are `stop:<place id>` (a whole stop/leg) or `day:<YYYY-MM-DD>` (one day of the plan). The quoted lines are the reason/text.
+`plan` targets are `stop:<place id>` (a whole stop/leg), `day:<YYYY-MM-DD>` (one day of the plan) or
+`travel:<place id>` (the journey INTO that stop, i.e. its leg's `travel` text) / `travel:home` (the flight home, `plan.end`). The quoted lines are the reason/text.
 The site shows an issue as "done" once closed, plus the text after `**Resolution:**` in the body.
 
 ## "Process feedback" workflow (when the user asks)
@@ -55,6 +56,7 @@ The site shows an issue as "done" once closed, plus the text after `**Resolution
 6. Report back a short summary of changes.
 
 ## Conventions
-- Plan legs: `arrive`/`leave` are check-in/check-out; `days[k]` lists items for day k; idea ids inside strings are expanded to titles.
+- Plan legs: `arrive`/`leave` are check-in/check-out; `days[k]` lists items for day k (the LAST leg has one extra entry for
+  its departure day, shown in that stop's card); idea ids inside strings are expanded to titles.
 - Stay prices are estimates - label them so; never present them as quotes.
 - Edit files with UTF-8 tools (not PowerShell 5.1 Get-Content/Set-Content, which mangles emoji).

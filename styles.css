@@ -246,3 +246,9 @@ input[type=search] { width: 100%; border: 1px solid var(--line); background: var
 #dlg .send-row { gap: 6px; }
 #dlg .send-row button { padding: 11px 12px; }
 #dlg .send-row .model-select { min-width: 110px; }
+
+/* Travel between stops: a lighter card on the timeline */
+.travel-leg .travel-card { background: var(--bg); border-style: dashed; padding: 10px 12px; margin: 6px 0; box-shadow: none; }
+.travel-card .item-title { font-size: 15px; }
+.travel-card .vote { margin-top: 8px; }
+.travel-card .vote button { padding: 7px 6px; font-size: 14px; }

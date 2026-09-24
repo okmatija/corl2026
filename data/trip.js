@@ -267,8 +267,8 @@ window.TRIP = {
       { place: "nyc", arrive: "2026-11-25", leave: "2026-11-27",
         travel: "🚗 Drive back to Miami (~3.5 h), ✈️ fly to New York (~3 h)",
         stay: { name: "Hotel in Brooklyn Heights / Downtown Brooklyn, or Midtown", price: 400, notes: "Maja & Amit are in Cobble Hill, Brooklyn - not staying with them, but aim for <=30 min away (Brooklyn Heights/Downtown Brooklyn is closest; Midtown also works via subway). Thanksgiving week is peak - book early." },
-        days: [["Long travel day", "Evening: balloon inflation by the Natural History Museum"], ["Relaxed Thanksgiving morning (skip the Macy's parade crowds): nyc-central", "Thanksgiving dinner with Maja & Amit"]] },
+        days: [["Long travel day", "Evening: balloon inflation by the Natural History Museum"], ["Relaxed Thanksgiving morning (skip the Macy's parade crowds): nyc-central", "Thanksgiving dinner with Maja & Amit"], ["Morning: nyc-911memorial (open Fri 9am-7pm; book ahead - it's closed on Thanksgiving Day itself) or the Met / High Line", "Check out and head to the airport"]] },
     ],
-    end: { date: "2026-11-27", text: "Morning at nyc-911memorial (open Fri 9am-7pm; book ahead - it's closed on Thanksgiving Day itself) or the Met/High Line, then fly home from New York (JFK/EWR) in the evening" },
+    end: { date: "2026-11-27", text: "✈️ Evening flight home from New York (JFK/EWR)" },
   },
 };

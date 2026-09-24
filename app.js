@@ -101,13 +101,15 @@
     const P = T.plan;
     const nights = P.legs.reduce((n, l) => n + nightsBetween(l.arrive, l.leave), 0);
     const lodging = P.legs.reduce((n, l) => n + (l.stay?.price || 0) * nightsBetween(l.arrive, l.leave), 0);
+    const expand = s => esc(s).replace(idPattern, id => `<b>${esc(ideas[id].title)}</b>`);
     const legs = P.legs.map((l, i) => {
       const n = nightsBetween(l.arrive, l.leave);
       const p = place(l.place);
-      const days = Array.from({ length: n }, (_, k) => {
+      const last = i === P.legs.length - 1;
+      const days = Array.from({ length: n + (last ? 1 : 0) }, (_, k) => {
         const date = addDays(l.arrive, k);
         const obl = T.obligations.filter(o => date >= o.start && date <= o.end).map(o => `<span class="oblig">💼 ${o.who ? esc(o.who) + ": " : ""}${esc(o.title)}</span>`);
-        const items = (l.days?.[k] || []).map(s => esc(s).replace(idPattern, id => `<b>${esc(ideas[id].title)}</b>`));
+        const items = (l.days?.[k] || []).map(expand);
         const lines = [...obl, ...items];
         const key = "day:" + date;
         const dayTitle = `${fmt(date)} in ${short(l.place)}`;
@@ -117,9 +119,9 @@
       }).join("");
       const s = l.stay;
       return `
+        ${travelCard(i === 0 ? null : P.legs[i - 1].place, l.place, l.arrive, l.travel, "travel:" + l.place)}
         <div class="leg">
           <div class="dot">${i + 1}</div>
-          <div class="travel">${esc(l.travel || "")}</div>
           <div class="card">
             <div class="item-head"><h3>${esc(p.name)}</h3><span class="tag">${n} night${n > 1 ? "s" : ""}</span></div>
             <div class="item-meta">${fmt(l.arrive)} → ${fmt(l.leave)} · ${esc(p.blurb || "")}</div>
@@ -148,7 +150,8 @@
         </div>`).join("")}</div>` : ""}
       <div id="map" role="img" aria-label="Route map"></div>
       ${legs}
-      <div class="leg"><div class="dot">✓</div><div class="travel">🏁 ${fmt(end.date)} · ${esc(end.text)}</div></div>
+      ${travelCard(P.legs.at(-1).place, null, end.date, end.text, "travel:home")}
+      <div class="leg"><div class="dot">✓</div><div class="travel">🏁 Home · ${fmt(end.date)}</div></div>
     `;
   }
 
@@ -175,6 +178,23 @@
         <div class="item-meta">${esc(dist(h))}${h.note ? " · " + esc(h.note) : ""}</div>
         ${h.run ? `<div class="run">🏃‍♀️ ${esc(h.run)}</div>` : ""}</div>`).join("")}
         <p class="muted small" style="margin:8px 0 0">Matija's work covers his room for 7-13 Nov, so this mostly matters for where you'd like to be based.</p></div>`;
+  }
+
+  // Card for a journey between stops (from/to = place ids; null = home). Same 👍 👎 💬 buttons as a stop.
+  function travelCard(from, to, date, text, key) {
+    const name = id => id ? short(id) : "Home";
+    const route = `${name(from)} → ${name(to)}`;
+    const icon = /✈️/.test(text || "") ? "✈️" : /🚗/.test(text || "") ? "🚗" : "🧳";
+    const details = esc((text || "").replace(/^(✈️|🚗)\s*/u, "")).replace(idPattern, id => `<b>${esc(ideas[id].title)}</b>`);
+    const a = from && place(from), b = to && place(to);
+    const dir = a && b && a.lat && b.lat ? `https://www.google.com/maps/dir/?api=1&origin=${a.lat},${a.lng}&destination=${b.lat},${b.lng}${icon === "🚗" ? "&travelmode=driving" : ""}` : "";
+    return `<div class="leg travel-leg">
+        <div class="card travel-card">
+          <div class="item-head"><span class="item-title">${icon} ${esc(route)}</span><span class="tag">${fmt(date)}</span></div>
+          ${details ? `<div class="item-meta">${details}${dir ? ` · <a href="${dir}" target="_blank" rel="noopener">directions</a>` : ""}</div>` : ""}
+          <div class="vote">${["up", "down", "note"].map(d => voteBtn(key, `Travel: ${route}`, d)).join("")}</div>
+        </div>
+      </div>`;
   }
 
   function drawAustinMap(el) {
