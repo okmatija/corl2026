@@ -315,27 +315,20 @@
   // Toggle chip shared by the Ideas and Feedback filters. People chips get their blue/pink outline.
   const toggleChip = (group, key, label, on) =>
     `<button class="chip ${on ? "on" : ""} ${PEOPLE.includes(key) ? tint(key) + "-chip" : ""}" data-${group}="${esc(key)}" aria-pressed="${on}">${label}</button>`;
-  const IDEA_VOTES = [["up", "👍"], ["down", "👎"], ["none", "No vote"]];
 
-  // Ideas filters, same idiom as Feedback: groups combine, and an empty group means "don't filter on it".
-  // Who + vote: "Maryna + 👍" = ideas Maryna liked; "No vote" = ideas the selected people (or nobody) haven't voted on.
+  // Ideas filters (toggles, same idiom as Comments): 📌 In plan, and a name = ideas that person has commented on.
+  // Both names on = either of you; nothing on = everything.
   function matches(idea) {
-    const whoSel = ui.ideaWho || [], voteSel = ui.ideaVote || [];
+    const whoSel = ui.ideaWho || [];
     if (ui.ideaPlan && !inPlan.has(idea.id)) return false;
-    if (!whoSel.length && !voteSel.length) return true;
-    const v = votes(idea.id);
-    const people = whoSel.length ? whoSel : PEOPLE;
-    if (!voteSel.length) return people.some(p => v[p]);
-    if (!whoSel.length && voteSel.includes("none") && !Object.keys(v).length) return true;
-    const dir = f => f.vote === "add" ? "up" : f.vote;
-    return people.some(p => (v[p] ? voteSel.includes(dir(v[p])) : whoSel.length && voteSel.includes("none")));
+    return !whoSel.length || feedback.some(f => f.kind === "idea" && f.idea === idea.id && whoSel.includes(f.who));
   }
 
   function ideaCard(a) {
     const v = votes(a.id);
     const q = encodeURIComponent(a.title.replace(/\(.*?\)/g, "") + " " + place(a.place).name);
     const notes = feedback.filter(f => f.kind === "idea" && f.idea === a.id && f.vote === "note" && f.text).sort((x, y) => x.date.localeCompare(y.date));
-    const reactions = voteChips(v) + notes.map(f => `<div class="fb note"><b>${esc(f.who)} 💬</b> ${esc(f.text)}</div>`).join("");
+    const reactions = voteChips(v) + notes.map(f => `<div class="fb ${tint(f.who)}"><b>${esc(f.who)} 💬</b> ${esc(f.text)}</div>`).join("");
     const state = STATES[place(a.place).name.split(", ").pop()] || "";
     const text = norm([a.title, a.why, place(a.place).name, state, place(a.place).type, a.cat, CATS[a.cat], a.cost, a.dur, inPlan.has(a.id) ? "in plan" : ""].join(" "));
     return `<article class="idea" data-text="${esc(text)}">
@@ -354,7 +347,7 @@
 
   function voteChips(v) {
     return PEOPLE.filter(p => v[p]).map(p => `
-      <div class="fb ${v[p].vote}"><b>${esc(p)} ${vIcon(v[p].vote)}</b>${v[p].text ? ` ${esc(v[p].text)}` : ""}</div>`).join("");
+      <div class="fb ${tint(p)}"><b>${esc(p)} ${vIcon(v[p].vote)}</b>${v[p].text ? ` ${esc(v[p].text)}` : ""}</div>`).join("");
   }
 
   // 💬 button for a plan stop, day or journey (mini = icon only, for day rows). Sentiment is picked inside the pop-up.
@@ -372,9 +365,8 @@
       <div class="banner info">💡 These cards are suggestions from Claude. Want more, or something specific? Ask on the <a href="#comments">💬 Comments</a> tab (e.g. "ideas for a rainy day in Austin") and the hourly agent will add new cards. 📌 Add to plan puts an idea into the plan; 💬 Comment for anything else.</div>
       ${statusBanner()}
       <div class="chips fb-filters" role="group" aria-label="Filter ideas">
-        ${PEOPLE.map(p => toggleChip("ideawho", p, esc(p), (ui.ideaWho || []).includes(p))).join("")}
+        ${PEOPLE.map(p => toggleChip("ideawho", p, `💬 ${esc(p)}`, (ui.ideaWho || []).includes(p))).join("")}
         <span class="chip-sep"></span>
-        ${IDEA_VOTES.map(([k, l]) => toggleChip("ideavote", k, l, (ui.ideaVote || []).includes(k))).join("")}
         ${toggleChip("ideaplan", "plan", "📌 In plan", !!ui.ideaPlan)}
       </div>
       <input type="search" id="ideaSearch" placeholder="🔍 Search ideas (e.g. gators, rock, beach)" value="${esc(ui.q || "")}" autocomplete="off" aria-label="Search ideas">
@@ -613,8 +605,8 @@
       who = PEOPLE[(PEOPLE.indexOf(who) + 1) % PEOPLE.length];
       store.set("who", who); toast("You are " + who); return rerender();
     }
-    if (ds.ideawho || ds.ideavote) {
-      const key = ds.ideawho ? "ideaWho" : "ideaVote", v = ds.ideawho || ds.ideavote;
+    if (ds.ideawho) {
+      const key = "ideaWho", v = ds.ideawho;
       const cur = new Set(ui[key] || []);
       cur.has(v) ? cur.delete(v) : cur.add(v);
       ui[key] = [...cur]; store.set("ui", ui); return rerender();

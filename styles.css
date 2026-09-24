@@ -290,3 +290,4 @@ input[type=search] { width: 100%; border: 1px solid var(--line); background: var
 .sentiment button.on { border-color: var(--accent); background: var(--accent-soft); }
 .vote button.on[disabled] { opacity: 1; cursor: default; }
 .day .mini button { padding: 2px 8px; }
+.fb.tint-matija, .fb.tint-maryna { border: 1px solid; }
