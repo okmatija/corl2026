@@ -16,7 +16,11 @@ Travellers: Matija and Maryna. CoRL 2026: Austin TX, workshops Nov 9, main confe
   If there are no open feedback issues, do nothing (no commit).
 
 ## Feedback = GitHub issues
-Every submission is an issue labelled `feedback` + `from:matija|from:maryna` + `idea|plan|general`.
+Every submission is an issue labelled `feedback` + `from:matija|from:maryna` + `idea|plan|reply|general` + `model:haiku|sonnet|opus`.
+`model:*` = which Claude model the sender picked to action it. There is one hourly routine per model (Haiku also takes
+issues with no model label); interactive sessions handle any model. `reply` = a comment on another feedback item
+(`replyTo` issue number, `replyToWho`): read the original issue for context; act on it if it changes the plan, otherwise
+resolve it as noted.
 The body ends with `<!-- feedback-data {...json...} -->` (who, kind, vote up/down, and either `idea` id or plan `target`).
 `plan` targets are `stop:<place id>` (a whole stop/leg) or `day:<YYYY-MM-DD>` (one day of the plan). The quoted lines are the reason/text.
 The site shows an issue as "done" once closed, plus the text after `**Resolution:**` in the body.
@@ -39,7 +43,10 @@ The site shows an issue as "done" once closed, plus the text after `**Resolution
    Answers to open questions arrive as general notes formatted `Q: <question>` / `A: <answer>`. Use the answer to update the plan,
    then remove (or reword) that entry in `openQuestions` once it's settled.
    Idea votes: 👍 → consider adding to the plan; 👎 → remove/avoid. Plan votes: 👍 → keep as is; 👎 → rework that stop/day using the reason. Plan `vote: "note"` = 💬 comment on a stop (question/idea, no sentiment). General notes: budget, dates, must-sees, new ideas (add idea cards).
-3. Edit `data/trip.js` (plan, ideas, openQuestions, bump `meta.updated`, refresh `meta.status`).
+3. Edit `data/trip.js` (plan, ideas, openQuestions; set `meta.updated` to the current UTC time as `date -u +%Y-%m-%dT%H:%MZ` -
+   the Trip Summary shows it). Validate BOTH data files load before committing:
+   `node -e "global.window={}; require('./data/trip.js'); require('./data/runs.js'); console.log(window.RUNS.length)"`
+   (an hourly run once deleted the `window.RUNS = [` line, which silently broke the About/usage page).
 4. Prepend an entry to `window.RUNS` in `data/runs.js`: start/end ISO UTC times (`date -u +%Y-%m-%dT%H:%M:%SZ` at start and just
    before committing), `by` ("scheduled" or "manual"), model id, issue numbers, a one-line summary. Add `tokens`/`costUsd` only if known.
    Then commit and push to `main` (Pages redeploys in ~1 min).

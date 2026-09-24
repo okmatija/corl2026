@@ -209,3 +209,24 @@ dialog textarea, dialog input { margin-top: 4px; }
 .run { font-size: 13px; margin-top: 4px; padding: 6px 8px; background: var(--bg); border-radius: 8px; }
 input[type=search] { width: 100%; border: 1px solid var(--line); background: var(--card); border-radius: 10px; padding: 10px 12px; font-size: 16px; margin: 4px 0 8px; }
 .idea[hidden], .region-group[hidden] { display: none; }
+
+/* Person colours (#25): Matija = light blue, Maryna = pink */
+:root { --matija: #dbeafe; --matija-line: #93c5fd; --maryna: #fce7f3; --maryna-line: #f9a8d4; }
+@media (prefers-color-scheme: dark) { :root { --matija: #172a45; --matija-line: #2563eb; --maryna: #3d1a30; --maryna-line: #db2777; } }
+.tint-matija { background: var(--matija) !important; border-color: var(--matija-line) !important; }
+.tint-maryna { background: var(--maryna) !important; border-color: var(--maryna-line) !important; }
+.tint-matija textarea, .tint-maryna textarea, .tint-matija select, .tint-maryna select, .tint-matija input, .tint-maryna input { background: var(--card); }
+.who-btn.tint-matija, .who-btn.tint-maryna { color: var(--ink); font-weight: 600; }
+
+/* ⓘ About link in the header (#18) */
+.info-btn { display: inline-grid; place-items: center; width: 22px; height: 22px; margin-left: 4px; border-radius: 50%; border: 1px solid var(--line); background: var(--card); color: var(--muted); font-size: 13px; font-weight: 600; text-decoration: none; vertical-align: 2px; }
+
+/* 🤖 model picker (#19): fills the row, send/cancel buttons sit to its right */
+.send-row { flex-wrap: nowrap; }
+.send-row .model-select { flex: 1; min-width: 0; width: auto; padding: 9px 8px; font-size: 16px; }
+.send-row .model-select[hidden] { display: none; }
+.send-row button { flex: none; }
+
+/* replies on feedback items (#23) */
+.reply { font-size: 14px; margin: 8px 0 0; padding: 6px 10px; border-radius: 10px; border: 1px solid var(--line); background: var(--bg); }
+.reply-btn { border: 1px solid var(--line); background: var(--bg); border-radius: 10px; padding: 4px 10px; font-size: 13px; cursor: pointer; margin-top: 8px; }

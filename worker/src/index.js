@@ -62,9 +62,11 @@ async function createFeedback(req, env) {
   const who = people.find(p => p.toLowerCase() === String(b.who || "").toLowerCase());
   if (!who) fail(400, "unknown person");
 
-  const kind = ["idea", "plan"].includes(b.kind) ? b.kind : "general";
+  const kind = ["idea", "plan", "reply"].includes(b.kind) ? b.kind : "general";
   const text = clean(b.text, 4000);
-  const data = { who, kind, date: new Date().toISOString() };
+  // Which Claude model should action this (each model has its own hourly routine). Small model by default.
+  const model = ["haiku", "sonnet", "opus"].includes(b.model) ? b.model : "haiku";
+  const data = { who, kind, model, date: new Date().toISOString() };
   let title;
   if (kind === "idea") {
     data.idea = clean(b.idea, 80);
@@ -79,6 +81,13 @@ async function createFeedback(req, env) {
     if (!/^(stop|day):[\w-]+$/.test(data.target)) fail(400, "bad plan target");
     if (data.vote === "note" && !text) fail(400, "empty comment");
     title = `[${who}] ${{ up: "👍", down: "👎", note: "💬" }[data.vote]} Plan: ${data.targetTitle || data.target}`;
+  } else if (kind === "reply") {
+    // A comment on someone's earlier feedback item (issue #replyTo)
+    data.replyTo = parseInt(b.replyTo, 10);
+    data.replyToWho = people.find(p => p.toLowerCase() === String(b.replyToWho || "").toLowerCase()) || "";
+    if (!(data.replyTo > 0)) fail(400, "bad replyTo");
+    if (!text) fail(400, "empty reply");
+    title = `[${who}] 💬 Re #${data.replyTo}${data.replyToWho ? ` (${data.replyToWho})` : ""}: ${text.split("\n")[0].slice(0, 60)}`;
   } else {
     if (!text) fail(400, "empty feedback");
     title = `[${who}] ${text.split("\n")[0].slice(0, 70)}`;
@@ -87,6 +96,7 @@ async function createFeedback(req, env) {
   const body = [
     kind === "idea" ? `**${who}** ${data.vote === "up" ? "likes 👍" : "dislikes 👎"} idea \`${data.idea}\` - ${data.ideaTitle}`
       : kind === "plan" ? `**${who}** ${{ up: "likes 👍", down: "dislikes 👎", note: "comments 💬 on" }[data.vote]} this part of the plan: \`${data.target}\` - ${data.targetTitle}`
+      : kind === "reply" ? `**${who}** replied to #${data.replyTo}${data.replyToWho ? ` (${data.replyToWho}'s feedback)` : ""}:`
       : `**${who}** wrote:`,
     "",
     text ? text.split("\n").map(l => "> " + l).join("\n") : "_(no reason given)_",
@@ -96,7 +106,7 @@ async function createFeedback(req, env) {
 
   const issue = await gh(env, "/issues", {
     method: "POST",
-    body: JSON.stringify({ title, body, labels: ["feedback", `from:${who.toLowerCase()}`, kind] }),
+    body: JSON.stringify({ title, body, labels: ["feedback", `from:${who.toLowerCase()}`, kind, `model:${model}`] }),
   });
   return { number: issue.number, url: issue.html_url };
 }
@@ -114,7 +124,8 @@ async function listFeedback(env) {
       out.push({
         number: i.number, url: i.html_url, state: i.state,
         who: d.who, kind: d.kind, idea: d.idea, ideaTitle: d.ideaTitle, target: d.target, targetTitle: d.targetTitle, vote: d.vote,
-        text: quoted, date: d.date || i.created_at,
+        replyTo: d.replyTo, replyToWho: d.replyToWho, model: d.model,
+        text: quoted, date: d.date || i.created_at, closedAt: i.closed_at,
         resolution: res ? res[1].trim() : null,
       });
     }

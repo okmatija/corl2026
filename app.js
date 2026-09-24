@@ -22,6 +22,7 @@
   let loadState = API ? "loading" : "off";
   const ui = store.get("ui", { filter: "all", region: "all" });
   let map = null;
+  let dlgModel = "haiku";   // model picked in the last feedback dialog
 
   // ---------- helpers ----------
   const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
@@ -36,6 +37,12 @@
   const STATES = { TX: "texas", FL: "florida", NY: "new york", CA: "california", NV: "nevada", AZ: "arizona", UT: "utah", LA: "louisiana", PR: "puerto rico" };
   const TYPE_ICON ={ city: "🏙️", nature: "🌲", beach: "🏖️" };
   const placeLabel = id => `${TYPE_ICON[place(id).type] || "📍"} ${place(id).name}`;
+  // Which Claude model actions a piece of feedback (each has its own hourly routine). Small model is the default.
+  const MODELS = [["haiku", "🤖 Haiku"], ["sonnet", "🤖 Sonnet"], ["opus", "🤖 Opus"]];
+  const modelOptions = sel => MODELS.map(([k, l]) => `<option value="${k}" ${k === sel ? "selected" : ""}>${l}</option>`).join("");
+  const MODEL_NAME = { haiku: "Haiku", sonnet: "Sonnet", opus: "Opus" };
+  const when = iso => iso.length <= 10 ? fmt(iso) : new Date(iso).toLocaleString("en-GB", { weekday: "short", day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" });
+  const tint = name => name ? "tint-" + name.toLowerCase() : "";
   const vIcon = v => ({ up: "👍", down: "👎", note: "💬" })[v] || "👍";
 
   // Latest vote per person per idea
@@ -127,15 +134,14 @@
 
     return `
       <div class="card accent">
-        <h2>${esc(P.name)}</h2>
+        <h2>Trip Summary</h2>
         <p class="muted" style="margin:4px 0">${esc(P.summary)}</p>
         <div class="stats">
           <div class="stat"><b>${fmt(P.legs[0].arrive, { day: "numeric", month: "short" })} – ${fmt(end.date, { day: "numeric", month: "short" })}</b><span>${nights} nights</span></div>
           <div class="stat"><b>${money(lodging)}</b><span>our lodging est. (excl. work-paid nights) · budget ${money(P.budgetPerNight)}/nt</span></div>
         </div>
+        <p class="muted small" style="margin:10px 0 0">Updated ${esc(when(T.meta.updated))} · 🤖 Claude checks feedback ${esc(window.AUTOMATION?.schedule || "")} · <a href="#about">ⓘ About & history</a></p>
       </div>
-      <div class="banner">${esc(T.meta.status)} Updated ${esc(T.meta.updated)}.</div>
-      ${autoBanner()}
       ${T.openQuestions?.length ? `<div class="card"><h3>Open questions</h3>${T.openQuestions.map((q, i) => `
         <div class="question">
           <div class="q-row"><span>${esc(q)}</span><button class="q-btn" data-answer="${i}" aria-label="Answer this question">💬 Answer</button></div>
@@ -309,39 +315,45 @@
     document.getElementById("noMatch").hidden = shown > 0 || !words.length;
   }
 
+  function fbLabel(f) {
+    if (f.kind === "idea") return `${vIcon(f.vote)} <b>${esc(f.ideaTitle || ideas[f.idea]?.title || f.idea)}</b>`;
+    if (f.kind === "plan") return `${vIcon(f.vote)} <b>Plan · ${esc(f.targetTitle || f.target)}</b>`;
+    if (f.kind === "reply") return `💬 <b>Reply to ${esc(f.replyToWho || "")} · #${f.replyTo}</b>`;
+    if (isAnswer(f)) return `💬 <b>Answer · ${esc(f.text.slice(3).split("\nA: ")[0])}</b>`;
+    return "💬 <b>General</b>";
+  }
+  const fbText = f => isAnswer(f) ? f.text.split("\nA: ").slice(1).join("\nA: ") : f.text;
+  const replies = n => feedback.filter(r => r.kind === "reply" && r.replyTo === n).sort((a, b) => a.date.localeCompare(b.date));
+
   function viewPerson(name) {
     const mine = feedback.filter(f => f.who === name).sort((a, b) => b.date.localeCompare(a.date));
     const open = mine.filter(f => f.state === "open").length;
     return `
       <h2>${esc(name)}'s feedback</h2>
       ${statusBanner()}
-      <div class="card accent">
-        <h3>Add feedback</h3>
+      <div class="card composer ${tint(name)}">
+        <h3>💬 Add feedback as ${esc(name)}</h3>
         <p class="muted small" style="margin:0 0 8px">Anything: must-sees, budget per night, where to stay, dates, dealbreakers, answers to the open questions…</p>
         <textarea id="freeText" rows="4" placeholder="e.g. Budget ~150/night. I'd love a day at the beach."></textarea>
-        <div class="row end" style="margin-top:8px"><button class="primary" data-send="${esc(name)}">💬 Send as ${esc(name)}</button></div>
+        <div class="row send-row" style="margin-top:8px">
+          <select id="freeModel" class="model-select" aria-label="Claude model to action this" title="Claude model to action this">${modelOptions("haiku")}</select>
+          <button class="primary" data-send="${esc(name)}">💬 Send</button>
+        </div>
       </div>
       <p class="muted small">${mine.length} item${mine.length === 1 ? "" : "s"} · ${open} waiting for Claude · ${mine.length - open} done</p>
       ${mine.map(f => `
         <div class="card fbitem ${f.state}">
           <div class="item-head">
-            <span>${f.kind === "idea" ? `${vIcon(f.vote)} <b>${esc(f.ideaTitle || ideas[f.idea]?.title || f.idea)}</b>`
-              : f.kind === "plan" ? `${vIcon(f.vote)} <b>Plan · ${esc(f.targetTitle || f.target)}</b>`
-              : isAnswer(f) ? `💬 <b>Answer · ${esc(f.text.slice(3).split("\nA: ")[0])}</b>` : "💬 <b>General</b>"}</span>
+            <span>${fbLabel(f)}</span>
             <span class="tag ${f.state === "open" ? "over" : "ok"}">${f.state === "open" ? "⏳ open" : "✅ done"}</span>
           </div>
-          ${f.text ? `<p>${esc(isAnswer(f) ? f.text.split("\nA: ").slice(1).join("\nA: ") : f.text).replace(/\n/g, "<br>")}</p>` : ""}
+          ${f.text ? `<p>${esc(fbText(f)).replace(/\n/g, "<br>")}</p>` : ""}
           ${f.resolution ? `<p class="resolution">🤖 ${esc(f.resolution)}</p>` : ""}
-          <div class="item-meta">${fmt(f.date.slice(0, 10))}${f.url ? ` · <a href="${esc(f.url)}" target="_blank" rel="noopener">#${f.number}</a>` : ""}</div>
+          <div class="item-meta">${esc(when(f.date))}${f.model ? ` · 🤖 ${MODEL_NAME[f.model] || esc(f.model)}` : ""}${f.url ? ` · <a href="${esc(f.url)}" target="_blank" rel="noopener">#${f.number}</a>` : ""}</div>
+          ${f.number ? replies(f.number).map(r => `<div class="reply ${tint(r.who)}"><b>${esc(r.who)} 💬</b> ${esc(r.text)} <span class="muted small">· ${esc(when(r.date))}</span></div>`).join("") : ""}
+          ${f.number && f.kind !== "reply" ? `<div class="row end"><button class="reply-btn" data-reply="${f.number}" data-replywho="${esc(f.who)}" data-replytitle="${esc(fbLabel(f).replace(/<[^>]+>/g, ""))}">💬 Reply</button></div>` : ""}
         </div>`).join("") || '<p class="muted">No feedback yet.</p>'}
     `;
-  }
-
-  function autoBanner() {
-    const A = window.AUTOMATION;
-    if (!A) return "";
-    const last = (window.RUNS || [])[0];
-    return `<div class="banner info">🤖 Claude reads new feedback and updates this plan <b>${esc(A.schedule)}</b>.${last ? ` Last update ${fmt(last.end.slice(0, 10))}.` : ""} <a href="#updates">Update history & cost →</a></div>`;
   }
 
   function viewUpdates() {
@@ -353,7 +365,17 @@
     const issues = runs.reduce((n, r) => n + (r.issues?.length || 0), 0);
     const time = r => new Date(r.end).toLocaleString("en-GB", { weekday: "short", day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" });
     return `
-      <h2>Plan updates</h2>
+      <h2>About this site</h2>
+      <div class="card">
+        <p style="margin:0 0 8px">Matija & Maryna's plan for CoRL 2026 in Austin and the holiday afterwards. Tell Claude what you think and it updates the plan:</p>
+        <ul class="plain">
+          <li>👍 / 👎 - quick like or dislike (ideas, stops, days)</li>
+          <li>💬 - write something: comments, answers to open questions, replies to each other, anything on your own tab</li>
+          <li>🤖 the dropdown next to Send picks which Claude model actions it: Haiku (default, small &amp; fast), Sonnet (balanced) or Opus (most thorough, for tricky requests)</li>
+          <li>Pick who you are with the name badge at the top right (blue = Matija, pink = Maryna)</li>
+        </ul>
+      </div>
+      <h2>Plan updates & usage</h2>
       <div class="card">
         <p style="margin:0">A scheduled Claude agent checks for new feedback <b>${esc(window.AUTOMATION?.schedule || "")}</b>. If there's nothing new it stops straight away, and nothing is logged here. When there is feedback it updates the plan, closes the GitHub issues with a note, and adds a row below.</p>
         <div class="stats">
@@ -379,9 +401,13 @@
   }
 
   // ---------- dialog ----------
-  function ask({ title, body, placeholder, input, ok = "OK" }) {
+  // model: show the 🤖 model picker (its value is left in dlgModel for the caller); as: tint the dialog for that person
+  function ask({ title, body, placeholder, input, ok = "OK", model, as }) {
     return new Promise(resolve => {
       const dlg = document.getElementById("dlg");
+      dlg.className = tint(as);
+      document.getElementById("dlgModel").hidden = !model;
+      document.getElementById("dlgModel").innerHTML = modelOptions("haiku");
       dlg.querySelector("h3").textContent = title;
       dlg.querySelector("p").textContent = body || "";
       const ta = dlg.querySelector("textarea");
@@ -391,7 +417,7 @@
       (input ? inp : ta).placeholder = placeholder || "";
       dlg.querySelector("button[value=ok]").textContent = ok;
       dlg.returnValue = "";
-      dlg.onclose = () => resolve(dlg.returnValue === "ok" ? (input ? inp.value : ta.value) : null);
+      dlg.onclose = () => { dlgModel = document.getElementById("dlgModel").value; resolve(dlg.returnValue === "ok" ? (input ? inp.value : ta.value) : null); };
       dlg.showModal();
     });
   }
@@ -402,7 +428,7 @@
     const person = PEOPLE.find(p => p.toLowerCase() === tab);
     if (person) return { tab, render: () => viewPerson(person) };
     if (tab === "ideas") return { tab, render: viewIdeas };
-    if (tab === "updates") return { tab, render: viewUpdates };
+    if (tab === "updates" || tab === "about") return { tab: "about", render: viewUpdates };
     if (tab === "austin") return { tab, render: viewAustin };
     return { tab: "plan", render: viewPlan };
   }
@@ -418,7 +444,9 @@
     if (r.tab === "plan" || r.tab === "austin") drawMap(); else if (map) { map.remove(); map = null; }
     if (r.tab === "ideas") applySearch();
     window.scrollTo(0, keepScroll ? y : 0);
-    document.getElementById("whoBtn").textContent = who ? "👤 " + who : "👤 Who are you?";
+    const badge = document.getElementById("whoBtn");
+    badge.textContent = who ? "👤 " + who : "👤 Who are you?";
+    badge.className = "who-btn " + tint(who);
   }
   const rerender = () => render(true);
 
@@ -441,36 +469,44 @@
     if (ds.vote) {
       if (!who) { toast("Tap 👤 at the top to pick who you are"); return; }
       const idea = ideas[ds.idea];
-      const text = await ask({ title: `${vIcon(ds.vote)} ${idea.title}`, body: `Voting as ${who}. Reason (optional):`, placeholder: ds.vote === "up" ? "Why do you like it?" : "Why not?", ok: "Send" });
+      const text = await ask({ title: `${vIcon(ds.vote)} ${idea.title}`, body: `Voting as ${who}. Reason (optional):`, placeholder: ds.vote === "up" ? "Why do you like it?" : "Why not?", ok: "Send", model: true, as: who });
       if (text === null) return;
       el.disabled = true;
-      await submit({ who, kind: "idea", idea: idea.id, ideaTitle: idea.title, vote: ds.vote, text: text.trim() });
+      await submit({ who, kind: "idea", idea: idea.id, ideaTitle: idea.title, vote: ds.vote, text: text.trim(), model: dlgModel });
       el.disabled = false;
     }
     if (ds.planvote) {
       if (!who) { toast("Tap 👤 at the top to pick who you are"); return; }
       const note = ds.planvote === "note";
       const text = await ask({ title: `${vIcon(ds.planvote)} ${ds.title}`, body: note ? `Comment as ${who}:` : `Feedback on the plan as ${who}. Reason (optional):`,
-        placeholder: note ? "Question, idea, anything…" : ds.planvote === "up" ? "What do you like?" : "What should change?", ok: "Send" });
+        placeholder: note ? "Question, idea, anything…" : ds.planvote === "up" ? "What do you like?" : "What should change?", ok: "Send", model: true, as: who });
       if (text === null || (note && !text.trim())) return;
       el.disabled = true;
-      await submit({ who, kind: "plan", target: ds.target, targetTitle: ds.title, vote: ds.planvote, text: text.trim() });
+      await submit({ who, kind: "plan", target: ds.target, targetTitle: ds.title, vote: ds.planvote, text: text.trim(), model: dlgModel });
       el.disabled = false;
     }
     if (ds.answer) {
       if (!who) { toast("Tap 👤 at the top to pick who you are"); return; }
       const q = T.openQuestions[+ds.answer];
-      const text = (await ask({ title: "💬 " + q, body: `Answering as ${who}:`, placeholder: "Your answer", ok: "Send" }))?.trim();
+      const text = (await ask({ title: "💬 " + q, body: `Answering as ${who}:`, placeholder: "Your answer", ok: "Send", model: true, as: who }))?.trim();
       if (!text) return;
       el.disabled = true;
-      await submit({ who, kind: "general", text: `Q: ${q}\nA: ${text}` });
+      await submit({ who, kind: "general", text: `Q: ${q}\nA: ${text}`, model: dlgModel });
+      el.disabled = false;
+    }
+    if (ds.reply) {
+      if (!who) { toast("Tap 👤 at the top to pick who you are"); return; }
+      const text = (await ask({ title: `💬 Reply to ${ds.replywho}`, body: ds.replytitle, placeholder: "Your reply", ok: "Send", model: true, as: who }))?.trim();
+      if (!text) return;
+      el.disabled = true;
+      await submit({ who, kind: "reply", replyTo: +ds.reply, replyToWho: ds.replywho, text, model: dlgModel });
       el.disabled = false;
     }
     if (ds.send) {
       const text = document.getElementById("freeText").value.trim();
       if (!text) { toast("Write something first"); return; }
       el.disabled = true;
-      if (await submit({ who: ds.send, kind: "general", text })) { const t = document.getElementById("freeText"); if (t) t.value = ""; }
+      if (await submit({ who: ds.send, kind: "general", text, model: document.getElementById("freeModel").value })) { const t = document.getElementById("freeText"); if (t) t.value = ""; }
       el.disabled = false;
     }
   });

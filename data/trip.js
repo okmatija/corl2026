@@ -4,7 +4,7 @@ window.TRIP = {
   meta: {
     title: "CoRL 2026 · USA trip",
     travellers: ["Matija", "Maryna"],
-    updated: "2026-09-24",
+    updated: "2026-09-24T10:01Z",
     status: "Work dates are confirmed. After Fri 13 Nov (Matija done at 16:00) this is a two-week proposal, flying home Fri 27 Nov - see the open questions.",
   },
 
