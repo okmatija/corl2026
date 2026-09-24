@@ -43,6 +43,11 @@
     <form method="dialog">
       <h3></h3>
       <p class="muted small"></p>
+      <div class="sentiment" id="dlgSentiment" hidden>
+        <button type="button" data-sent="up" aria-label="Positive">👍</button>
+        <button type="button" data-sent="down" aria-label="Negative">👎</button>
+        <span class="muted small">optional</span>
+      </div>
       <textarea rows="4"></textarea>
       <input type="text" autocomplete="off" hidden>
       <div class="row end send-row" style="margin-top:10px">

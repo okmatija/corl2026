@@ -23,6 +23,7 @@
   const ui = store.get("ui", { filter: "all", region: "all" });
   let map = null;
   let dlgModel = "sonnet";   // model picked in the last feedback dialog
+  let dlgVote = null;        // optional 👍/👎 picked in the last feedback dialog
 
   // ---------- helpers ----------
   const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
@@ -43,13 +44,13 @@
   const MODEL_NAME = { haiku: "Haiku", sonnet: "Sonnet", opus: "Opus" };
   const when = iso => iso.length <= 10 ? fmt(iso) : new Date(iso).toLocaleString("en-GB", { weekday: "short", day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" });
   const tint = name => name ? "tint-" + name.toLowerCase() : "";
-  const vIcon = v => ({ up: "👍", down: "👎", note: "💬" })[v] || "👍";
+  const vIcon = v => ({ up: "👍", down: "👎", add: "📌", note: "💬" })[v] || "💬";
 
   // Latest vote per person per idea
   // key: an idea id, or a plan target like "stop:austin" / "day:2026-11-08"
   function votes(key) {
     const out = {};
-    feedback.filter(f => (f.kind === "idea" && f.idea === key) || (f.kind === "plan" && f.target === key && f.vote !== "note"))
+    feedback.filter(f => ((f.kind === "idea" && f.idea === key) || (f.kind === "plan" && f.target === key)) && ["up", "down", "add"].includes(f.vote))
       .sort((a, b) => a.date.localeCompare(b.date))
       .forEach(f => { out[f.who] = f; });
     return out;
@@ -115,7 +116,7 @@
         const key = "day:" + date;
         const dayTitle = `${fmt(date)} in ${short(l.place)}`;
         return `<div class="day"><div class="date"><b>${fmt(date, { weekday: "short" })}</b>${fmt(date, { day: "numeric", month: "short" })}
-          <div class="mini">${voteBtn(key, dayTitle, "up", true)}${voteBtn(key, dayTitle, "down", true)}</div></div>
+          <div class="mini">${commentBtn(key, dayTitle, true)}</div></div>
           <div><ul>${lines.map(x => `<li>${x}</li>`).join("") || "<li class='muted'>Free</li>"}</ul></div></div>`;
       }).join("");
       const s = l.stay;
@@ -129,7 +130,7 @@
             ${detailsBtn("stop:" + l.place)}
             ${s ? `<div class="stay"><div class="item-head"><span>🛏️ ${esc(s.name)}</span>${s.covered ? '<span class="tag ok">paid by work</span>' : `<span class="tag ${s.price <= P.budgetPerNight ? "ok" : "over"}">~${money(s.price)}/nt</span>`}</div>${s.notes ? `<div class="item-meta">${esc(s.notes)}</div>` : ""}</div>` : ""}
             <div class="days">${days}</div>
-            <div class="vote">${["up", "down", "note"].map(dir => voteBtn("stop:" + l.place, `Stop: ${p.name}`, dir)).join("")}</div>
+            <div class="vote">${commentBtn("stop:" + l.place, `Stop: ${p.name}`)}</div>
           </div>
         </div>`;
     }).join("");
@@ -275,7 +276,7 @@
           <div class="item-head"><span class="item-title">${icon} ${esc(route)}</span><span class="tag">${fmt(date)}</span></div>
           ${details ? `<div class="item-meta">${details}${dir ? ` · <a href="${dir}" target="_blank" rel="noopener">directions</a>` : ""}</div>` : ""}
           ${detailsBtn(key)}
-          <div class="vote">${["up", "down", "note"].map(d => voteBtn(key, `Travel: ${route}`, d)).join("")}</div>
+          <div class="vote">${commentBtn(key, `Travel: ${route}`)}</div>
         </div>
       </div>`;
   }
@@ -326,14 +327,15 @@
     const people = whoSel.length ? whoSel : PEOPLE;
     if (!voteSel.length) return people.some(p => v[p]);
     if (!whoSel.length && voteSel.includes("none") && !Object.keys(v).length) return true;
-    return people.some(p => (v[p] ? voteSel.includes(v[p].vote) : whoSel.length && voteSel.includes("none")));
+    const dir = f => f.vote === "add" ? "up" : f.vote;
+    return people.some(p => (v[p] ? voteSel.includes(dir(v[p])) : whoSel.length && voteSel.includes("none")));
   }
 
   function ideaCard(a) {
     const v = votes(a.id);
-    const mine = who ? v[who]?.vote : null;
     const q = encodeURIComponent(a.title.replace(/\(.*?\)/g, "") + " " + place(a.place).name);
-    const reactions = voteChips(v);
+    const notes = feedback.filter(f => f.kind === "idea" && f.idea === a.id && f.vote === "note" && f.text).sort((x, y) => x.date.localeCompare(y.date));
+    const reactions = voteChips(v) + notes.map(f => `<div class="fb note"><b>${esc(f.who)} 💬</b> ${esc(f.text)}</div>`).join("");
     const state = STATES[place(a.place).name.split(", ").pop()] || "";
     const text = norm([a.title, a.why, place(a.place).name, state, place(a.place).type, a.cat, CATS[a.cat], a.cost, a.dur, inPlan.has(a.id) ? "in plan" : ""].join(" "));
     return `<article class="idea" data-text="${esc(text)}">
@@ -342,8 +344,8 @@
       <p>${esc(a.why)} <a href="https://www.google.com/maps/search/?api=1&query=${q}" target="_blank" rel="noopener">map</a>${a.link ? ` · <a href="${esc(a.link)}" target="_blank" rel="noopener">website / book</a>` : ""}</p>
       ${reactions}
       <div class="vote">
-        <button data-vote="up" data-idea="${a.id}" class="${mine === "up" ? "on" : ""}">👍 Like</button>
-        <button data-vote="down" data-idea="${a.id}" class="${mine === "down" ? "on" : ""}">👎 Dislike</button>
+        ${inPlan.has(a.id) ? `<button class="on" disabled>📌 In plan</button>` : `<button data-addplan="${a.id}">📌 Add to plan</button>`}
+        <button data-ideacomment="${a.id}">💬 Comment</button>
       </div>
     </article>`;
   }
@@ -355,11 +357,9 @@
       <div class="fb ${v[p].vote}"><b>${esc(p)} ${vIcon(v[p].vote)}</b>${v[p].text ? ` ${esc(v[p].text)}` : ""}</div>`).join("");
   }
 
-  // Like/Dislike/Comment button for a plan stop or day. mini = icon-only (day rows).
-  // No "selected" state: the plan view doesn't display feedback, so a highlighted button would just look stuck.
-  function voteBtn(key, title, dir, mini) {
-    const label = { up: "Like", down: "Dislike", note: "Comment" }[dir];
-    return `<button data-planvote="${dir}" data-target="${esc(key)}" data-title="${esc(title)}" aria-label="${label} ${esc(title)}">${vIcon(dir)}${mini ? "" : " " + label}</button>`;
+  // 💬 button for a plan stop, day or journey (mini = icon only, for day rows). Sentiment is picked inside the pop-up.
+  function commentBtn(key, title, mini) {
+    return `<button data-plancomment="${esc(key)}" data-title="${esc(title)}" aria-label="Comment on ${esc(title)}">💬${mini ? "" : " Comment"}</button>`;
   }
 
   function viewIdeas() {
@@ -369,7 +369,7 @@
     const groups = regions.map(r => ({ r, items: list.filter(a => a.place === r) })).filter(g => g.items.length);
     return `
       <h2>Ideas</h2>
-      <div class="banner info">💡 These cards are suggestions from Claude. Want more, or something specific? Ask on the <a href="#feedback">💬 Feedback</a> tab (e.g. "ideas for a rainy day in Austin") and the hourly agent will add new cards. 👍 / 👎 on a card tells it what to put into the plan.</div>
+      <div class="banner info">💡 These cards are suggestions from Claude. Want more, or something specific? Ask on the <a href="#feedback">💬 Feedback</a> tab (e.g. "ideas for a rainy day in Austin") and the hourly agent will add new cards. 📌 Add to plan puts an idea into the plan; 💬 Comment for anything else.</div>
       ${statusBanner()}
       <div class="chips fb-filters" role="group" aria-label="Filter ideas">
         ${PEOPLE.map(p => toggleChip("ideawho", p, esc(p), (ui.ideaWho || []).includes(p))).join("")}
@@ -427,17 +427,17 @@
   }
 
   function fbLabel(f) {
-    if (f.kind === "idea") return `${vIcon(f.vote)} <b>${esc(f.ideaTitle || ideas[f.idea]?.title || f.idea)}</b>`;
+    if (f.kind === "idea") return `${vIcon(f.vote)} <b>${f.vote === "add" ? "Add to plan: " : ""}${esc(f.ideaTitle || ideas[f.idea]?.title || f.idea)}</b>`;
     if (f.kind === "plan") return `${vIcon(f.vote)} <b>Plan · ${esc(f.targetTitle || f.target)}</b>`;
-    if (f.kind === "reply") return `💬 <b>Reply to ${esc(f.replyToWho || "")} · #${f.replyTo}</b>`;
+    if (f.kind === "reply") return `${vIcon(f.vote)} <b>Comment on ${esc(f.replyToWho || "")}'s #${f.replyTo}</b>`;
     if (isAnswer(f)) return `💬 <b>Answer · ${esc(f.text.slice(3).split("\nA: ")[0])}</b>`;
-    return "💬 <b>General</b>";
+    return `${vIcon(f.vote)} <b>General</b>`;
   }
   const fbText = f => isAnswer(f) ? f.text.split("\nA: ").slice(1).join("\nA: ") : f.text;
   const replies = n => feedback.filter(r => r.kind === "reply" && r.replyTo === n).sort((a, b) => a.date.localeCompare(b.date));
 
   // 👍 / 👎 votes vs everything written (general notes, answers, replies, plan comments)
-  const fbType = f => f.vote === "up" ? "up" : f.vote === "down" ? "down" : "general";
+  const fbType = f => f.vote === "up" || f.vote === "add" ? "up" : f.vote === "down" ? "down" : "general";
   const FB_TYPES = [["general", "💬"], ["up", "👍"], ["down", "👎"]];
 
   function viewFeedback() {
@@ -479,8 +479,8 @@
           ${f.text ? `<p>${esc(fbText(f)).replace(/\n/g, "<br>")}</p>` : ""}
           ${f.resolution ? `<p class="resolution">🤖 ${esc(f.resolution)}</p>` : ""}
           <div class="item-meta">${esc(when(f.date))}${f.model ? ` · 🤖 ${MODEL_NAME[f.model] || esc(f.model)}` : ""}${f.url ? ` · <a href="${esc(f.url)}" target="_blank" rel="noopener">#${f.number}</a>` : ""}</div>
-          ${f.number ? replies(f.number).map(r => `<div class="reply ${tint(r.who)}"><b>${esc(r.who)} 💬</b> ${esc(r.text)} <span class="muted small">· ${esc(when(r.date))}</span></div>`).join("") : ""}
-          ${f.number && f.kind !== "reply" ? `<div class="row end"><button class="reply-btn" data-reply="${f.number}" data-replywho="${esc(f.who)}" data-replytitle="${esc(fbLabel(f).replace(/<[^>]+>/g, ""))}">💬 Reply</button></div>` : ""}
+          ${f.number ? replies(f.number).map(r => `<div class="reply ${tint(r.who)}"><b>${esc(r.who)} ${vIcon(r.vote)}</b> ${esc(r.text)} <span class="muted small">· ${esc(when(r.date))}</span></div>`).join("") : ""}
+          ${f.number && f.kind !== "reply" ? `<div class="row end"><button class="reply-btn" data-reply="${f.number}" data-replywho="${esc(f.who)}" data-replytitle="${esc(fbLabel(f).replace(/<[^>]+>/g, ""))}">💬 Comment</button></div>` : ""}
         </div>`).join("") || '<p class="muted">No feedback yet.</p>'}
     `;
   }
@@ -496,13 +496,14 @@
     return `
       <h2>About this site</h2>
       <div class="card">
-        <p style="margin:0 0 8px">Matija & Maryna's plan for CoRL 2026 in Austin and the holiday afterwards. Tell Claude what you think and it updates the plan:</p>
+        <p style="margin:0 0 8px">Matija & Maryna's plan for CoRL 2026 in Austin and a two-week holiday afterwards. Claude agents read what you say and update the plan every hour.</p>
         <ul class="plain">
-          <li>👍 / 👎 - quick like or dislike (ideas, stops, days)</li>
-          <li>💬 - write something: comments, answers to open questions, replies to each other, and anything else on the Feedback tab</li>
-          <li>🤖 the dropdown next to Send picks which Claude model actions it: Sonnet (default, balanced), Haiku (small &amp; fast) or Opus (most thorough, for tricky requests)</li>
-          <li>Pick who you are with the name badge at the top right (blue = Matija, pink = Maryna)</li>
-          <li>📄 Details on a stop or journey opens a page with more (maps, hotels, car hire…). Ask for one on anything with 💬</li>
+          <li><b>👤 Pick who you are</b> with the name badge at the top right (blue = Matija, pink = Maryna).</li>
+          <li><b>💬 Comment</b> on anything - a stop, a journey, a single day, an idea, an open question or each other's feedback. In the pop-up you can add an optional 👍 or 👎.</li>
+          <li><b>📌 Add to plan</b> on an idea asks the agent to fit it into the plan.</li>
+          <li><b>💬 Feedback tab</b> - ask the agent for anything else: new ideas, changes, a budget… and see everything you've both said (filter by person, 👍, 👎).</li>
+          <li><b>🤖 Model</b> - the dropdown next to Send picks which Claude handles it: Sonnet (default), Haiku (quick) or Opus (most thorough).</li>
+          <li><b>📄 Details</b> on a stop or journey opens more (maps, hotels, flights, car hire). Ask for one on anything with 💬.</li>
         </ul>
       </div>
       <h2>🤖 Agent usage</h2>
@@ -538,13 +539,17 @@
 
   // ---------- dialog ----------
   // Every feedback pop-up looks like the Feedback tab's box: "<emoji> Add feedback as <you>", then what it's about.
-  const feedbackDialog = (icon, subject, placeholder) =>
-    ask({ title: `${icon} Add feedback as ${who}`, body: subject, placeholder, ok: "💬 Send", model: true, as: who });
+  // sentiment: show the optional 👍/👎 toggle (the choice is left in dlgVote).
+  const feedbackDialog = (icon, subject, placeholder, sentiment = true) =>
+    ask({ title: `${icon} Add feedback as ${who}`, body: subject, placeholder, ok: "💬 Send", model: true, as: who, sentiment });
 
   // model: show the 🤖 model picker (its value is left in dlgModel for the caller); as: tint the dialog for that person
-  function ask({ title, body, placeholder, input, ok = "OK", model, as }) {
+  function ask({ title, body, placeholder, input, ok = "OK", model, as, sentiment }) {
     return new Promise(resolve => {
       const dlg = document.getElementById("dlg");
+      dlgVote = null;
+      document.getElementById("dlgSentiment").hidden = !sentiment;
+      document.querySelectorAll("#dlgSentiment [data-sent]").forEach(b => b.classList.remove("on"));
       dlg.className = tint(as);
       document.getElementById("dlgModel").hidden = !model;
       document.getElementById("dlgModel").innerHTML = modelOptions("sonnet");
@@ -615,29 +620,44 @@
       ui[key] = [...cur]; store.set("ui", ui); return rerender();
     }
     if (ds.ideaplan) { ui.ideaPlan = !ui.ideaPlan; store.set("ui", ui); return rerender(); }
-    if (ds.vote) {
-      if (!who) { toast("Tap 👤 at the top to pick who you are"); return; }
-      const idea = ideas[ds.idea];
-      const text = await feedbackDialog(vIcon(ds.vote), idea.title, ds.vote === "up" ? "e.g. Sounds amazing, let's do it! (reason optional)" : "e.g. Too far out of the way. (reason optional)");
+    if (ds.sent) {   // 👍/👎 toggle inside the pop-up
+      dlgVote = dlgVote === ds.sent ? null : ds.sent;
+      document.querySelectorAll("#dlgSentiment [data-sent]").forEach(b => b.classList.toggle("on", b.dataset.sent === dlgVote));
+      return;
+    }
+    const needWho = () => { if (!who) toast("Tap your name at the top to pick who you are"); return !who; };
+    // A comment needs words unless it carries a 👍/👎
+    const empty = text => text === null || (!text.trim() && !dlgVote);
+    if (ds.addplan) {
+      if (needWho()) return;
+      const idea = ideas[ds.addplan];
+      const text = await feedbackDialog("📌", idea.title, "e.g. Any afternoon in Austin works. (optional)", false);
       if (text === null) return;
       el.disabled = true;
-      await submit({ who, kind: "idea", idea: idea.id, ideaTitle: idea.title, vote: ds.vote, text: text.trim(), model: dlgModel });
+      await submit({ who, kind: "idea", idea: idea.id, ideaTitle: idea.title, vote: "add", text: text.trim(), model: dlgModel });
       el.disabled = false;
     }
-    if (ds.planvote) {
-      if (!who) { toast("Tap 👤 at the top to pick who you are"); return; }
-      const note = ds.planvote === "note";
-      const text = await feedbackDialog(vIcon(ds.planvote), ds.title,
-        note ? "e.g. Is one night here enough?" : ds.planvote === "up" ? "e.g. Perfect, keep this. (reason optional)" : "e.g. Too packed - drop one thing. (reason optional)");
-      if (text === null || (note && !text.trim())) return;
+    if (ds.ideacomment) {
+      if (needWho()) return;
+      const idea = ideas[ds.ideacomment];
+      const text = await feedbackDialog("💬", idea.title, "e.g. Only if it's warm enough.");
+      if (empty(text)) return;
       el.disabled = true;
-      await submit({ who, kind: "plan", target: ds.target, targetTitle: ds.title, vote: ds.planvote, text: text.trim(), model: dlgModel });
+      await submit({ who, kind: "idea", idea: idea.id, ideaTitle: idea.title, vote: dlgVote || "note", text: text.trim(), model: dlgModel });
+      el.disabled = false;
+    }
+    if (ds.plancomment) {
+      if (needWho()) return;
+      const text = await feedbackDialog("💬", ds.title, "e.g. Is one night here enough?");
+      if (empty(text)) return;
+      el.disabled = true;
+      await submit({ who, kind: "plan", target: ds.plancomment, targetTitle: ds.title, vote: dlgVote || "note", text: text.trim(), model: dlgModel });
       el.disabled = false;
     }
     if (ds.answer) {
       if (!who) { toast("Tap 👤 at the top to pick who you are"); return; }
       const q = T.openQuestions[+ds.answer];
-      const text = (await feedbackDialog("💬", q, "e.g. Yes - and we'd rather…"))?.trim();
+      const text = (await feedbackDialog("💬", q, "e.g. Yes - and we'd rather…", false))?.trim();
       if (!text) return;
       el.disabled = true;
       await submit({ who, kind: "general", text: `Q: ${q}\nA: ${text}`, model: dlgModel });
@@ -645,10 +665,10 @@
     }
     if (ds.reply) {
       if (!who) { toast("Tap 👤 at the top to pick who you are"); return; }
-      const text = (await feedbackDialog("💬", `Reply to ${ds.replywho}: ${ds.replytitle}`, "e.g. Agreed! Or maybe…"))?.trim();
-      if (!text) return;
+      const text = await feedbackDialog("💬", `${ds.replywho}: ${ds.replytitle}`, "e.g. Agreed! Or maybe…");
+      if (empty(text)) return;
       el.disabled = true;
-      await submit({ who, kind: "reply", replyTo: +ds.reply, replyToWho: ds.replywho, text, model: dlgModel });
+      await submit({ who, kind: "reply", replyTo: +ds.reply, replyToWho: ds.replywho, text: text.trim(), vote: dlgVote || undefined, model: dlgModel });
       el.disabled = false;
     }
     if (ds.fbwho || ds.fbtype) {

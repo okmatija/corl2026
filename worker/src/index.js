@@ -53,6 +53,7 @@ async function gh(env, path, init = {}) {
   return res.json();
 }
 
+const ICON = { up: "👍", down: "👎", add: "📌", note: "💬" };
 const clean = (s, max) => String(s ?? "").replace(/<!--|-->/g, "").trim().slice(0, max);
 
 async function createFeedback(req, env) {
@@ -71,33 +72,36 @@ async function createFeedback(req, env) {
   if (kind === "idea") {
     data.idea = clean(b.idea, 80);
     data.ideaTitle = clean(b.ideaTitle, 120);
-    data.vote = b.vote === "down" ? "down" : "up";
+    data.vote = ["down", "add", "note"].includes(b.vote) ? b.vote : "up";   // add = put it in the plan; note = comment
     if (!data.idea) fail(400, "missing idea");
-    title = `[${who}] ${data.vote === "up" ? "👍" : "👎"} ${data.ideaTitle || data.idea}`;
+    if (data.vote === "note" && !text) fail(400, "empty comment");
+    title = `[${who}] ${ICON[data.vote]} ${data.vote === "add" ? "Add to plan: " : ""}${data.ideaTitle || data.idea}`;
   } else if (kind === "plan") {
     data.target = clean(b.target, 80);        // "stop:<place>", "day:<YYYY-MM-DD>" or "travel:<place>|home"
     data.targetTitle = clean(b.targetTitle, 120);
     data.vote = ["down", "note"].includes(b.vote) ? b.vote : "up";   // note = 💬 comment, no sentiment
     if (!/^(stop|day|travel):[\w-]+$/.test(data.target)) fail(400, "bad plan target");
     if (data.vote === "note" && !text) fail(400, "empty comment");
-    title = `[${who}] ${{ up: "👍", down: "👎", note: "💬" }[data.vote]} Plan: ${data.targetTitle || data.target}`;
+    title = `[${who}] ${ICON[data.vote]} Plan: ${data.targetTitle || data.target}`;
   } else if (kind === "reply") {
     // A comment on someone's earlier feedback item (issue #replyTo)
     data.replyTo = parseInt(b.replyTo, 10);
     data.replyToWho = people.find(p => p.toLowerCase() === String(b.replyToWho || "").toLowerCase()) || "";
     if (!(data.replyTo > 0)) fail(400, "bad replyTo");
-    if (!text) fail(400, "empty reply");
-    title = `[${who}] 💬 Re #${data.replyTo}${data.replyToWho ? ` (${data.replyToWho})` : ""}: ${text.split("\n")[0].slice(0, 60)}`;
+    if (["up", "down"].includes(b.vote)) data.vote = b.vote;   // optional sentiment
+    if (!text && !data.vote) fail(400, "empty reply");
+    title = `[${who}] ${ICON[data.vote || "note"]} Re #${data.replyTo}${data.replyToWho ? ` (${data.replyToWho})` : ""}: ${text.split("\n")[0].slice(0, 60)}`;
   } else {
+    if (["up", "down"].includes(b.vote)) data.vote = b.vote;   // optional sentiment
     if (!text) fail(400, "empty feedback");
     title = `[${who}] ${text.split("\n")[0].slice(0, 70)}`;
   }
 
   const body = [
-    kind === "idea" ? `**${who}** ${data.vote === "up" ? "likes 👍" : "dislikes 👎"} idea \`${data.idea}\` - ${data.ideaTitle}`
+    kind === "idea" ? `**${who}** ${{ up: "likes 👍", down: "dislikes 👎", add: "wants to add 📌 to the plan:", note: "comments 💬 on" }[data.vote]} idea \`${data.idea}\` - ${data.ideaTitle}`
       : kind === "plan" ? `**${who}** ${{ up: "likes 👍", down: "dislikes 👎", note: "comments 💬 on" }[data.vote]} this part of the plan: \`${data.target}\` - ${data.targetTitle}`
-      : kind === "reply" ? `**${who}** replied to #${data.replyTo}${data.replyToWho ? ` (${data.replyToWho}'s feedback)` : ""}:`
-      : `**${who}** wrote:`,
+      : kind === "reply" ? `**${who}** ${data.vote ? ICON[data.vote] + " " : ""}commented on #${data.replyTo}${data.replyToWho ? ` (${data.replyToWho}'s feedback)` : ""}:`
+      : `**${who}**${data.vote ? " " + ICON[data.vote] : ""} wrote:`,
     "",
     text ? text.split("\n").map(l => "> " + l).join("\n") : "_(no reason given)_",
     "",

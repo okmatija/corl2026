@@ -43,6 +43,9 @@ The site shows an issue as "done" once closed, plus the text after `**Resolution
    answered: add a new entry to `openQuestions` that states the options, so they can 💬 Answer it on the Plan page. A later vote by the same person on the same idea supersedes an earlier one.
    Answers to open questions arrive as general notes formatted `Q: <question>` / `A: <answer>`. Use the answer to update the plan,
    then remove (or reword) that entry in `openQuestions` once it's settled.
+   Votes (`vote`): `add` (📌 "Add to plan" on an idea) → fit it into the plan. `note` = a 💬 comment with no sentiment - act on
+   the text. `up`/`down` = an optional 👍/👎 the person attached to a comment (on ideas, plan stops/days/journeys, replies and
+   general notes): 👍 = keep/more of this, 👎 = rework/avoid it, using the text as the reason.
    Idea votes: 👍 → consider adding to the plan; 👎 → remove/avoid. Plan votes: 👍 → keep as is; 👎 → rework that stop/day using the reason. Plan `vote: "note"` = 💬 comment on a stop (question/idea, no sentiment). General notes: budget, dates, must-sees, new ideas (add idea cards).
 3. Edit `data/trip.js` (plan, ideas, openQuestions; set `meta.updated` to the current UTC time as `date -u +%Y-%m-%dT%H:%MZ` -
    the Trip Summary shows it). Validate BOTH data files load before committing:
