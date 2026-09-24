@@ -264,6 +264,7 @@
     const groups = regions.map(r => ({ r, items: list.filter(a => a.place === r) })).filter(g => g.items.length);
     return `
       <h2>Ideas</h2>
+      <div class="banner info">💡 These cards are suggestions from Claude. Want more, or something specific? Ask on the <a href="#feedback">💬 Feedback</a> tab (e.g. "ideas for a rainy day in Austin") and the hourly agent will add new cards. 👍 / 👎 on a card tells it what to put into the plan.</div>
       ${statusBanner()}
       <div class="chips">${FILTERS.map(([k, l]) => `<button class="chip ${ui.filter === k ? "on" : ""}" data-filter="${esc(k)}">${esc(l)}</button>`).join("")}</div>
       <input type="search" id="ideaSearch" placeholder="🔍 Search ideas (e.g. gators, rock, beach)" value="${esc(ui.q || "")}" autocomplete="off" aria-label="Search ideas">
@@ -325,26 +326,44 @@
   const fbText = f => isAnswer(f) ? f.text.split("\nA: ").slice(1).join("\nA: ") : f.text;
   const replies = n => feedback.filter(r => r.kind === "reply" && r.replyTo === n).sort((a, b) => a.date.localeCompare(b.date));
 
-  function viewPerson(name) {
-    const mine = feedback.filter(f => f.who === name).sort((a, b) => b.date.localeCompare(a.date));
-    const open = mine.filter(f => f.state === "open").length;
+  // 👍 / 👎 votes vs everything written (general notes, answers, replies, plan comments)
+  const fbType = f => f.vote === "up" ? "up" : f.vote === "down" ? "down" : "general";
+  const FB_TYPES = [["general", "💬 General"], ["up", "👍"], ["down", "👎"]];
+
+  function viewFeedback() {
+    // Toggle filters: nothing selected in a group = show all of that group
+    const whoSel = ui.fbWho || [], typeSel = ui.fbType || [];
+    const list = feedback
+      .filter(f => (!whoSel.length || whoSel.includes(f.who)) && (!typeSel.length || typeSel.includes(fbType(f))))
+      .sort((a, b) => b.date.localeCompare(a.date));
+    const open = list.filter(f => f.state === "open").length;
+    const chip = (group, key, label, on) => `<button class="chip ${on ? "on" : ""} ${group === "fbwho" ? tint(key) + "-chip" : ""}" data-${group}="${esc(key)}" aria-pressed="${on}">${label}</button>`;
     return `
-      <h2>${esc(name)}'s feedback</h2>
+      <h2>Feedback</h2>
       ${statusBanner()}
-      <div class="card composer ${tint(name)}">
-        <h3>💬 Add feedback as ${esc(name)}</h3>
-        <p class="muted small" style="margin:0 0 8px">Anything: must-sees, budget per night, where to stay, dates, dealbreakers, answers to the open questions…</p>
+      <div class="card composer ${tint(who)}">
+        ${who ? `
+        <h3>💬 Add feedback as ${esc(who)}</h3>
+        <p class="muted small" style="margin:0 0 8px">Anything: must-sees, budget per night, where to stay, dates, dealbreakers… (not you? tap the name badge at the top)</p>
         <textarea id="freeText" rows="4" placeholder="e.g. Budget ~150/night. I'd love a day at the beach."></textarea>
         <div class="row send-row" style="margin-top:8px">
           <select id="freeModel" class="model-select" aria-label="Claude model to action this" title="Claude model to action this">${modelOptions("haiku")}</select>
-          <button class="primary" data-send="${esc(name)}">💬 Send</button>
-        </div>
+          <button class="primary" data-send>💬 Send</button>
+        </div>` : `
+        <h3>💬 Add feedback</h3>
+        <p class="muted small" style="margin:0 0 8px">Who are you?</p>
+        <div class="row">${PEOPLE.map(p => `<button class="chip ${tint(p)}" data-setwho="${esc(p)}">👤 ${esc(p)}</button>`).join("")}</div>`}
       </div>
-      <p class="muted small">${mine.length} item${mine.length === 1 ? "" : "s"} · ${open} waiting for Claude · ${mine.length - open} done</p>
-      ${mine.map(f => `
-        <div class="card fbitem ${f.state}">
+      <div class="chips fb-filters" role="group" aria-label="Filter feedback">
+        ${PEOPLE.map(p => chip("fbwho", p, esc(p), whoSel.includes(p))).join("")}
+        <span class="chip-sep"></span>
+        ${FB_TYPES.map(([k, l]) => chip("fbtype", k, l, typeSel.includes(k))).join("")}
+      </div>
+      <p class="muted small">${list.length} item${list.length === 1 ? "" : "s"} · ${open} waiting for Claude · ${list.length - open} done</p>
+      ${list.map(f => `
+        <div class="card fbitem ${f.state} ${tint(f.who)}">
           <div class="item-head">
-            <span>${fbLabel(f)}</span>
+            <span><span class="who-name">${esc(f.who)}</span> ${fbLabel(f)}</span>
             <span class="tag ${f.state === "open" ? "over" : "ok"}">${f.state === "open" ? "⏳ open" : "✅ done"}</span>
           </div>
           ${f.text ? `<p>${esc(fbText(f)).replace(/\n/g, "<br>")}</p>` : ""}
@@ -370,7 +389,7 @@
         <p style="margin:0 0 8px">Matija & Maryna's plan for CoRL 2026 in Austin and the holiday afterwards. Tell Claude what you think and it updates the plan:</p>
         <ul class="plain">
           <li>👍 / 👎 - quick like or dislike (ideas, stops, days)</li>
-          <li>💬 - write something: comments, answers to open questions, replies to each other, anything on your own tab</li>
+          <li>💬 - write something: comments, answers to open questions, replies to each other, and anything else on the Feedback tab</li>
           <li>🤖 the dropdown next to Send picks which Claude model actions it: Haiku (default, small &amp; fast), Sonnet (balanced) or Opus (most thorough, for tricky requests)</li>
           <li>Pick who you are with the name badge at the top right (blue = Matija, pink = Maryna)</li>
         </ul>
@@ -426,7 +445,9 @@
   function route() {
     const tab = (location.hash.slice(1) || "plan").toLowerCase();
     const person = PEOPLE.find(p => p.toLowerCase() === tab);
-    if (person) return { tab, render: () => viewPerson(person) };
+    // Old per-person links (#matija / #maryna) open the Feedback tab filtered to that person
+    if (person) { ui.fbWho = [person]; store.set("ui", ui); history.replaceState(null, "", "#feedback"); return { tab: "feedback", render: viewFeedback }; }
+    if (tab === "feedback") return { tab, render: viewFeedback };
     if (tab === "ideas") return { tab, render: viewIdeas };
     if (tab === "updates" || tab === "about") return { tab: "about", render: viewUpdates };
     if (tab === "austin") return { tab, render: viewAustin };
@@ -502,11 +523,18 @@
       await submit({ who, kind: "reply", replyTo: +ds.reply, replyToWho: ds.replywho, text, model: dlgModel });
       el.disabled = false;
     }
-    if (ds.send) {
+    if (ds.fbwho || ds.fbtype) {
+      const key = ds.fbwho ? "fbWho" : "fbType", v = ds.fbwho || ds.fbtype;
+      const cur = new Set(ui[key] || []);
+      cur.has(v) ? cur.delete(v) : cur.add(v);
+      ui[key] = [...cur]; store.set("ui", ui); return rerender();
+    }
+    if (ds.setwho) { who = ds.setwho; store.set("who", who); return rerender(); }
+    if ("send" in ds) {
       const text = document.getElementById("freeText").value.trim();
       if (!text) { toast("Write something first"); return; }
       el.disabled = true;
-      if (await submit({ who: ds.send, kind: "general", text, model: document.getElementById("freeModel").value })) { const t = document.getElementById("freeText"); if (t) t.value = ""; }
+      if (await submit({ who, kind: "general", text, model: document.getElementById("freeModel").value })) { const t = document.getElementById("freeText"); if (t) t.value = ""; }
       el.disabled = false;
     }
   });
