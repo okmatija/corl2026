@@ -420,12 +420,13 @@
     document.getElementById("noMatch").hidden = shown > 0 || !words.length;
   }
 
+  // Title after the person's name on a comment card: "<icon> RE: <what it's about>" ("<icon>" alone for general comments)
   function fbLabel(f) {
-    if (f.kind === "idea") return `${vIcon(f.vote)} <b>${f.vote === "add" ? "Add to plan: " : f.vote === "remove" ? "Remove from plan: " : ""}${esc(f.ideaTitle || ideas[f.idea]?.title || f.idea)}</b>`;
-    if (f.kind === "plan") return `${vIcon(f.vote)} <b>Plan · ${esc(f.targetTitle || f.target)}</b>`;
-    if (f.kind === "reply") return `${vIcon(f.vote)} <b>Comment on ${esc(f.replyToWho || "")}'s #${f.replyTo}</b>`;
-    if (isAnswer(f)) return `💬 <b>Answer · ${esc(f.text.slice(3).split("\nA: ")[0])}</b>`;
-    return `${vIcon(f.vote)} <b>General</b>`;
+    if (f.kind === "idea") return `${vIcon(f.vote)} <b>${f.vote === "add" ? "Add to plan: " : f.vote === "remove" ? "Remove from plan: " : "RE: "}${esc(f.ideaTitle || ideas[f.idea]?.title || f.idea)}</b>`;
+    if (f.kind === "plan") return `${vIcon(f.vote)} <b>RE: Plan ${esc(f.targetTitle || f.target)}</b>`;
+    if (f.kind === "reply") return `${vIcon(f.vote)} <b>RE: ${esc(f.replyToWho || "")}'s #${f.replyTo}</b>`;
+    if (isAnswer(f)) return `💬 <b>RE: ${esc(f.text.slice(3).split("\nA: ")[0])}</b>`;
+    return vIcon(f.vote);
   }
   const fbText = f => isAnswer(f) ? f.text.split("\nA: ").slice(1).join("\nA: ") : f.text;
   const AGENT = "Claude";
