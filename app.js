@@ -444,7 +444,8 @@
     // Toggle filters: nothing selected in a group = show all of that group
     const whoSel = ui.fbWho || [], typeSel = ui.fbType || [];
     const list = feedback
-      .filter(f => (!whoSel.length || whoSel.includes(f.who) || (whoSel.includes(AGENT) && f.resolution)) && (!typeSel.length || typeSel.includes(fbType(f))))
+      // a name matches comments that person wrote AND comments they commented on (their replies / the agent's note in the thread)
+      .filter(f => (!whoSel.length || [f.who, ...thread(f).map(r => r.who)].some(w => whoSel.includes(w))) && (!typeSel.length || typeSel.includes(fbType(f))))
       .sort((a, b) => b.date.localeCompare(a.date));
     const open = list.filter(f => f.state === "open").length;
     return `
