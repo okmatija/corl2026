@@ -314,21 +314,23 @@
 
   // Toggle chip shared by the Ideas and Feedback filters. People chips get their blue/pink outline.
   const toggleChip = (group, key, label, on) =>
-    `<button class="chip ${on ? "on" : ""} ${PEOPLE.includes(key) ? tint(key) + "-chip" : ""}" data-${group}="${esc(key)}" aria-pressed="${on}">${label}</button>`;
+    `<button class="chip ${on ? "on" : ""} ${PEOPLE.includes(key) || key === AGENT ? tint(key) + "-chip" : ""}" data-${group}="${esc(key)}" aria-pressed="${on}">${label}</button>`;
 
   // Ideas filters (toggles, same idiom as Comments): 📌 In plan, and a name = ideas that person has commented on.
   // Both names on = either of you; nothing on = everything.
   function matches(idea) {
     const whoSel = ui.ideaWho || [];
     if (ui.ideaPlan && !inPlan.has(idea.id)) return false;
-    return !whoSel.length || feedback.some(f => f.kind === "idea" && f.idea === idea.id && whoSel.includes(f.who));
+    return !whoSel.length || feedback.some(f => f.kind === "idea" && f.idea === idea.id && (whoSel.includes(f.who) || (whoSel.includes(AGENT) && f.resolution)));
   }
 
   function ideaCard(a) {
     const v = votes(a.id);
     const q = encodeURIComponent(a.title.replace(/\(.*?\)/g, "") + " " + place(a.place).name);
     const notes = feedback.filter(f => f.kind === "idea" && f.idea === a.id && f.vote === "note" && f.text).sort((x, y) => x.date.localeCompare(y.date));
-    const reactions = voteChips(v) + notes.map(f => `<div class="fb ${tint(f.who)}"><b>${esc(f.who)} 💬</b> ${esc(f.text)}</div>`).join("");
+    const agentNotes = feedback.filter(f => f.kind === "idea" && f.idea === a.id && f.resolution).sort((x, y) => (x.closedAt || x.date).localeCompare(y.closedAt || y.date));
+    const reactions = voteChips(v) + notes.map(f => `<div class="fb ${tint(f.who)}"><b>${esc(f.who)} 💬</b> ${esc(f.text)}</div>`).join("")
+      + agentNotes.map(f => `<div class="fb ${tint(AGENT)}"><b>🤖 Claude</b> ${esc(f.resolution)}</div>`).join("");
     const state = STATES[place(a.place).name.split(", ").pop()] || "";
     const text = norm([a.title, a.why, place(a.place).name, state, place(a.place).type, a.cat, CATS[a.cat], a.cost, a.dur, inPlan.has(a.id) ? "in plan" : ""].join(" "));
     return `<article class="idea" data-text="${esc(text)}">
@@ -365,7 +367,7 @@
       <div class="banner info">💡 These cards are suggestions from Claude. Want more, or something specific? Ask on the <a href="#comments">💬 Comments</a> tab (e.g. "ideas for a rainy day in Austin") and the hourly agent will add new cards. 📌 Add to plan puts an idea into the plan; 💬 Comment for anything else.</div>
       ${statusBanner()}
       <div class="chips fb-filters" role="group" aria-label="Filter ideas">
-        ${PEOPLE.map(p => toggleChip("ideawho", p, `💬 ${esc(p)}`, (ui.ideaWho || []).includes(p))).join("")}
+        ${[...PEOPLE, AGENT].map(p => toggleChip("ideawho", p, p === AGENT ? "🤖 Claude" : `💬 ${esc(p)}`, (ui.ideaWho || []).includes(p))).join("")}
         <span class="chip-sep"></span>
         ${toggleChip("ideaplan", "plan", "📌 In plan", !!ui.ideaPlan)}
       </div>
@@ -426,7 +428,13 @@
     return `${vIcon(f.vote)} <b>General</b>`;
   }
   const fbText = f => isAnswer(f) ? f.text.split("\nA: ").slice(1).join("\nA: ") : f.text;
-  const replies = n => feedback.filter(r => r.kind === "reply" && r.replyTo === n).sort((a, b) => a.date.localeCompare(b.date));
+  const AGENT = "Claude";
+  // Agent comment = the note an agent leaves when it closes a comment (its "Resolution"), dated when it was closed.
+  const agentComment = f => f.resolution ? { who: AGENT, text: f.resolution, date: f.closedAt || f.date } : null;
+  // Thread under a comment: people's replies + the agent's comment, oldest first
+  const thread = f => [...feedback.filter(r => r.kind === "reply" && r.replyTo === f.number), agentComment(f)]
+    .filter(Boolean).sort((a, b) => a.date.localeCompare(b.date));
+  const whoLabel = w => w === AGENT ? "🤖 Claude" : esc(w);
 
   // 👍 / 👎 votes vs everything written (general notes, answers, replies, plan comments)
   const fbType = f => f.vote === "up" || f.vote === "add" ? "up" : f.vote === "down" ? "down" : "general";
@@ -436,7 +444,7 @@
     // Toggle filters: nothing selected in a group = show all of that group
     const whoSel = ui.fbWho || [], typeSel = ui.fbType || [];
     const list = feedback
-      .filter(f => (!whoSel.length || whoSel.includes(f.who)) && (!typeSel.length || typeSel.includes(fbType(f))))
+      .filter(f => (!whoSel.length || whoSel.includes(f.who) || (whoSel.includes(AGENT) && f.resolution)) && (!typeSel.length || typeSel.includes(fbType(f))))
       .sort((a, b) => b.date.localeCompare(a.date));
     const open = list.filter(f => f.state === "open").length;
     return `
@@ -457,7 +465,7 @@
       </div>
       <h2 class="section-title">Comment history</h2>
       <div class="chips fb-filters" role="group" aria-label="Filter comments">
-        ${PEOPLE.map(p => toggleChip("fbwho", p, esc(p), whoSel.includes(p))).join("")}
+        ${[...PEOPLE, AGENT].map(p => toggleChip("fbwho", p, whoLabel(p), whoSel.includes(p))).join("")}
         <span class="chip-sep"></span>
         ${FB_TYPES.map(([k, l]) => toggleChip("fbtype", k, l, typeSel.includes(k))).join("")}
       </div>
@@ -469,9 +477,8 @@
             <span class="tag ${f.state === "open" ? "over" : "ok"}">${f.state === "open" ? "⏳ open" : "✅ done"}</span>
           </div>
           ${f.text ? `<p>${esc(fbText(f)).replace(/\n/g, "<br>")}</p>` : ""}
-          ${f.resolution ? `<p class="resolution">🤖 ${esc(f.resolution)}</p>` : ""}
           <div class="item-meta">${esc(when(f.date))}${f.model ? ` · 🤖 ${MODEL_NAME[f.model] || esc(f.model)}` : ""}${f.url ? ` · <a href="${esc(f.url)}" target="_blank" rel="noopener">#${f.number}</a>` : ""}</div>
-          ${f.number ? replies(f.number).map(r => `<div class="reply ${tint(r.who)}"><b>${esc(r.who)} ${vIcon(r.vote)}</b> ${esc(r.text)} <span class="muted small">· ${esc(when(r.date))}</span></div>`).join("") : ""}
+          ${thread(f).map(r => `<div class="reply ${tint(r.who)}"><b>${whoLabel(r.who)}${r.who === AGENT ? "" : " " + vIcon(r.vote)}</b> ${esc(r.text)} <span class="muted small">· ${esc(when(r.date))}</span></div>`).join("")}
           ${f.number && f.kind !== "reply" ? `<div class="row end"><button class="reply-btn" data-reply="${f.number}" data-replywho="${esc(f.who)}" data-replytitle="${esc(fbLabel(f).replace(/<[^>]+>/g, ""))}">💬 Comment</button></div>` : ""}
         </div>`).join("") || '<p class="muted">No comments yet.</p>'}
     `;

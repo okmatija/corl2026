@@ -291,3 +291,11 @@ input[type=search] { width: 100%; border: 1px solid var(--line); background: var
 .vote button.on[disabled] { opacity: 1; cursor: default; }
 .day .mini button { padding: 2px 8px; }
 .fb.tint-matija, .fb.tint-maryna { border: 1px solid; }
+
+/* Agent (Claude) comments: grey, same shape as people's comments */
+:root { --agent: #f1f0ec; --agent-line: #cfccc4; }
+@media (prefers-color-scheme: dark) { :root { --agent: #2a2724; --agent-line: #57524b; } }
+.tint-claude { background: var(--agent) !important; border-color: var(--agent-line) !important; }
+.fb.tint-claude { border: 1px solid; }
+.chip.tint-claude-chip { border-color: var(--agent-line); }
+.chip.tint-claude-chip.on { background: var(--agent-line); border-color: var(--agent-line); color: var(--ink); }
