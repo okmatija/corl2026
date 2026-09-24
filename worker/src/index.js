@@ -53,7 +53,7 @@ async function gh(env, path, init = {}) {
   return res.json();
 }
 
-const ICON = { up: "👍", down: "👎", add: "📌", note: "💬" };
+const ICON = { up: "👍", down: "👎", add: "📌", remove: "❌", note: "💬" };
 const clean = (s, max) => String(s ?? "").replace(/<!--|-->/g, "").trim().slice(0, max);
 
 async function createFeedback(req, env) {
@@ -72,10 +72,10 @@ async function createFeedback(req, env) {
   if (kind === "idea") {
     data.idea = clean(b.idea, 80);
     data.ideaTitle = clean(b.ideaTitle, 120);
-    data.vote = ["down", "add", "note"].includes(b.vote) ? b.vote : "up";   // add = put it in the plan; note = comment
+    data.vote = ["down", "add", "remove", "note"].includes(b.vote) ? b.vote : "up";   // add/remove = put in / take out of the plan; note = comment
     if (!data.idea) fail(400, "missing idea");
     if (data.vote === "note" && !text) fail(400, "empty comment");
-    title = `[${who}] ${ICON[data.vote]} ${data.vote === "add" ? "Add to plan: " : ""}${data.ideaTitle || data.idea}`;
+    title = `[${who}] ${ICON[data.vote]} ${{ add: "Add to plan: ", remove: "Remove from plan: " }[data.vote] || ""}${data.ideaTitle || data.idea}`;
   } else if (kind === "plan") {
     data.target = clean(b.target, 80);        // "stop:<place>", "day:<YYYY-MM-DD>" or "travel:<place>|home"
     data.targetTitle = clean(b.targetTitle, 120);
@@ -98,7 +98,7 @@ async function createFeedback(req, env) {
   }
 
   const body = [
-    kind === "idea" ? `**${who}** ${{ up: "likes 👍", down: "dislikes 👎", add: "wants to add 📌 to the plan:", note: "comments 💬 on" }[data.vote]} idea \`${data.idea}\` - ${data.ideaTitle}`
+    kind === "idea" ? `**${who}** ${{ up: "likes 👍", down: "dislikes 👎", add: "wants to add 📌 to the plan:", remove: "wants to remove ❌ from the plan:", note: "comments 💬 on" }[data.vote]} idea \`${data.idea}\` - ${data.ideaTitle}`
       : kind === "plan" ? `**${who}** ${{ up: "likes 👍", down: "dislikes 👎", note: "comments 💬 on" }[data.vote]} this part of the plan: \`${data.target}\` - ${data.targetTitle}`
       : kind === "reply" ? `**${who}** ${data.vote ? ICON[data.vote] + " " : ""}commented on #${data.replyTo}${data.replyToWho ? ` (${data.replyToWho}'s feedback)` : ""}:`
       : `**${who}**${data.vote ? " " + ICON[data.vote] : ""} wrote:`,

@@ -44,13 +44,13 @@
   const MODEL_NAME = { haiku: "Haiku", sonnet: "Sonnet", opus: "Opus" };
   const when = iso => iso.length <= 10 ? fmt(iso) : new Date(iso).toLocaleString("en-GB", { weekday: "short", day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" });
   const tint = name => name ? "tint-" + name.toLowerCase() : "";
-  const vIcon = v => ({ up: "👍", down: "👎", add: "📌", note: "💬" })[v] || "💬";
+  const vIcon = v => ({ up: "👍", down: "👎", add: "📌", remove: "❌", note: "💬" })[v] || "💬";
 
   // Latest vote per person per idea
   // key: an idea id, or a plan target like "stop:austin" / "day:2026-11-08"
   function votes(key) {
     const out = {};
-    feedback.filter(f => ((f.kind === "idea" && f.idea === key) || (f.kind === "plan" && f.target === key)) && ["up", "down", "add"].includes(f.vote))
+    feedback.filter(f => ((f.kind === "idea" && f.idea === key) || (f.kind === "plan" && f.target === key)) && ["up", "down", "add", "remove"].includes(f.vote))
       .sort((a, b) => a.date.localeCompare(b.date))
       .forEach(f => { out[f.who] = f; });
     return out;
@@ -339,7 +339,7 @@
       <p>${esc(a.why)} <a href="https://www.google.com/maps/search/?api=1&query=${q}" target="_blank" rel="noopener">map</a>${a.link ? ` · <a href="${esc(a.link)}" target="_blank" rel="noopener">website / book</a>` : ""}</p>
       ${reactions}
       <div class="vote">
-        ${inPlan.has(a.id) ? `<button class="on" disabled>📌 In plan</button>` : `<button data-addplan="${a.id}">📌 Add to plan</button>`}
+        ${inPlan.has(a.id) ? `<button class="on" data-removeplan="${a.id}" aria-label="In plan - tap to ask to remove it">📌 In plan</button>` : `<button data-addplan="${a.id}">📌 Add to plan</button>`}
         <button data-ideacomment="${a.id}">💬 Comment</button>
       </div>
     </article>`;
@@ -421,7 +421,7 @@
   }
 
   function fbLabel(f) {
-    if (f.kind === "idea") return `${vIcon(f.vote)} <b>${f.vote === "add" ? "Add to plan: " : ""}${esc(f.ideaTitle || ideas[f.idea]?.title || f.idea)}</b>`;
+    if (f.kind === "idea") return `${vIcon(f.vote)} <b>${f.vote === "add" ? "Add to plan: " : f.vote === "remove" ? "Remove from plan: " : ""}${esc(f.ideaTitle || ideas[f.idea]?.title || f.idea)}</b>`;
     if (f.kind === "plan") return `${vIcon(f.vote)} <b>Plan · ${esc(f.targetTitle || f.target)}</b>`;
     if (f.kind === "reply") return `${vIcon(f.vote)} <b>Comment on ${esc(f.replyToWho || "")}'s #${f.replyTo}</b>`;
     if (isAnswer(f)) return `💬 <b>Answer · ${esc(f.text.slice(3).split("\nA: ")[0])}</b>`;
@@ -437,7 +437,7 @@
   const whoLabel = w => w === AGENT ? "Agent 💬" : esc(w);
 
   // 👍 / 👎 votes vs everything written (general notes, answers, replies, plan comments)
-  const fbType = f => f.vote === "up" || f.vote === "add" ? "up" : f.vote === "down" ? "down" : "general";
+  const fbType = f => f.vote === "up" || f.vote === "add" ? "up" : f.vote === "down" || f.vote === "remove" ? "down" : "general";
   const FB_TYPES = [["general", "💬"], ["up", "👍"], ["down", "👎"]];
 
   function viewFeedback() {
@@ -499,7 +499,7 @@
         <ul class="plain">
           <li><b>👤 Pick who you are</b> with the name badge at the top right (blue = Matija, pink = Maryna).</li>
           <li><b>💬 Comment</b> on anything - a stop, a journey, a single day, an idea, an open question or each other's comments. In the pop-up you can add an optional 👍 or 👎.</li>
-          <li><b>📌 Add to plan</b> on an idea asks the agent to fit it into the plan.</li>
+          <li><b>📌 Add to plan</b> on an idea asks the agent to fit it into the plan; tapping <b>📌 In plan</b> asks it to take the idea out again.</li>
           <li><b>💬 Comments tab</b> - ask the agent for anything else: new ideas, changes, a budget… and see everything you've both said (filter by person, 👍, 👎).</li>
           <li><b>🤖 Model</b> - the dropdown next to Send picks which Claude handles it: Sonnet (default), Haiku (quick) or Opus (most thorough).</li>
           <li><b>📄 Details</b> on a stop or journey opens more (maps, hotels, flights, car hire). Ask for one on anything with 💬.</li>
@@ -540,7 +540,7 @@
   // Every comment pop-up looks like the Comments tab's box: "<emoji> Add comment as <you>", then what it's about.
   // sentiment: show the optional 👍/👎 toggle (the choice is left in dlgVote).
   const feedbackDialog = (icon, subject, placeholder, sentiment = true) =>
-    ask({ title: icon === "📌" ? `📌 Add to plan as ${who}` : `${icon} Add comment as ${who}`, body: subject, placeholder, ok: "💬 Send", model: true, as: who, sentiment });
+    ask({ title: icon === "📌" ? `📌 Add to plan as ${who}` : icon === "❌" ? `📌 Remove from plan as ${who}` : `${icon} Add comment as ${who}`, body: subject, placeholder, ok: "💬 Send", model: true, as: who, sentiment });
 
   // model: show the 🤖 model picker (its value is left in dlgModel for the caller); as: tint the dialog for that person
   function ask({ title, body, placeholder, input, ok = "OK", model, as, sentiment }) {
@@ -634,6 +634,15 @@
       if (text === null) return;
       el.disabled = true;
       await submit({ who, kind: "idea", idea: idea.id, ideaTitle: idea.title, vote: "add", text: text.trim(), model: dlgModel });
+      el.disabled = false;
+    }
+    if (ds.removeplan) {
+      if (needWho()) return;
+      const idea = ideas[ds.removeplan];
+      const text = await feedbackDialog("❌", idea.title, "e.g. Not enough time that day. (optional)", false);
+      if (text === null) return;
+      el.disabled = true;
+      await submit({ who, kind: "idea", idea: idea.id, ideaTitle: idea.title, vote: "remove", text: text.trim(), model: dlgModel });
       el.disabled = false;
     }
     if (ds.ideacomment) {

@@ -288,7 +288,7 @@ input[type=search] { width: 100%; border: 1px solid var(--line); background: var
 .sentiment[hidden] { display: none; }
 .sentiment button { border: 1px solid var(--line); background: var(--card); border-radius: 999px; min-width: 44px; height: 36px; font-size: 17px; cursor: pointer; -webkit-tap-highlight-color: transparent; }
 .sentiment button.on { border-color: var(--accent); background: var(--accent-soft); }
-.vote button.on[disabled] { opacity: 1; cursor: default; }
+.vote button.on { cursor: pointer; }
 .day .mini button { padding: 2px 8px; }
 .fb.tint-matija, .fb.tint-maryna { border: 1px solid; }
 
