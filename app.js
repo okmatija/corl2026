@@ -461,7 +461,7 @@
         <textarea id="freeText" rows="4" placeholder="e.g. Add ideas for a rainy day in Austin. Move the Everglades to the morning."></textarea>
         <div class="row send-row" style="margin-top:8px">
           <select id="freeModel" class="model-select" aria-label="Claude model to action this" title="Claude model to action this">${modelOptions("sonnet")}</select>
-          <button class="primary" data-send>💬 Send</button>
+          <button class="primary" data-send>Send</button>
         </div>` : `
         <h3>💬 Add comment</h3>
         <p class="muted small" style="margin:0 0 8px">Who are you?</p>
@@ -544,7 +544,7 @@
   // Every comment pop-up looks like the Comments tab's box: "<emoji> Add comment as <you>", then what it's about.
   // sentiment: show the optional 👍/👎 toggle (the choice is left in dlgVote).
   const feedbackDialog = (icon, subject, placeholder, sentiment = true) =>
-    ask({ title: icon === "📌" ? `📌 Add to plan as ${who}` : icon === "❌" ? `📌 Remove from plan as ${who}` : `${icon} Add comment as ${who}`, body: subject, placeholder, ok: "💬 Send", model: true, as: who, sentiment });
+    ask({ title: icon === "📌" ? `📌 Add to plan as ${who}` : icon === "❌" ? `📌 Remove from plan as ${who}` : `${icon} Add comment as ${who}`, body: subject, placeholder, ok: "Send", model: true, as: who, sentiment });
 
   // model: show the 🤖 model picker (its value is left in dlgModel for the caller); as: tint the dialog for that person
   function ask({ title, body, placeholder, input, ok = "OK", model, as, sentiment }) {
