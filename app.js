@@ -432,7 +432,8 @@
   // Agent comment = the note an agent leaves when it closes a comment (its "Resolution"), dated when it was closed.
   const agentComment = f => f.resolution ? { who: AGENT, text: f.resolution, date: f.closedAt || f.date } : null;
   // Thread under a comment: people's replies + the agent's comment, oldest first
-  const thread = f => [...feedback.filter(r => r.kind === "reply" && r.replyTo === f.number), agentComment(f)]
+  const replyItems = f => feedback.filter(r => r.kind === "reply" && r.replyTo === f.number);
+  const thread = f => [...replyItems(f).flatMap(r => [r, agentComment(r)]), agentComment(f)]
     .filter(Boolean).sort((a, b) => a.date.localeCompare(b.date));
   const whoLabel = w => w === AGENT ? "Agent 💬" : esc(w);
 
@@ -444,10 +445,12 @@
     // Toggle filters: nothing selected in a group = show all of that group
     const whoSel = ui.fbWho || [], typeSel = ui.fbType || [];
     const list = feedback
+      .filter(f => f.kind !== "reply")
       // a name matches comments that person wrote AND comments they commented on (their replies / the agent's note in the thread)
       .filter(f => (!whoSel.length || [f.who, ...thread(f).map(r => r.who)].some(w => whoSel.includes(w))) && (!typeSel.length || typeSel.includes(fbType(f))))
       .sort((a, b) => b.date.localeCompare(a.date));
-    const open = list.filter(f => f.state === "open").length;
+    const all = list.flatMap(f => [f, ...replyItems(f)]);
+    const open = all.filter(f => f.state === "open").length;
     return `
       <h2>Comments</h2>
       ${statusBanner()}
@@ -470,7 +473,7 @@
         <span class="chip-sep"></span>
         ${FB_TYPES.map(([k, l]) => toggleChip("fbtype", k, l, typeSel.includes(k))).join("")}
       </div>
-      <p class="muted small">${list.length} item${list.length === 1 ? "" : "s"} · ${open} waiting for Claude · ${list.length - open} done</p>
+      <p class="muted small">${all.length} comment${all.length === 1 ? "" : "s"} · ${open} waiting for the agent · ${all.length - open} done</p>
       ${list.map(f => `
         <div class="card fbitem ${f.state} ${tint(f.who)}">
           <div class="item-head">
@@ -479,7 +482,7 @@
           </div>
           ${f.text ? `<p>${esc(fbText(f)).replace(/\n/g, "<br>")}</p>` : ""}
           <div class="item-meta">${esc(when(f.date))}${f.model ? ` · 🤖 ${MODEL_NAME[f.model] || esc(f.model)}` : ""}${f.url ? ` · <a href="${esc(f.url)}" target="_blank" rel="noopener">#${f.number}</a>` : ""}</div>
-          ${thread(f).map(r => `<div class="reply ${tint(r.who)}"><b>${whoLabel(r.who)}${r.who === AGENT ? "" : " " + vIcon(r.vote)}</b> ${esc(r.text)} <span class="muted small">· ${esc(when(r.date))}</span></div>`).join("")}
+          ${thread(f).map(r => `<div class="reply ${tint(r.who)}">${r.state ? `<span class="reply-state" title="${r.state === "open" ? "waiting for the agent" : "done"}">${r.state === "open" ? "⏳" : "✅"}</span>` : ""}<b>${whoLabel(r.who)}${r.who === AGENT ? "" : " " + vIcon(r.vote)}</b> ${esc(r.text)} <span class="muted small">· ${esc(when(r.date))}</span></div>`).join("")}
           ${f.number && f.kind !== "reply" ? `<div class="row end"><button class="reply-btn" data-reply="${f.number}" data-replywho="${esc(f.who)}" data-replytitle="${esc(fbLabel(f).replace(/<[^>]+>/g, ""))}">💬 Comment</button></div>` : ""}
         </div>`).join("") || '<p class="muted">No comments yet.</p>'}
     `;

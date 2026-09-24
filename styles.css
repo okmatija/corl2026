@@ -299,3 +299,4 @@ input[type=search] { width: 100%; border: 1px solid var(--line); background: var
 .fb.tint-claude { border: 1px solid; }
 .chip.tint-claude-chip { border-color: var(--agent-line); }
 .chip.tint-claude-chip.on { background: var(--agent-line); border-color: var(--agent-line); color: var(--ink); }
+.reply-state { float: right; margin-left: 6px; font-size: 13px; }
