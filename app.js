@@ -144,7 +144,7 @@
       </div>
       ${T.openQuestions?.length ? `<div class="card"><h3>Open questions</h3>${T.openQuestions.map((q, i) => `
         <div class="question">
-          <div class="q-row"><span>${esc(q)}</span><button class="q-btn" data-answer="${i}" aria-label="Answer this question">💬 Answer</button></div>
+          <div class="q-row"><span>${esc(q)}</span><button class="q-btn" data-answer="${i}" aria-label="Reply to this question">💬 Reply</button></div>
         </div>`).join("")}</div>` : ""}
       <div id="map" role="img" aria-label="Route map"></div>
       ${legs}
