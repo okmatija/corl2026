@@ -100,7 +100,7 @@
   function viewPlan() {
     const P = T.plan;
     const nights = P.legs.reduce((n, l) => n + nightsBetween(l.arrive, l.leave), 0);
-    const lodging = P.legs.reduce((n, l) => n + (l.stay?.price || 0) * nightsBetween(l.arrive, l.leave), 0);
+    const costs = costBreakdown();
     const expand = s => esc(s).replace(idPattern, id => ideas[id].link
       ? `<a href="${esc(ideas[id].link)}" target="_blank" rel="noopener"><b>${esc(ideas[id].title)}</b></a>` : `<b>${esc(ideas[id].title)}</b>`);
     const legs = P.legs.map((l, i) => {
@@ -141,14 +141,15 @@
         <p class="muted" style="margin:4px 0">${esc(P.summary)}</p>
         <div class="stats">
           <div class="stat"><b>${fmt(P.legs[0].arrive, { day: "numeric", month: "short" })} – ${fmt(end.date, { day: "numeric", month: "short" })}</b><span>${nights} nights</span></div>
-          <div class="stat"><b>${money(lodging)}</b><span>our lodging est. (excl. work-paid nights) · budget ${money(P.budgetPerNight)}/nt</span></div>
+          <div class="stat"><b>${money(costs.total)}</b><span>estimated total for 2 (excl. work-paid nights, food & shopping)</span></div>
         </div>
-        <p class="muted small" style="margin:10px 0 0">Updated ${esc(when(T.meta.updated))} · 🤖 Claude checks feedback ${esc(window.AUTOMATION?.schedule || "")} · <a href="#about">ℹ️ Help & history</a></p>
+        ${costCharts(costs)}
+        <p class="muted small" style="margin:10px 0 0">Updated ${esc(when(T.meta.updated))}</p>
       </div>
-      ${T.openQuestions?.length ? `<div class="card"><h3>Open questions</h3>${T.openQuestions.map((q, i) => `
+      ${T.openQuestions?.length ? `<details class="card questions-card" id="openQuestions" ${ui.qClosed ? "" : "open"}><summary><h3>Open questions (${T.openQuestions.length})</h3></summary>${T.openQuestions.map((q, i) => `
         <div class="question">
           <div class="q-row"><span>${esc(q)}</span><button class="q-btn" data-answer="${i}" aria-label="Reply to this question">💬 Reply</button></div>
-        </div>`).join("")}</div>` : ""}
+        </div>`).join("")}</details>` : ""}
       <div id="map" role="img" aria-label="Route map"></div>
       ${legs}
       ${travelCard(P.legs.at(-1).place, null, end.date, end.text, "travel:home")}
@@ -179,6 +180,64 @@
         <div class="item-meta">${esc(dist(h))}${h.note ? " · " + esc(h.note) : ""}</div>
         ${h.run ? `<div class="run">🏃‍♀️ ${esc(h.run)}</div>` : ""}</div>`).join("")}
         <p class="muted small" style="margin:8px 0 0">Matija's work covers his room for 7-13 Nov, so this mostly matters for where you'd like to be based.</p></div>`;
+  }
+
+  // ---------- trip cost estimate (Trip Summary pies) ----------
+  // Per person cost of an idea by its $ rating (rough), x2 people. Food/shopping are not counted.
+  const EVENT_COST = { free: 0, "$": 15, "$$": 50, "$$$": 150 };
+  const COST_TYPES = [["flights", "✈️ Flights"], ["car", "🚗 Car hire"], ["hotels", "🛏️ Hotels"], ["events", "🎟️ Things to do"]];
+
+  function costBreakdown() {
+    const P = T.plan, byType = { flights: 0, car: 0, hotels: 0, events: 0 }, byDate = {};
+    const add = (type, date, amount) => { byType[type] += amount; byDate[date] = (byDate[date] || 0) + amount; };
+    P.legs.forEach(l => {
+      const n = nightsBetween(l.arrive, l.leave);
+      for (let k = 0; k < n; k++) add("hotels", addDays(l.arrive, k), l.stay?.covered ? 0 : (l.stay?.price || 0));
+      (l.days || []).forEach((items, k) => items.forEach(item => (item.match(idPattern) || []).forEach(id => {
+        add("events", addDays(l.arrive, k), 2 * (EVENT_COST[ideas[id].cost] ?? 0));
+      })));
+    });
+    (P.costs || []).forEach(c => {
+      if (c.date) return add(c.type, c.date, c.amount);
+      const days = nightsBetween(c.from, c.to);
+      for (let k = 0; k < days; k++) add(c.type, addDays(c.from, k), c.amount / days);
+    });
+    // group days by stop (a date belongs to the leg that covers it; the trip's last day to the last stop)
+    const byStop = P.legs.map((l, i) => {
+      const last = i === P.legs.length - 1;
+      const dates = Object.keys(byDate).filter(dt => dt >= l.arrive && (dt < l.leave || (last && dt <= l.leave)));
+      const days = nightsBetween(l.arrive, l.leave) + (last ? 1 : 0);
+      return { label: short(l.place), amount: dates.reduce((n, dt) => n + byDate[dt], 0), days };
+    });
+    const total = Object.values(byType).reduce((a, b) => a + b, 0);
+    return { byType, byStop, total };
+  }
+
+  // SVG pie. slices: [{ label, amount, sub }] in fixed categorical order (colour follows the entity: slot i = series i+1).
+  function pie(title, slices) {
+    const total = slices.reduce((n, x) => n + x.amount, 0) || 1;
+    let a0 = -Math.PI / 2;
+    const paths = slices.map((x, i) => {
+      if (!x.amount) return "";
+      const a1 = a0 + 2 * Math.PI * x.amount / total;
+      const pt = a => `${(50 + 48 * Math.cos(a)).toFixed(2)} ${(50 + 48 * Math.sin(a)).toFixed(2)}`;
+      const d = x.amount >= total ? "M 50 2 A 48 48 0 1 1 49.99 2 Z" : `M 50 50 L ${pt(a0)} A 48 48 0 ${a1 - a0 > Math.PI ? 1 : 0} 1 ${pt(a1)} Z`;
+      a0 = a1;
+      return `<path d="${d}" class="slice s${i + 1}"><title>${esc(x.label)}: ${money(x.amount)} (${Math.round(100 * x.amount / total)}%)</title></path>`;
+    }).join("");
+    return `<figure class="pie">
+      <figcaption>${esc(title)}</figcaption>
+      <svg viewBox="0 0 100 100" role="img" aria-label="${esc(title)} pie chart">${paths}</svg>
+      <ul class="legend">${slices.map((x, i) => `<li><span class="swatch s${i + 1}"></span><span class="lg-label">${esc(x.label)}</span><span class="lg-val">${money(x.amount)}${x.sub ? ` <span class="muted">${esc(x.sub)}</span>` : ""}</span></li>`).join("")}</ul>
+    </figure>`;
+  }
+
+  function costCharts(c) {
+    return `<div class="pies">
+      ${pie("Cost by type", COST_TYPES.map(([k, l]) => ({ label: l, amount: c.byType[k] })))}
+      ${pie("Cost per day, by stop", c.byStop.map(x => ({ label: x.label, amount: x.amount, sub: `${x.days}d · ~${money(x.amount / x.days)}/day` })))}
+    </div>
+    <p class="muted small" style="margin:6px 0 0">Rough estimates for 2 people: hotels from the plan, flights & car hire from the 📄 Details pages, things to do from each idea's $ rating. Austin nights are paid by work.</p>`;
   }
 
   // "📄 Details" button for any stop/travel card that has an entry in TRIP.details (same keys as plan feedback targets)
@@ -278,7 +337,7 @@
     const state = STATES[place(a.place).name.split(", ").pop()] || "";
     const text = norm([a.title, a.why, place(a.place).name, state, place(a.place).type, a.cat, CATS[a.cat], a.cost, a.dur, inPlan.has(a.id) ? "in plan" : ""].join(" "));
     return `<article class="idea" data-text="${esc(text)}">
-      <div class="item-head"><h3>${esc(a.title)}</h3>${inPlan.has(a.id) ? '<span class="tag star">in plan</span>' : ""}</div>
+      <div class="item-head"><h3>${esc(a.title)}</h3>${inPlan.has(a.id) ? '<span class="tag star">📌 in plan</span>' : ""}</div>
       <div class="item-meta">📍 ${esc(short(a.place))} · ${CATS[a.cat] || ""} · ${esc(a.dur)} · ${esc(a.cost)}</div>
       <p>${esc(a.why)} <a href="https://www.google.com/maps/search/?api=1&query=${q}" target="_blank" rel="noopener">map</a>${a.link ? ` · <a href="${esc(a.link)}" target="_blank" rel="noopener">website / book</a>` : ""}</p>
       ${reactions}
@@ -305,7 +364,8 @@
 
   function viewIdeas() {
     const regions = [...new Set(T.ideas.map(a => a.place))];
-    const list = T.ideas.filter(a => (ui.region === "all" || a.place === ui.region) && matches(a));
+    const inRegion = a => ui.region === "all" || a.place === ui.region || ui.region === "type:" + place(a.place).type;
+    const list = T.ideas.filter(a => inRegion(a) && matches(a));
     const groups = regions.map(r => ({ r, items: list.filter(a => a.place === r) })).filter(g => g.items.length);
     return `
       <h2>Ideas</h2>
@@ -318,7 +378,7 @@
         ${toggleChip("ideaplan", "plan", "📌 In plan", !!ui.ideaPlan)}
       </div>
       <input type="search" id="ideaSearch" placeholder="🔍 Search ideas (e.g. gators, rock, beach)" value="${esc(ui.q || "")}" autocomplete="off" aria-label="Search ideas">
-      <select id="region" aria-label="Region"><option value="all">All places</option>${regions.map(r => `<option value="${r}" ${ui.region === r ? "selected" : ""}>${esc(placeLabel(r))}</option>`).join("")}</select>
+      <select id="region" aria-label="Region"><option value="all">All places</option>${Object.entries(TYPE_ICON).map(([t, icon]) => `<option value="type:${t}" ${ui.region === "type:" + t ? "selected" : ""}>${icon} All ${{ city: "cities", nature: "nature", beach: "beaches" }[t]}</option>`).join("")}<option disabled>──────────</option>${regions.map(r => `<option value="${r}" ${ui.region === r ? "selected" : ""}>${esc(placeLabel(r))}</option>`).join("")}</select>
       <p class="muted small" id="ideaCount">${list.length} idea${list.length === 1 ? "" : "s"}</p>
       ${groups.map(g => `<section class="region-group"><h3 class="region">${esc(placeLabel(g.r))}</h3>${g.items.map(ideaCard).join("")}</section>`).join("") || '<p class="muted">Nothing matches this filter.</p>'}
       <p class="muted" id="noMatch" hidden>No ideas match your search.</p>
@@ -378,7 +438,7 @@
 
   // 👍 / 👎 votes vs everything written (general notes, answers, replies, plan comments)
   const fbType = f => f.vote === "up" ? "up" : f.vote === "down" ? "down" : "general";
-  const FB_TYPES = [["general", "💬 General"], ["up", "👍"], ["down", "👎"]];
+  const FB_TYPES = [["general", "💬"], ["up", "👍"], ["down", "👎"]];
 
   function viewFeedback() {
     // Toggle filters: nothing selected in a group = show all of that group
@@ -528,7 +588,7 @@
     if (r.tab === "ideas") applySearch();
     window.scrollTo(0, keepScroll ? y : 0);
     const badge = document.getElementById("whoBtn");
-    badge.textContent = who ? "👤 " + who : "👤 Who are you?";
+    badge.textContent = who || "Who are you?";
     badge.className = "who-btn " + tint(who);
   }
   const rerender = () => render(true);
@@ -606,6 +666,10 @@
       el.disabled = false;
     }
   });
+  // remember whether the open questions are folded ("toggle" doesn't bubble, so listen in the capture phase)
+  document.addEventListener("toggle", e => {
+    if (e.target.id === "openQuestions") { ui.qClosed = !e.target.open; store.set("ui", ui); }
+  }, true);
   document.addEventListener("change", e => {
     if (e.target.id === "region") { ui.region = e.target.value; store.set("ui", ui); rerender(); }
   });

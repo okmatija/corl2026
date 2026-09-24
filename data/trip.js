@@ -293,6 +293,17 @@ window.TRIP = {
   // days[k] = items for the k-th day of the leg; idea ids are expanded to their titles on the page.
   plan: {
     home: "London",
+    // Estimated trip costs (USD, for both of us) that aren't hotels or activities - drive the Trip Summary pie charts.
+    // Hotels come from each leg's stay; "events" are estimated from the cost level ($/$$/$$$) of ideas in the plan.
+    // A cost has a date, or from/to (spread evenly per day, to exclusive). Estimates only - update as things get booked.
+    costs: [
+      { type: "flights", label: "London → Austin, 2 people, economy (BA nonstop, estimate)", amount: 600, date: "2026-11-07" },
+      { type: "flights", label: "San Antonio → Miami, 2 people (estimate)", amount: 350, date: "2026-11-20" },
+      { type: "flights", label: "Miami → New York, 2 people (estimate)", amount: 350, date: "2026-11-25" },
+      { type: "flights", label: "New York → London, 2 people, economy (estimate)", amount: 600, date: "2026-11-27" },
+      { type: "car", label: "Texas rental, Austin → San Antonio one-way, 7 days (estimate)", amount: 550, from: "2026-11-13", to: "2026-11-20" },
+      { type: "car", label: "Florida rental from Miami airport, 3 days (estimate)", amount: 250, from: "2026-11-22", to: "2026-11-25" },
+    ],
     name: "Texas road trip, Florida & New York",
     summary: "A nature-heavy weekend together in Austin, then Maryna explores while Matija works (Mon-Fri). From Friday evening: a road trip through Hill Country, the West Texas desert and Big Bend, then fly to warm Florida (Miami, the Everglades and the Keys) and finish with Thanksgiving in New York.",
     budgetPerNight: 200,

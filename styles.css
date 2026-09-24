@@ -257,3 +257,26 @@ input[type=search] { width: 100%; border: 1px solid var(--line); background: var
 .details-btn { display: inline-block; margin-top: 8px; padding: 6px 12px; border: 1px solid var(--line); border-radius: 10px; background: var(--bg); color: var(--ink); font-size: 14px; font-weight: 600; text-decoration: none; }
 .changelog-items { font-size: 13px; margin: 4px 0 6px; }
 .changelog-items li { margin: 2px 0; }
+
+/* Trip Summary cost pies - validated categorical palette (fixed order; colour follows the entity) */
+:root { --s1: #2a78d6; --s2: #eb6834; --s3: #1baf7a; --s4: #eda100; --s5: #e87ba4; --s6: #008300; --s7: #4a3aa7; --s8: #e34948; }
+@media (prefers-color-scheme: dark) { :root { --s1: #3987e5; --s2: #d95926; --s3: #199e70; --s4: #c98500; --s5: #d55181; --s6: #008300; --s7: #9085e9; --s8: #e66767; } }
+.pies { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 12px; }
+.pie { margin: 0; min-width: 0; }
+.pie figcaption { font-size: 13px; font-weight: 600; margin-bottom: 6px; }
+.pie svg { width: 100%; max-width: 140px; display: block; margin: 0 auto 8px; }
+.pie .slice { stroke: var(--card); stroke-width: 1.2; stroke-linejoin: round; }
+.pie .slice:hover { opacity: .85; }
+.s1 { fill: var(--s1); background: var(--s1); } .s2 { fill: var(--s2); background: var(--s2); } .s3 { fill: var(--s3); background: var(--s3); } .s4 { fill: var(--s4); background: var(--s4); }
+.s5 { fill: var(--s5); background: var(--s5); } .s6 { fill: var(--s6); background: var(--s6); } .s7 { fill: var(--s7); background: var(--s7); } .s8 { fill: var(--s8); background: var(--s8); }
+.legend { list-style: none; margin: 0; padding: 0; font-size: 12px; }
+.legend li { display: grid; grid-template-columns: 10px 1fr; column-gap: 6px; align-items: baseline; margin: 3px 0; }
+.legend .swatch { width: 10px; height: 10px; border-radius: 3px; display: inline-block; }
+.legend .lg-val { grid-column: 2; font-weight: 600; }
+.legend .lg-val .muted { font-weight: 400; }
+
+/* Open questions: foldable card, open by default */
+.questions-card { padding-top: 14px; }
+.questions-card > summary { list-style: none; }
+.questions-card > summary h3 { display: inline; }
+.questions-card[open] > summary { margin-bottom: 4px; }

@@ -61,6 +61,9 @@ The site shows an issue as "done" once closed, plus the text after `**Resolution
   to an existing page). The card then shows a "📄 Details" button. When feedback asks for "more details" on something, do this.
 - Ideas can have `link` (official website / booking page): shown on the idea card and makes the idea's name a link in the plan.
   Add one whenever feedback asks for a booking/website link.
+- `plan.costs` = estimated flights / car hire (type flights|car, amount USD for both, date or from/to). The Trip Summary pies
+  add hotels (from each leg's stay) and "things to do" (from the $ rating of ideas in the plan). Update costs when prices are
+  looked up or things get booked.
 - `plan.home` ("London") is where the trip starts and ends.
 - Plan legs: `arrive`/`leave` are check-in/check-out; `days[k]` lists items for day k (the LAST leg has one extra entry for
   its departure day, shown in that stop's card); idea ids inside strings are expanded to titles.
