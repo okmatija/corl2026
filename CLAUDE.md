@@ -24,7 +24,8 @@ issues with no model label); interactive sessions handle any model. `reply` = a 
 resolve it as noted.
 The body ends with `<!-- feedback-data {...json...} -->` (who, kind, vote up/down, and either `idea` id or plan `target`).
 `plan` targets are `stop:<place id>` (a whole stop/leg), `day:<YYYY-MM-DD>` (one day of the plan) or
-`travel:<place id>` (the journey INTO that stop, i.e. its leg's `travel` text) / `travel:home` (the flight home, `plan.end`). The quoted lines are the reason/text.
+`travel:<place id>` (the journey INTO that stop, i.e. its leg's `travel` text) / `travel:home` (the flight home, `plan.end`).
+`trip:summary` = a comment on the Trip Summary card (overall plan, costs, dates). The quoted lines are the reason/text.
 The site shows an issue as "done" once closed. The text after `**Resolution:**` in the body is shown as a grey comment
 from "Agent 💬" in that comment's thread (and on the idea card for idea comments) - write it as a short, friendly reply
 to the person saying what you changed.

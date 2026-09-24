@@ -146,6 +146,7 @@
         </div>
         ${costCharts(costs)}
         <p class="muted small" style="margin:10px 0 0">Updated ${esc(when(T.meta.updated))}</p>
+        <div class="vote">${commentBtn("trip:summary", "Trip Summary")}</div>
       </div>
       ${T.openQuestions?.length ? `<details class="card questions-card" id="openQuestions" ${ui.qClosed ? "" : "open"}><summary><h3>Open questions (${T.openQuestions.length})</h3></summary>${T.openQuestions.map((q, i) => `
         <div class="question">
@@ -258,7 +259,7 @@
 
   // "📜 Details" button for any stop/travel card that has an entry in TRIP.details (same keys as plan feedback targets)
   // Small icon link-buttons, same style as 📜 Details
-  const mapBtn = url => `<a class="details-btn" href="${esc(url)}" target="_blank" rel="noopener">🗺️ Map</a>`;
+  const mapBtn = url => `<a class="details-btn" href="${esc(url)}" target="_blank" rel="noopener">📍 Map</a>`;
   const webBtn = url => `<a class="details-btn" href="${esc(url)}" target="_blank" rel="noopener">🔗 Website</a>`;
 
   function detailsBtn(key) {
@@ -276,7 +277,7 @@
       return { title: `🛏️ ${st.name}`, intro: `${p.name} · ${fmt(l.arrive)} → ${fmt(l.leave)} (${nightsBetween(l.arrive, l.leave)} nights)`, sections: [
         sec("Where to stay", [
           { name: st.name, text: [st.covered ? "Paid by Matija's work." : `~${money(st.price)} a night (estimate).`, st.notes].filter(Boolean).join(" ") },
-          { name: "🗺️ Map", link: gmaps(st.name + ", " + p.name) },
+          { name: "📍 Map", link: gmaps(st.name + ", " + p.name) },
           { name: "Compare prices (Google Hotels)", link: `https://www.google.com/travel/hotels?q=${encodeURIComponent(st.name + " " + p.name)}` },
         ]) ] };
     }
@@ -285,7 +286,7 @@
       return { title: p.name, intro: `${fmt(l.arrive)} → ${fmt(l.leave)} · ${p.blurb || ""}`, sections: [
         ...(l.stay ? [sec("Where to stay", [{ name: `🛏️ ${l.stay.name}`, text: l.stay.notes || "", link: "#details/stay:" + id }])] : []),
         sec("Day by day", Array.from({ length: n }, (_, k) => ({ name: fmt(addDays(l.arrive, k)), text: (l.days?.[k] || []).map(x => x.replace(idPattern, i => ideas[i].title)).join(" · ") || "Free" }))),
-        sec("On the map", [{ name: `🗺️ ${p.name}`, link: gmaps(p.name) }]),
+        sec("On the map", [{ name: `📍 ${p.name}`, link: gmaps(p.name) }]),
       ] };
     }
     if (kind === "travel") {
@@ -294,7 +295,7 @@
       const text = id === "home" ? P.end?.text : l?.travel;
       const a = from && place(from), b = to && place(to);
       return { title: `${nm(from)} → ${nm(to)}`, intro: (text || "").replace(idPattern, i => ideas[i].title), sections: [
-        ...(a && b ? [sec("Route", [{ name: "🗺️ Directions", link: `https://www.google.com/maps/dir/?api=1&origin=${a.lat},${a.lng}&destination=${b.lat},${b.lng}` }])] : []),
+        ...(a && b ? [sec("Route", [{ name: "📍 Directions", link: `https://www.google.com/maps/dir/?api=1&origin=${a.lat},${a.lng}&destination=${b.lat},${b.lng}` }])] : []),
       ] };
     }
     return null;

@@ -77,10 +77,10 @@ async function createFeedback(req, env) {
     if (data.vote === "note" && !text) fail(400, "empty comment");
     title = `[${who}] ${ICON[data.vote]} ${{ add: "Add to plan: ", remove: "Remove from plan: " }[data.vote] || ""}${data.ideaTitle || data.idea}`;
   } else if (kind === "plan") {
-    data.target = clean(b.target, 80);        // "stop:<place>", "day:<YYYY-MM-DD>" or "travel:<place>|home"
+    data.target = clean(b.target, 80);        // "stop:<place>", "day:<YYYY-MM-DD>", "travel:<place>|home" or "trip:summary"
     data.targetTitle = clean(b.targetTitle, 120);
     data.vote = ["down", "note"].includes(b.vote) ? b.vote : "up";   // note = 💬 comment, no sentiment
-    if (!/^(stop|day|travel):[\w-]+$/.test(data.target)) fail(400, "bad plan target");
+    if (!/^(stop|day|travel|trip):[\w-]+$/.test(data.target)) fail(400, "bad plan target");
     if (data.vote === "note" && !text) fail(400, "empty comment");
     title = `[${who}] ${ICON[data.vote]} Plan: ${data.targetTitle || data.target}`;
   } else if (kind === "reply") {
