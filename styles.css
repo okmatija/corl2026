@@ -239,3 +239,7 @@ input[type=search] { width: 100%; border: 1px solid var(--line); background: var
 .chip.tint-matija-chip.on { background: var(--matija-line); border-color: var(--matija-line); color: var(--ink); }
 .chip.tint-maryna-chip.on { background: var(--maryna-line); border-color: var(--maryna-line); color: var(--ink); }
 .who-name { font-weight: 700; margin-right: 2px; }
+.section-title { margin: 28px 0 6px; padding-top: 16px; border-top: 1px solid var(--line); }
+.fb-filters { gap: 5px; }
+.fb-filters .chip { padding: 6px 10px; }
+.fb-filters .chip-sep { margin: 0 1px; }

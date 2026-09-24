@@ -140,7 +140,7 @@
           <div class="stat"><b>${fmt(P.legs[0].arrive, { day: "numeric", month: "short" })} – ${fmt(end.date, { day: "numeric", month: "short" })}</b><span>${nights} nights</span></div>
           <div class="stat"><b>${money(lodging)}</b><span>our lodging est. (excl. work-paid nights) · budget ${money(P.budgetPerNight)}/nt</span></div>
         </div>
-        <p class="muted small" style="margin:10px 0 0">Updated ${esc(when(T.meta.updated))} · 🤖 Claude checks feedback ${esc(window.AUTOMATION?.schedule || "")} · <a href="#about">ⓘ Help & history</a></p>
+        <p class="muted small" style="margin:10px 0 0">Updated ${esc(when(T.meta.updated))} · 🤖 Claude checks feedback ${esc(window.AUTOMATION?.schedule || "")} · <a href="#about">ℹ️ Help & history</a></p>
       </div>
       ${T.openQuestions?.length ? `<div class="card"><h3>Open questions</h3>${T.openQuestions.map((q, i) => `
         <div class="question">
@@ -208,21 +208,22 @@
     map.fitBounds(latlngs, { padding: [30, 30] });
   }
 
-  const FILTERS = [
-    ["all", "All"],
-    ["plan", "In the plan"],
-    ...PEOPLE.flatMap(p => [[`${p}:up`, `${p} 👍`], [`${p}:down`, `${p} 👎`]]),
-    ["none", "No feedback yet"],
-  ];
+  // Toggle chip shared by the Ideas and Feedback filters. People chips get their blue/pink outline.
+  const toggleChip = (group, key, label, on) =>
+    `<button class="chip ${on ? "on" : ""} ${PEOPLE.includes(key) ? tint(key) + "-chip" : ""}" data-${group}="${esc(key)}" aria-pressed="${on}">${label}</button>`;
+  const IDEA_VOTES = [["up", "👍"], ["down", "👎"], ["none", "No vote"]];
 
+  // Ideas filters, same idiom as Feedback: groups combine, and an empty group means "don't filter on it".
+  // Who + vote: "Maryna + 👍" = ideas Maryna liked; "No vote" = ideas the selected people (or nobody) haven't voted on.
   function matches(idea) {
-    const f = ui.filter;
-    if (f === "all") return true;
-    if (f === "plan") return inPlan.has(idea.id);
+    const whoSel = ui.ideaWho || [], voteSel = ui.ideaVote || [];
+    if (ui.ideaPlan && !inPlan.has(idea.id)) return false;
+    if (!whoSel.length && !voteSel.length) return true;
     const v = votes(idea.id);
-    if (f === "none") return !Object.keys(v).length;
-    const [p, dir] = f.split(":");
-    return v[p]?.vote === dir;
+    const people = whoSel.length ? whoSel : PEOPLE;
+    if (!voteSel.length) return people.some(p => v[p]);
+    if (!whoSel.length && voteSel.includes("none") && !Object.keys(v).length) return true;
+    return people.some(p => (v[p] ? voteSel.includes(v[p].vote) : whoSel.length && voteSel.includes("none")));
   }
 
   function ideaCard(a) {
@@ -266,7 +267,12 @@
       <h2>Ideas</h2>
       <div class="banner info">💡 These cards are suggestions from Claude. Want more, or something specific? Ask on the <a href="#feedback">💬 Feedback</a> tab (e.g. "ideas for a rainy day in Austin") and the hourly agent will add new cards. 👍 / 👎 on a card tells it what to put into the plan.</div>
       ${statusBanner()}
-      <div class="chips">${FILTERS.map(([k, l]) => `<button class="chip ${ui.filter === k ? "on" : ""}" data-filter="${esc(k)}">${esc(l)}</button>`).join("")}</div>
+      <div class="chips fb-filters" role="group" aria-label="Filter ideas">
+        ${PEOPLE.map(p => toggleChip("ideawho", p, esc(p), (ui.ideaWho || []).includes(p))).join("")}
+        <span class="chip-sep"></span>
+        ${IDEA_VOTES.map(([k, l]) => toggleChip("ideavote", k, l, (ui.ideaVote || []).includes(k))).join("")}
+        ${toggleChip("ideaplan", "plan", "📌 In plan", !!ui.ideaPlan)}
+      </div>
       <input type="search" id="ideaSearch" placeholder="🔍 Search ideas (e.g. gators, rock, beach)" value="${esc(ui.q || "")}" autocomplete="off" aria-label="Search ideas">
       <select id="region" aria-label="Region"><option value="all">All places</option>${regions.map(r => `<option value="${r}" ${ui.region === r ? "selected" : ""}>${esc(placeLabel(r))}</option>`).join("")}</select>
       <p class="muted small" id="ideaCount">${list.length} idea${list.length === 1 ? "" : "s"}</p>
@@ -337,7 +343,6 @@
       .filter(f => (!whoSel.length || whoSel.includes(f.who)) && (!typeSel.length || typeSel.includes(fbType(f))))
       .sort((a, b) => b.date.localeCompare(a.date));
     const open = list.filter(f => f.state === "open").length;
-    const chip = (group, key, label, on) => `<button class="chip ${on ? "on" : ""} ${group === "fbwho" ? tint(key) + "-chip" : ""}" data-${group}="${esc(key)}" aria-pressed="${on}">${label}</button>`;
     return `
       <h2>Feedback</h2>
       ${statusBanner()}
@@ -354,10 +359,11 @@
         <p class="muted small" style="margin:0 0 8px">Who are you?</p>
         <div class="row">${PEOPLE.map(p => `<button class="chip ${tint(p)}" data-setwho="${esc(p)}">👤 ${esc(p)}</button>`).join("")}</div>`}
       </div>
+      <h2 class="section-title">Feedback history</h2>
       <div class="chips fb-filters" role="group" aria-label="Filter feedback">
-        ${PEOPLE.map(p => chip("fbwho", p, esc(p), whoSel.includes(p))).join("")}
+        ${PEOPLE.map(p => toggleChip("fbwho", p, esc(p), whoSel.includes(p))).join("")}
         <span class="chip-sep"></span>
-        ${FB_TYPES.map(([k, l]) => chip("fbtype", k, l, typeSel.includes(k))).join("")}
+        ${FB_TYPES.map(([k, l]) => toggleChip("fbtype", k, l, typeSel.includes(k))).join("")}
       </div>
       <p class="muted small">${list.length} item${list.length === 1 ? "" : "s"} · ${open} waiting for Claude · ${list.length - open} done</p>
       ${list.map(f => `
@@ -486,7 +492,13 @@
       who = PEOPLE[(PEOPLE.indexOf(who) + 1) % PEOPLE.length];
       store.set("who", who); toast("You are " + who); return rerender();
     }
-    if (ds.filter) { ui.filter = ds.filter; store.set("ui", ui); return rerender(); }
+    if (ds.ideawho || ds.ideavote) {
+      const key = ds.ideawho ? "ideaWho" : "ideaVote", v = ds.ideawho || ds.ideavote;
+      const cur = new Set(ui[key] || []);
+      cur.has(v) ? cur.delete(v) : cur.add(v);
+      ui[key] = [...cur]; store.set("ui", ui); return rerender();
+    }
+    if (ds.ideaplan) { ui.ideaPlan = !ui.ideaPlan; store.set("ui", ui); return rerender(); }
     if (ds.vote) {
       if (!who) { toast("Tap 👤 at the top to pick who you are"); return; }
       const idea = ideas[ds.idea];
