@@ -24,7 +24,7 @@ window.TRIP = {
     "OK renting a car for the road trip after the conference, with some 4-6 h driving days?",
     "SpaceX: with Florida in the plan, we could swap a Keys day for the Space Coast if a launch is scheduled then (I'll check the schedule nearer the time). Interested?",
     "Vegas: where should it go? Options: (a) swap Key West for 3 nights in Vegas (Sphere + Valley of Fire), flying Austin/San Antonio -> Vegas; (b) replace all of Florida with Vegas + the Grand Canyon; (c) add Vegas at the end and fly home a few days later.",
-    "NASCAR: the Cup championship race is Sun 8 Nov at Homestead-Miami - the day before CoRL. Only possible by flying into Miami first (Fri 6 Nov) and on to Austin on Sunday night. Worth it, or do the Texas Motor Speedway drive/ride-along (Fort Worth, a full day) instead?",
+    "NASCAR: the Cup championship race is Sun 8 Nov at Homestead-Miami - the day before CoRL. Tickets are on sale now (~$100-250pp estimate for a good grandstand seat, more for premium/hospitality). Checked flights: American has a 9:45pm nonstop Miami -> Austin (backup 10:13pm) landing well before Monday's conference start, so it's logistically doable if we fly into Miami first (Fri 6 Nov) - tight on race day (leave right after the trophy presentation), but workable. Worth it, or do the Texas Motor Speedway drive/ride-along (Fort Worth, a full day) instead?",
     "Theme parks: add Orlando (Disney World / Universal) to the Florida leg? It would take 2-3 nights, e.g. from Key West or NYC.",
     "Concerts: the bands we grew up with (Linkin Park, AC/DC, Iron Maiden, Foo Fighters, Okean Elzy) aren't touring the US in November 2026. Metallica at the Sphere is the big exception, but it needs Vegas. Should I keep checking for new announcements, or is it worth building Vegas in for Metallica?",
     "Any must-sees already on your list?",
@@ -118,8 +118,8 @@ window.TRIP = {
     // NASCAR / motorsport
     { id: "nascar-tms", place: "fortworth", title: "Drive (or ride in) a NASCAR stock car at Texas Motor Speedway", cat: "adventure", cost: "$$$", dur: "half day", why: "Ride-alongs at up to ~160 mph or drive yourself in timed sessions on the 1.5-mile oval. Fort Worth is ~3 h from Austin - would need a dedicated day." },
     { id: "nascar-stockyards", place: "fortworth", title: "Fort Worth Stockyards cattle drive + rodeo", cat: "culture", cost: "$", dur: "half day", why: "Longhorns walk the street twice a day; Friday/Saturday night rodeo. Pairs with the Speedway for a 'very Texas' day." },
-    { id: "nascar-cota", place: "austin", title: "Circuit of the Americas (COTA)", cat: "adventure", cost: "$$", dur: "half day", why: "Austin's F1/NASCAR circuit, 20 min from downtown - check what's on (karting, track experiences, events) during our week." },
-    { id: "nascar-final", place: "miami", title: "NASCAR Cup championship race, Homestead-Miami (Sun 8 Nov)", cat: "adventure", cost: "$$", dur: "full day", why: "The 2026 season finale, 45 min from Miami. Clashes with our Austin weekend - only works if we fly into Miami first (see open questions)." },
+    { id: "nascar-cota", place: "austin", title: "Circuit of the Americas (COTA)", cat: "adventure", cost: "$$", dur: "half day", why: "Austin's F1/NASCAR circuit, 20 min from downtown. Easiest evening drop-in is Speed City (karting + mini-golf + zipline, ~$25-40pp estimate karting); COTA Driving Experience (~$1,837pp estimate) and Xtreme Xperience supercar rides (from ~$99pp estimate) are pricier day-session bookings, not evening drop-ins. No F1 or NASCAR Cup race clashes in Nov 2026 (F1 is in October); Schnell Fest club racing runs Nov 11-12 (daytime, may mean extra track traffic those days). Sources disagree on exact evening hours - confirm nearer the time." },
+    { id: "nascar-final", place: "miami", title: "NASCAR Cup championship race, Homestead-Miami (Sun 8 Nov)", cat: "adventure", cost: "$$-$$$", dur: "full day", why: "The 2026 season finale, 45 min from Miami. Tickets already on sale, ~$100-250pp estimate for a good grandstand seat (premium/hospitality $250-500+pp). Race should end ~7:30-8:30pm; American has a 9:45pm Miami -> Austin nonstop (backup 10:13pm) landing well before Monday's conference start - tight but doable if we head straight to the airport after the trophy presentation. Clashes with our Austin weekend - only works if we fly into Miami first (see open questions)." },
 
     // Space / rockets
     { id: "space-starbase", place: "starbase", title: "SpaceX Starbase (Starship) + South Padre beaches", cat: "adventure", cost: "$", dur: "1-2 days", why: "~5 h drive from San Antonio. You can see the Starship towers from the road/beach any time; a launch is a bonus - dates are only set weeks ahead and slip often." },
@@ -241,7 +241,7 @@ window.TRIP = {
           ["Maryna: free day - South Congress shops, cafés, or a spa"],
         ] },
       { place: "fredericksburg", arrive: "2026-11-13", leave: "2026-11-15",
-        travel: "🚗 Pick up rental car; leave Austin after 16:00 · 1.5 h drive",
+        travel: "🚗 Pick up rental car right after the Team summit ends (16:00) · 1.5 h drive",
         stay: { name: "Guesthaus / cottage near Main St", price: 180, notes: "" },
         days: [["Drive after work", "Late dinner on Main St"], ["Together: fbg-rock (early start)", "fbg-wine", "fbg-luck"]] },
       { place: "marfa", arrive: "2026-11-15", leave: "2026-11-16",

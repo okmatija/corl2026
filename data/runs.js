@@ -1,6 +1,6 @@
 // Log of plan updates made from feedback (newest first). Appended by Claude on every run that changes something.
 // { start, end: ISO UTC, by: "scheduled" | "manual", model, issues: [numbers], summary, tokens?: number, costUsd?: number }
-window.RUNS = [
+  { start: "2026-09-24T07:11:45Z", end: "2026-09-24T07:14:55Z", by: "scheduled", model: "claude-sonnet-5", issues: [15, 16, 17], summary: "Researched NASCAR Homestead tickets/flights and COTA evening options; clarified Fredericksburg drive starts right after the Team summit." },
   { start: "2026-09-24T06:00:00Z", end: "2026-09-24T06:25:00Z", by: "manual", model: "claude-opus-5-5", issues: [13, 14], summary: "Thanksgiving dinner with Maja & Amit in the plan; typo-tolerant search on the Ideas page; rock venues + Veselka; concert availability question." },
   { start: "2026-09-23T22:20:00Z", end: "2026-09-23T22:40:00Z", by: "manual", model: "claude-opus-5-5", issues: [11, 12], summary: "Vegas ideas (Metallica + Wizard of Oz at Sphere), alligator spots, theme parks, NASCAR options; 3 new open questions; plan buttons no longer look selected." },
   { start: "2026-09-23T22:15:00Z", end: "2026-09-23T22:30:00Z", by: "manual", model: "claude-opus-5-5", issues: [9, 10], summary: "Trip extended to Fri 27 Nov: Florida (Miami, Everglades, Keys) + Thanksgiving in NYC; warm-place ideas; place-type emoji; running notes on the Austin hotel map." },
