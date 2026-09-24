@@ -18,7 +18,7 @@ window.TRIP = {
   openQuestions: [
     "Flying from London? Arriving together on Sat 7 Nov?",
     "Warm leg after Texas: Florida (Miami + Keys, as now in the plan), or San Diego / Puerto Rico instead? Vote on the 'Warm alternative' cards or answer here.",
-    "Thanksgiving with Maja & Amit (Thu 26 Nov): dinner at their place (bring something?) or a restaurant (book by October)? Where are they based - should we stay near them? And do we want a 3rd night in New York to have more time with them?",
+    "Thanksgiving with Maja & Amit (Thu 26 Nov, they're in Cobble Hill, Brooklyn - we'll stay nearby, not with them): dinner at their place (bring something?) or a restaurant (book by October)? And do we want a 3rd night in New York to have more time with them?",
     "Return: flying home on Fri 27 Nov from New York - does that match 'two weeks after CoRL' for you?",
     "Maryna, Mon 9 - Fri 13 Nov: stay in Austin with day trips, or a side trip (New Orleans, Houston, San Antonio...)? Vote on the 'Maryna:' idea cards.",
     "OK renting a car for the road trip after the conference, with some 4-6 h driving days?",
@@ -266,7 +266,7 @@ window.TRIP = {
         days: [["mia-everglades", "kw-highway", "kw-sunset"], ["kw-snorkel", "kw-oldtown"], ["kw-tortugas (book ahead) or a lazy beach day"]] },
       { place: "nyc", arrive: "2026-11-25", leave: "2026-11-27",
         travel: "🚗 Drive back to Miami (~3.5 h), ✈️ fly to New York (~3 h)",
-        stay: { name: "Hotel in Midtown or Long Island City", price: 400, notes: "Thanksgiving week is peak - book early. Long Island City is cheaper and one stop from Midtown." },
+        stay: { name: "Hotel in Brooklyn Heights / Downtown Brooklyn, or Midtown", price: 400, notes: "Maja & Amit are in Cobble Hill, Brooklyn - not staying with them, but aim for <=30 min away (Brooklyn Heights/Downtown Brooklyn is closest; Midtown also works via subway). Thanksgiving week is peak - book early." },
         days: [["Long travel day", "Evening: balloon inflation by the Natural History Museum"], ["Thanksgiving: nyc-parade", "nyc-central", "Thanksgiving dinner with Maja & Amit"]] },
     ],
     end: { date: "2026-11-27", text: "Morning at the Met or the High Line, then fly home from New York (JFK/EWR) in the evening" },
