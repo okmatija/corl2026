@@ -1,6 +1,7 @@
 // Log of plan updates made from feedback (newest first). Appended by Claude on every run that changes something.
 // { start, end: ISO UTC, by: "scheduled" | "manual", model, issues: [numbers], summary, tokens?: number, costUsd?: number }
 window.RUNS = [
+  { start: "2026-09-24T12:21:41Z", end: "2026-09-24T12:22:38Z", by: "scheduled", model: "claude-sonnet-5", issues: [37, 38, 39], summary: "3 website-feature requests (pin emoji on plan badges in Ideas list, drop 'General' from the feedback history filter badge, drop the person-head emoji from the name badge) labelled site, left open for an interactive session; no plan changes." },
   { start: "2026-09-24T12:00:00Z", end: "2026-09-24T12:10:00Z", by: "manual", model: "claude-opus-5-5", issues: [36], summary: "Flight details pages: BA nonstop London → Austin (economy / premium / Club Suite) and New York → London; open question on cabins." },
   { start: "2026-09-24T11:52:00Z", end: "2026-09-24T11:58:00Z", by: "manual", model: "claude-opus-5-5", issues: [34, 35], summary: "9/11 Museum booking link (ideas can now carry website/booking links); Help section renamed to Agent usage." },
   { start: "2026-09-24T11:43:00Z", end: "2026-09-24T12:05:00Z", by: "manual", model: "claude-opus-5-5", issues: [30, 31, 32, 33], summary: "London both ways; return date confirmed; 📄 Details pages (car hire for the Texas road trip); Help page split into agents + changelog." },
