@@ -412,6 +412,7 @@
     const state = STATES[place(a.place).name.split(", ").pop()] || "";
     const text = norm([a.title, a.why, place(a.place).name, state, place(a.place).type, a.cat, CATS[a.cat], a.cost, a.dur, inPlan.has(a.id) ? "in plan" : ""].join(" "));
     return `<article class="idea" data-text="${esc(text)}">
+      ${a.img ? `<a class="idea-img" href="${esc(a.imgCredit || a.img)}" target="_blank" rel="noopener" title="Photo: Wikimedia Commons"><img src="${esc(a.img)}" alt="${esc(a.title)}" loading="lazy"></a>` : ""}
       <div class="item-head"><h3>${esc(a.title)}</h3><span class="link-btns">${a.link ? webBtn(a.link) : ""}${detailsFor("idea:" + a.id) ? detailsBtn("idea:" + a.id) : ""}${mapBtn(`https://www.google.com/maps/search/?api=1&query=${q}`)}<button class="icon-btn" data-deleteidea="${a.id}" aria-label="Delete this idea" title="Delete this idea">🗑️</button></span></div>
       <div class="item-meta">📍 ${esc(short(a.place))} · ${CATS[a.cat] || ""} · ${esc(a.dur)} · ${esc(a.cost)}</div>
       <p>${esc(a.why)}</p>

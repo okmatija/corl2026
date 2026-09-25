@@ -343,3 +343,7 @@ input[type=search] { width: 100%; border: 1px solid var(--line); background: var
 /* No grey/blue flash when tapping buttons on Android */
 * { -webkit-tap-highlight-color: transparent; }
 button:focus:not(:focus-visible), select:focus:not(:focus-visible), a:focus:not(:focus-visible) { outline: none; }
+
+/* Idea card photo (Wikimedia Commons; tap opens the photo's credit page) */
+.idea-img { display: block; margin: -4px -4px 10px; }
+.idea-img img { display: block; width: 100%; aspect-ratio: 16 / 9; object-fit: cover; border-radius: 10px; background: var(--line); }

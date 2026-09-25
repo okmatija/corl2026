@@ -4,7 +4,7 @@ window.TRIP = {
   meta: {
     title: "CoRL 2026 · USA trip",
     travellers: ["Matija", "Maryna"],
-    updated: "2026-09-25T13:22Z",
+    updated: "2026-09-25T13:32Z",
     status: "Two plans to choose from (menu at the top left): Vegas or New York together, then Maryna flies home to London and Matija flies on to Austin for CoRL.",
   },
 
@@ -40,6 +40,7 @@ window.TRIP = {
 
   // Idea cards. Region groups them on the Ideas page; ideas outside the plan's regions are alternatives to vote on.
   // cat: nature | food | culture | music | city | night | adventure. Optional link: official website / booking page.
+  // Optional img: photo URL (use Wikimedia Commons Special:FilePath ...?width=640) + imgCredit: its Commons file page.
   ideas: [
     // Austin
     { id: "atx-barton", place: "austin", title: "Swim at Barton Springs Pool", cat: "nature", cost: "$", dur: "2h", why: "Spring-fed pool at ~20°C all year - locals swim in November too." },
@@ -116,15 +117,37 @@ window.TRIP = {
     { id: "nyc-central", place: "nyc", title: "Central Park in late fall", cat: "nature", cost: "free", dur: "half day", why: "Foliage often peaks early-mid November." },
     { id: "nyc-met", place: "nyc", title: "The Met", cat: "culture", cost: "$$", dur: "half day", why: "Pick 3 wings, don't try to see it all." },
     { id: "nyc-highline", place: "nyc", title: "High Line + Little Island + Chelsea Market", cat: "city", cost: "free", dur: "half day", why: "Great first-day walk." },
-    { id: "nyc-broadway", place: "nyc", title: "Broadway show", cat: "night", cost: "$$$", dur: "evening", why: "TKTS booth for same-day discounts." },
+    { id: "nyc-broadway", place: "nyc", title: "Broadway show", cat: "night", cost: "$$$", dur: "evening", why: "Pick one of the shows below. TKTS in Times Square sells same-day tickets 20-50% off; many shows run daily digital lotteries." },
     { id: "nyc-brooklyn", place: "nyc", title: "Walk Brooklyn Bridge to DUMBO", cat: "city", cost: "free", dur: "2h", why: "Go early morning or at dusk." },
     { id: "nyc-rock", place: "nyc", title: "Rock show (Beacon Theatre / Irving Plaza / Brooklyn Steel)", cat: "music", cost: "$$", dur: "evening", why: "New York's classic rock rooms - check who is playing that week." },
     { id: "nyc-halloween", place: "nyc", title: "Village Halloween Parade (Sat 31 Oct)", cat: "night", cost: "free", dur: "evening", why: "The huge costume parade up Sixth Avenue from 19:00 - anyone in costume can march in it." },
     { id: "nyc-marathon", place: "nyc", title: "Cheer the New York City Marathon (Sun 1 Nov)", cat: "city", cost: "free", dur: "2-3h", why: "Usually the first Sunday of November (check the date): 50,000 runners through all five boroughs - First Avenue or Fifth Avenue by Central Park are great spots." },
     { id: "nyc-veselka", place: "nyc", title: "Veselka + the East Village's Ukrainian corner", cat: "food", cost: "$", dur: "2h", why: "Legendary Ukrainian diner (varenyky, borscht) at the heart of Little Ukraine; the Ukrainian Museum is a few blocks away." },
-    { id: "nyc-jazz", place: "nyc", title: "Village Vanguard jazz", cat: "music", cost: "$$", dur: "evening", why: "Legendary basement club." },
+    { id: "nyc-jazz", place: "nyc", title: "Village Vanguard jazz", cat: "music", cost: "$$", dur: "evening", link: "https://villagevanguard.com/", img: "https://commons.wikimedia.org/wiki/Special:FilePath/Village_Vanguard_daytime_jeh.jpg?width=640", imgCredit: "https://commons.wikimedia.org/wiki/File:Village_Vanguard_daytime_jeh.jpg", why: "Legendary basement club, open since 1935. ~$40-50 a set including one drink; 8pm and 10pm sets - book online." },
     { id: "nyc-summit", place: "nyc", title: "Top of the Rock or SUMMIT at sunset", cat: "city", cost: "$$", dur: "2h", why: "Top of the Rock has the Empire State in view." },
     { id: "nyc-911memorial", place: "nyc", link: "https://www.911memorial.org/visit/visit-museum-1", title: "9/11 Memorial & Museum", cat: "culture", cost: "$$", dur: "half day", why: "Outdoor Memorial is free, daily 8am-8pm. Museum (~$33pp estimate) is open Wed-Mon 9am-7pm, last entry 5:30pm (closed Tuesdays) - but closed on Thanksgiving Day itself. Book timed tickets online up to 6 months ahead; first-come first-served tickets release Mondays 7am ET." },
+
+    // New York: cocktail bars (prices are rough estimates for late 2026)
+    { id: "nyc-bemelmans", place: "nyc", title: "Bemelmans Bar at The Carlyle", cat: "night", cost: "$$$", dur: "evening", img: "https://commons.wikimedia.org/wiki/Special:FilePath/Bemelmans_Bar.jpg?width=640", imgCredit: "https://commons.wikimedia.org/wiki/File:Bemelmans_Bar.jpg", why: "The classic: live jazz piano under Ludwig Bemelmans' murals. Cocktails ~$28-32; a per-person music charge (~$20-35) kicks in once the pianist starts in the evening. Smart-casual; queue or go early." },
+    { id: "nyc-kingcole", place: "nyc", title: "King Cole Bar at the St. Regis", cat: "night", cost: "$$$", dur: "1-2h", img: "https://commons.wikimedia.org/wiki/Special:FilePath/King_Cole_Bar_HDR_2021_jeh.jpg?width=640", imgCredit: "https://commons.wikimedia.org/wiki/File:King_Cole_Bar_HDR_2021_jeh.jpg", why: "Birthplace of the Bloody Mary (the 'Red Snapper'), under Maxfield Parrish's King Cole mural. Cocktails ~$30." },
+    { id: "nyc-deathco", place: "nyc", title: "Death & Co (East Village)", cat: "night", cost: "$$", dur: "1-2h", img: "https://commons.wikimedia.org/wiki/Special:FilePath/Death_and_Company_HDR_2022_jeh.jpg?width=640", imgCredit: "https://commons.wikimedia.org/wiki/File:Death_and_Company_HDR_2022_jeh.jpg", why: "Dark, candlelit and one of the bars that started the craft-cocktail revival. Cocktails ~$22. No bookings for small groups - put your name down and wait nearby." },
+    { id: "nyc-pdt", place: "nyc", title: "PDT - Please Don't Tell", cat: "night", cost: "$$", dur: "1-2h", img: "https://commons.wikimedia.org/wiki/Special:FilePath/PDT_bar_01.jpg?width=640", imgCredit: "https://commons.wikimedia.org/wiki/File:PDT_bar_01.jpg", why: "Speakeasy entered through a phone booth inside Crif Dogs hot-dog shop. Cocktails ~$22, and you can order a hot dog to your seat. Reservations open the same day." },
+    { id: "nyc-doublechicken", place: "nyc", title: "Double Chicken Please (Lower East Side)", cat: "night", cost: "$$", dur: "1-2h", img: "https://commons.wikimedia.org/wiki/Special:FilePath/Double_Chicken_Please-_Cold_Pizza_Cocktail%2C_NYC%2C_2-24-2024.jpg?width=640", imgCredit: "https://commons.wikimedia.org/wiki/File:Double_Chicken_Please-_Cold_Pizza_Cocktail%2C_NYC%2C_2-24-2024.jpg", why: "Ranked the world's best bar in 2023: cocktails that taste like dishes (the 'Cold Pizza'!). Cocktails ~$20-24; the back room takes bookings, the front is walk-in." },
+    { id: "nyc-deadrabbit", place: "nyc", title: "The Dead Rabbit (Financial District)", cat: "night", cost: "$$", dur: "1-2h", img: "https://commons.wikimedia.org/wiki/Special:FilePath/Dead_Rabbit_-_24395363161.jpg?width=640", imgCredit: "https://commons.wikimedia.org/wiki/File:Dead_Rabbit_-_24395363161.jpg", why: "Award-winning Irish bar: the best Irish coffee in town downstairs, a storybook cocktail menu upstairs in the Parlor. Cocktails ~$20-22." },
+    { id: "nyc-attaboy", place: "nyc", title: "Attaboy (Lower East Side)", cat: "night", cost: "$$", dur: "1-2h", img: "https://commons.wikimedia.org/wiki/Special:FilePath/Attaboy_NYC.jpg?width=640", imgCredit: "https://commons.wikimedia.org/wiki/File:Attaboy_NYC.jpg", why: "No menu - tell the bartender what you like and they make it for you. Cocktails ~$20. Small, walk-in only; ring the buzzer." },
+    { id: "nyc-katana", place: "nyc", title: "Katana Kitten (West Village)", cat: "night", cost: "$$", dur: "1-2h", img: "https://commons.wikimedia.org/wiki/Special:FilePath/Katana_Kitten_NYC.jpg?width=640", imgCredit: "https://commons.wikimedia.org/wiki/File:Katana_Kitten_NYC.jpg", why: "Fun Japanese-American highball bar - cheaper than the rest (highballs ~$16-18) and great bar snacks." },
+
+    // New York: jazz clubs
+    { id: "nyc-bluenote", place: "nyc", title: "Blue Note Jazz Club", cat: "music", cost: "$$$", dur: "evening", link: "https://www.bluenotejazz.com/nyc/", img: "https://commons.wikimedia.org/wiki/Special:FilePath/Blue_Note_Jazz_Club%2C_New_York_City.jpg?width=640", imgCredit: "https://commons.wikimedia.org/wiki/File:Blue_Note_Jazz_Club%2C_New_York_City.jpg", why: "Famous Greenwich Village club with big-name acts. Tickets ~$35-75 plus a ~$20 food/drink minimum; 8pm and 10:30pm sets - book ahead." },
+    { id: "nyc-smalls", place: "nyc", title: "Smalls Jazz Club", cat: "music", cost: "$$", dur: "evening", link: "https://www.smallslive.com/", img: "https://commons.wikimedia.org/wiki/Special:FilePath/Max-leven-performance-smalls-jazz-club-greenwich-village-nyc-july-2025.jpg?width=640", imgCredit: "https://commons.wikimedia.org/wiki/File:Max-leven-performance-smalls-jazz-club-greenwich-village-nyc-july-2025.jpg", why: "Tiny basement club with a proper local-musician vibe; ~$35-40 a set, and the late-night jam sessions run past midnight." },
+    { id: "nyc-birdland", place: "nyc", title: "Birdland (Midtown)", cat: "music", cost: "$$$", dur: "evening", link: "https://www.birdlandjazz.com/", img: "https://commons.wikimedia.org/wiki/Special:FilePath/Birdland_New_York.jpg?width=640", imgCredit: "https://commons.wikimedia.org/wiki/File:Birdland_New_York.jpg", why: "The legendary name (after Charlie 'Bird' Parker), near the Broadway theatres - good before or after a show. Tickets ~$40-60 plus a ~$20 minimum." },
+
+    // New York: Broadway (check it is still running that week; TKTS in Times Square sells same-day tickets 20-50% off)
+    { id: "nyc-lionking", place: "nyc", title: "The Lion King (Minskoff Theatre)", cat: "night", cost: "$$$", dur: "evening", img: "https://commons.wikimedia.org/wiki/Special:FilePath/The_Lion_King_at_Minskoff_Theatre_in_Broadway.jpg?width=640", imgCredit: "https://commons.wikimedia.org/wiki/File:The_Lion_King_at_Minskoff_Theatre_in_Broadway.jpg", why: "The spectacular puppetry is worth it even if you know the film. Tickets from ~$100; good seats ~$150-250." },
+    { id: "nyc-wicked", place: "nyc", title: "Wicked (Gershwin Theatre)", cat: "night", cost: "$$$", dur: "evening", img: "https://commons.wikimedia.org/wiki/Special:FilePath/Gershwin_Theatre_-_Wicked_%2854077363135%29.jpg?width=640", imgCredit: "https://commons.wikimedia.org/wiki/File:Gershwin_Theatre_-_Wicked_%2854077363135%29.jpg", why: "Big, funny and a huge production - extra popular since the films. Tickets from ~$100; good seats ~$150-250." },
+    { id: "nyc-hamilton", place: "nyc", title: "Hamilton (Richard Rodgers Theatre)", cat: "night", cost: "$$$", dur: "evening", img: "https://commons.wikimedia.org/wiki/Special:FilePath/Rodgers_Theater_-_Hamilton_%2848193460677%29.jpg?width=640", imgCredit: "https://commons.wikimedia.org/wiki/File:Rodgers_Theater_-_Hamilton_%2848193460677%29.jpg", why: "Still the hottest ticket. From ~$150, good seats ~$250-400 - or try the $10 digital lottery (Hamilton app) every day." },
+    { id: "nyc-chicago", place: "nyc", title: "Chicago (Ambassador Theatre)", cat: "night", cost: "$$", dur: "evening", img: "https://commons.wikimedia.org/wiki/Special:FilePath/Ambassador_Theatre_-_Chicago_%2848296059772%29.jpg?width=640", imgCredit: "https://commons.wikimedia.org/wiki/File:Ambassador_Theatre_-_Chicago_%2848296059772%29.jpg", why: "Slick, sexy and the cheapest of the classics - often on the TKTS board. Tickets from ~$70-80." },
+    { id: "nyc-mormon", place: "nyc", title: "The Book of Mormon (Eugene O'Neill Theatre)", cat: "night", cost: "$$$", dur: "evening", img: "https://commons.wikimedia.org/wiki/Special:FilePath/Eugene_O%27Neill_Theatre_-_Book_of_Mormon_%2848295951286%29.jpg?width=640", imgCredit: "https://commons.wikimedia.org/wiki/File:Eugene_O%27Neill_Theatre_-_Book_of_Mormon_%2848295951286%29.jpg", why: "Very rude, very funny (from the South Park creators). Tickets from ~$90; daily lottery for cheap front-row seats." },
   ],
 
   // Austin map page (#austin). Coordinates are approximate; the map links search by address.
@@ -364,6 +387,95 @@ window.TRIP = {
           title: "✈️ Matija: New York → Austin (Sat 7 Nov)",
           intro: "Nonstops from JFK, LaGuardia and Newark (American, Delta, United, JetBlue), about 4 h. Austin is an hour behind New York.",
           sections: [],
+        },
+      },
+    },
+    {
+      id: "nyc-austin",
+      label: "🗽🤠 NYC + Austin plan",
+      home: "London",
+      costs: [
+        { type: "flights", label: "Maryna: one multi-city ticket London → New York (30 Oct) + Austin → London (10 Nov), nonstop both ways (from ~$701, Google Flights 25 Sep - estimate). Matija's flights are paid by work.", amount: 701, date: "2026-10-30" },
+        { type: "flights", label: "Maryna: New York → Austin, nonstop (~$269, estimate)", amount: 269, date: "2026-11-07" },
+      ],
+      name: "A week in New York, then a long weekend in Austin together",
+      summary: "Together: a week in New York from Fri 30 Oct, then on Sat 7 Nov we both fly to Austin - a weekend together, and Maryna explores while Matija starts CoRL. Maryna flies home on Tue 10 Nov; Matija stays for CoRL and the team summit, home Sat 14 Nov.",
+      budgetPerNight: 200,
+      legs: [
+        { place: "nyc", arrive: "2026-10-30", leave: "2026-11-07",
+          travel: "✈️ Fly London → New York together (nonstop, ~8 h)",
+          stay: { name: "Hotel in Manhattan or Brooklyn", price: 280, notes: "Estimate - New York hotels are pricey; Brooklyn (near Maja & Amit in Cobble Hill) is a bit cheaper than Manhattan." },
+          days: [
+            ["Land around lunchtime, check in", "Easy evening: nyc-veselka"],
+            ["Halloween! nyc-highline", "Evening: nyc-halloween", "Clocks go back tonight (an extra hour of sleep)"],
+            ["Morning: nyc-marathon", "nyc-central", "Evening: nyc-jazz"],
+            ["nyc-met", "Evening: nyc-broadway"],
+            ["nyc-911memorial", "Sunset: nyc-summit"],
+            ["Dusk: nyc-brooklyn", "Dinner in Brooklyn with Maja & Amit?"],
+            ["Free day", "Evening: nyc-rock"],
+            ["Free day"],
+          ] },
+        { place: "austin", arrive: "2026-11-07", leave: "2026-11-10",
+          travel: "✈️ Fly New York → Austin together (nonstop, ~4 h)",
+          stay: { name: "Downtown hotel near the venues", covered: true, notes: "Matija's work hotel from Sat 7 Nov - check Maryna can share it." },
+          days: [
+            ["Last morning in New York, afternoon flight", "Dinner: atx-bbq (Terry Black's is walk-in)"],
+            ["Breakfast: atx-tacos", "atx-barton", "atx-soco", "Sunset: atx-bonnell"],
+            ["Maryna: atx-wildflower", "Evening together: atx-music"],
+            ["Maryna: atx-kayak, then atx-blanton", "Evening: Maryna flies Austin → London (lands Wed 11 Nov)"],
+          ] },
+        { id: "austin-matija", who: "Matija", place: "austin", arrive: "2026-11-10", leave: "2026-11-14", daysFrom: "2026-11-11",
+          stay: { name: "Downtown hotel near the venues", covered: true, notes: "Paid by work. Matija checks out Sat 14 Nov." },
+          days: [
+            ["Evening: atx-stubbs"],
+            ["Evening: team social"],
+            ["Evening: celebrate the end of CoRL"],
+            ["Check out", "Fly Austin → London"],
+          ] },
+      ],
+      ends: [
+        { who: "Maryna", date: "2026-11-10", text: "✈️ Maryna: Austin → London, BA nonstop, evening (lands Wed 11 Nov)" },
+        { who: "Matija", date: "2026-11-14", text: "✈️ Matija: Austin → London" },
+      ],
+      details: {
+        "travel:nyc": {
+          title: "✈️ Flights London → New York (Fri 30 Oct)",
+          intro: "The busiest route across the Atlantic: British Airways, Virgin Atlantic, American, Delta, United and JetBlue all fly nonstop Heathrow → JFK or Newark many times a day, about 8 h.",
+          sections: [
+            { title: "Maryna's ticket: one multi-city ticket, London → New York + Austin → London (economy, estimates from Google Flights, 25 Sep)", items: [
+              { name: "Out Fri 30 Oct, home Tue 10 Nov", text: "Multi-city, nonstop both ways: from ~$701 for the whole trip (Delta / Virgin Atlantic out; BA home from Austin), American ~$735, BA ~$814. Separate one-ways would be ~$1,245.", link: "https://www.google.com/travel/flights/search?tfs=GhwSCjIwMjYtMTAtMzAoAGoFEgNMSFJyBRIDSkZLGhwSCjIwMjYtMTEtMTAoAGoFEgNBVVNyBRIDTEhSQgEBSAGYAQM=&hl=en" },
+              { name: "One-ways instead", text: "Out Sat 31 Oct JetBlue is ~$450 one-way, but Austin → London alone is ~$558 - the multi-city ticket is cheaper.", link: "https://www.google.com/travel/flights?q=Flights%20to%20NYC%20from%20LON%20on%202026-10-31%20one%20way" },
+              { name: "Plus New York → Austin", text: "A separate short flight on Sat 7 Nov, ~$269 nonstop - see the New York → Austin card." },
+              { name: "Matija", text: "Paid by work - ideally booked on the same outbound flight." },
+              { name: "Live prices", text: "Tap a date above for today's return fares on Google Flights; use Track prices for alerts." },
+            ] },
+            { title: "Nonstop options", items: [
+              { name: "British Airways / American (LHR → JFK)", text: "Many flights a day; morning departures land early afternoon.", link: "https://www.britishairways.com/" },
+              { name: "Virgin Atlantic / Delta (LHR → JFK)", text: "Several a day.", link: "https://www.virginatlantic.com/" },
+            ] },
+            { title: "Before you fly", items: [
+              { name: "Entry to the US", text: "UK passports need an approved ESTA; other passports may need a US visa, which can take months - check each passport early.", link: "https://esta.cbp.dhs.gov/" },
+            ] },
+          ],
+        },
+        "travel:austin": {
+          title: "✈️ New York → Austin (Sat 7 Nov)",
+          intro: "American, Delta, United and JetBlue fly nonstop from JFK, LaGuardia and Newark, about 4 h. Nonstops were from ~$269 one-way on Google Flights (25 Sep, estimate). Matija's is paid by work - book the same flight.",
+          sections: [],
+        },
+        "stop:austin": { href: "#austin" },
+        "stay:austin": { href: "#austin" },
+        "travel:home": {
+          title: "✈️ Flights home to London",
+          intro: "Maryna flies home from Austin on Tue 10 Nov; Matija after the team summit.",
+          sections: [
+            { title: "Maryna - Tue 10 Nov", items: [
+              { name: "British Airways Austin → London (nonstop), the second half of her multi-city ticket", text: "The only nonstop: 18:55 → 10:05 next day. See the London → New York card for prices." },
+            ] },
+            { title: "Matija - Sat 14 Nov", items: [
+              { name: "British Airways Austin → London (nonstop)", text: "Paid by work. After checking out of the work hotel; lands Sun 15 Nov.", link: "https://www.britishairways.com/content/flights/usa/texas/austin" },
+            ] },
+          ],
         },
       },
     },
