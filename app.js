@@ -9,7 +9,11 @@
   const ideas = Object.fromEntries(T.ideas.map(a => [a.id, a]));
   const idPattern = new RegExp("\\b(" + T.ideas.map(a => a.id).sort((a, b) => b.length - a.length).join("|") + ")\\b", "g");
   const inPlan = new Set();
-  T.plan.legs.forEach(l => (l.days || []).flat().forEach(s => (s.match(idPattern) || []).forEach(id => inPlan.add(id))));
+  const plannedOn = {};   // idea id -> the first plan day it's on (YYYY-MM-DD)
+  T.plan.legs.forEach(l => (l.days || []).forEach((items, k) => items.forEach(s => (s.match(idPattern) || []).forEach(id => {
+    inPlan.add(id);
+    if (!plannedOn[id]) { const dt = new Date(l.arrive + "T12:00:00"); dt.setDate(dt.getDate() + k); plannedOn[id] = dt.toISOString().slice(0, 10); }
+  }))));
 
   // ---------- storage (never throws) ----------
   const store = {
@@ -44,7 +48,7 @@
   const MODEL_NAME = { haiku: "Haiku", sonnet: "Sonnet", opus: "Opus" };
   const when = iso => iso.length <= 10 ? fmt(iso) : new Date(iso).toLocaleString("en-GB", { weekday: "short", day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" });
   const tint = name => name ? "tint-" + name.toLowerCase() : "";
-  const vIcon = v => ({ add: "📌", remove: "❌" })[v] || "💬";
+  const vIcon = v => ({ add: "🗓️", remove: "🗓️" })[v] || "💬";
 
   // ---------- API ----------
   async function loadFeedback() {
@@ -358,11 +362,12 @@
   const toggleChip = (group, key, label, on) =>
     `<button class="chip ${on ? "on" : ""} ${PEOPLE.includes(key) || key === AGENT ? tint(key) + "-chip" : ""}" data-${group}="${esc(key)}" aria-pressed="${on}">${label}</button>`;
 
-  // Ideas filters (toggles, same idiom as Comments): 📌 In plan, and a name = ideas that person has commented on.
+  // Ideas filters (toggles, same idiom as Comments): 🗓️ Planned / Not planned, and a name = ideas that person has commented on.
   // Both names on = either of you; nothing on = everything.
   function matches(idea) {
     const whoSel = ui.ideaWho || [];
-    if (ui.ideaPlan && !inPlan.has(idea.id)) return false;
+    if (ui.ideaPlanned && !ui.ideaUnplanned && !inPlan.has(idea.id)) return false;
+    if (ui.ideaUnplanned && !ui.ideaPlanned && inPlan.has(idea.id)) return false;
     return !whoSel.length || feedback.some(f => f.kind === "idea" && f.idea === idea.id && (whoSel.includes(f.who) || (whoSel.includes(AGENT) && f.resolution)));
   }
 
@@ -370,7 +375,7 @@
     const q = encodeURIComponent(a.title.replace(/\(.*?\)/g, "") + " " + place(a.place).name);
     const notes = feedback.filter(f => f.kind === "idea" && f.idea === a.id && (f.text || ["add", "remove"].includes(f.vote))).sort((x, y) => x.date.localeCompare(y.date));
     const agentNotes = feedback.filter(f => f.kind === "idea" && f.idea === a.id && f.resolution).sort((x, y) => (x.closedAt || x.date).localeCompare(y.closedAt || y.date));
-    const reactions = notes.map(f => `<div class="fb ${tint(f.who)}"><b>${esc(f.who)} ${vIcon(f.vote)}</b>${f.vote === "add" ? " Add to plan." : f.vote === "remove" ? " Remove from plan." : ""} ${esc(f.text || "")}</div>`).join("")
+    const reactions = notes.map(f => `<div class="fb ${tint(f.who)}"><b>${esc(f.who)} ${vIcon(f.vote)}</b>${f.vote === "add" ? " Add to plan." : f.vote === "remove" ? " Take out of plan." : ""} ${esc(f.text || "")}</div>`).join("")
       + agentNotes.map(f => `<div class="fb ${tint(AGENT)}"><b>Agent 💬</b> ${esc(f.resolution)}</div>`).join("");
     const state = STATES[place(a.place).name.split(", ").pop()] || "";
     const text = norm([a.title, a.why, place(a.place).name, state, place(a.place).type, a.cat, CATS[a.cat], a.cost, a.dur, inPlan.has(a.id) ? "in plan" : ""].join(" "));
@@ -380,7 +385,7 @@
       <p>${esc(a.why)}</p>
       ${reactions}
       <div class="vote">
-        ${inPlan.has(a.id) ? `<button class="on" data-removeplan="${a.id}" aria-label="In plan - tap to ask to remove it">📌 In plan</button>` : `<button data-addplan="${a.id}">📌 Add to plan</button>`}
+        ${inPlan.has(a.id) ? `<button class="on planned-btn" data-removeplan="${a.id}" aria-label="Planned for ${fmt(plannedOn[a.id])} - tap to ask to take it out">🗓️ Planned <span class="tag date-tag">${fmt(plannedOn[a.id])}</span></button>` : `<button data-addplan="${a.id}">🗓️ Add to plan</button>`}
         <button data-ideacomment="${a.id}">💬 Comment</button>
       </div>
     </article>`;
@@ -400,12 +405,12 @@
     const groups = regions.map(r => ({ r, items: list.filter(a => a.place === r) })).filter(g => g.items.length);
     return `
       <h2>Ideas</h2>
-      <div class="banner info">💡 These cards are suggestions from Claude. Want more, or something specific? Ask on the <a href="#comments">💬 Comments</a> tab (e.g. "ideas for a rainy day in Austin") and the hourly agent will add new cards. 📌 Add to plan puts an idea into the plan; 💬 Comment for anything else.</div>
+      <div class="banner info">💡 These cards are suggestions from Claude. Want more, or something specific? Ask on the <a href="#comments">💬 Comments</a> tab (e.g. "ideas for a rainy day in Austin") and the hourly agent will add new cards. 🗓️ Add to plan puts an idea into the plan; 💬 Comment for anything else.</div>
       ${statusBanner()}
       <div class="chips fb-filters" role="group" aria-label="Filter ideas">
         ${[...PEOPLE, AGENT].map(p => toggleChip("ideawho", p, p === AGENT ? "Agent" : esc(p), (ui.ideaWho || []).includes(p))).join("")}
         <span class="chip-sep"></span>
-        ${toggleChip("ideaplan", "plan", "📌 In plan", !!ui.ideaPlan)}
+        ${toggleChip("ideaplan", "planned", "🗓️ Planned", !!ui.ideaPlanned)}${toggleChip("ideaplan", "unplanned", "Not planned", !!ui.ideaUnplanned)}
       </div>
       <input type="search" id="ideaSearch" placeholder="🔍 Search ideas (e.g. gators, rock, beach)" value="${esc(ui.q || "")}" autocomplete="off" aria-label="Search ideas">
       <select id="region" aria-label="Region"><option value="all">All places</option>${Object.entries(TYPE_ICON).map(([t, icon]) => `<option value="type:${t}" ${ui.region === "type:" + t ? "selected" : ""}>${icon} All ${{ city: "cities", nature: "nature", beach: "beaches" }[t]}</option>`).join("")}<option disabled>──────────</option>${regions.map(r => `<option value="${r}" ${ui.region === r ? "selected" : ""}>${esc(placeLabel(r))}</option>`).join("")}</select>
@@ -458,7 +463,7 @@
 
   // Title after the person's name on a comment card: "<icon> RE: <what it's about>" ("<icon>" alone for general comments)
   function fbLabel(f) {
-    if (f.kind === "idea") return `${vIcon(f.vote)} <b>${f.vote === "add" ? "Add to plan: " : f.vote === "remove" ? "Remove from plan: " : "RE: "}${esc(f.ideaTitle || ideas[f.idea]?.title || f.idea)}</b>`;
+    if (f.kind === "idea") return `${vIcon(f.vote)} <b>${f.vote === "add" ? "Add to plan: " : f.vote === "remove" ? "Take out of plan: " : "RE: "}${esc(f.ideaTitle || ideas[f.idea]?.title || f.idea)}</b>`;
     if (f.kind === "plan") return `${vIcon(f.vote)} <b>RE: Plan ${esc(f.targetTitle || f.target)}</b>`;
     if (f.kind === "reply") return `${vIcon(f.vote)} <b>RE: ${esc(f.replyToWho || "")}'s #${f.replyTo}</b>`;
     if (isAnswer(f)) return `💬 <b>RE: ${esc(f.text.slice(3).split("\nA: ")[0])}</b>`;
@@ -535,7 +540,7 @@
         <ul class="plain">
           <li><b>👤 Pick who you are</b> with the name badge at the top right.</li>
           <li><b>💬 Comment</b> on anything - a stop, a journey, a day, an idea etc. - and pick the model to action the comment: Sonnet (default), Haiku (quick) or Opus (most thorough).</li>
-          <li><b>📌 Add to plan</b> on an idea asks the agent to fit it into the plan; tapping <b>📌 In plan</b> asks it to take the idea out again.</li>
+          <li><b>🗓️ Add to plan</b> on an idea asks the agent to fit it into the plan; tapping <b>🗓️ Planned</b> asks it to take the idea out again.</li>
           <li><b>📜 Details</b> on a stop or journey opens more (maps, hotels, flights, car hire). Ask for one on anything with 💬.</li>
         </ul>
       </div>
@@ -573,7 +578,7 @@
   // ---------- dialog ----------
   // Every comment pop-up looks like the Comments tab's box: "<emoji> Add comment as <you>", then what it's about.
   const feedbackDialog = (icon, subject, placeholder) =>
-    ask({ title: icon === "📌" ? `📌 Add to plan as ${who}` : icon === "❌" ? `📌 Remove from plan as ${who}` : `${icon} Add comment as ${who}`, body: subject, placeholder, ok: "Send", model: true, as: who });
+    ask({ title: icon === "add" ? `🗓️ Add to plan as ${who}` : icon === "remove" ? `🗓️ Take out of plan as ${who}` : `${icon} Add comment as ${who}`, body: subject, placeholder, ok: "Send", model: true, as: who });
 
   // model: show the 🤖 model picker (its value is left in dlgModel for the caller); as: tint the dialog for that person
   function ask({ title, body, placeholder, input, ok = "OK", model, as }) {
@@ -650,7 +655,7 @@
       cur.has(v) ? cur.delete(v) : cur.add(v);
       ui[key] = [...cur]; store.set("ui", ui); return rerender();
     }
-    if (ds.ideaplan) { ui.ideaPlan = !ui.ideaPlan; store.set("ui", ui); return rerender(); }
+    if (ds.ideaplan) { const k = ds.ideaplan === "planned" ? "ideaPlanned" : "ideaUnplanned"; ui[k] = !ui[k]; store.set("ui", ui); return rerender(); }
     if (ds.daydetails) {   // 📜 on a day: that day's idea cards, exactly as in the Ideas list
       openDay = { date: ds.daydetails, title: ds.title };
       document.getElementById("ideaDlgBody").innerHTML = dayIdeas(openDay);
@@ -663,7 +668,7 @@
     if (ds.addplan) {
       if (needWho()) return;
       const idea = ideas[ds.addplan];
-      const text = await feedbackDialog("📌", idea.title, "e.g. Any afternoon in Austin works. (optional)");
+      const text = await feedbackDialog("add", idea.title, "e.g. Any afternoon in Austin works. (optional)");
       if (text === null) return;
       el.disabled = true;
       await submit({ who, kind: "idea", idea: idea.id, ideaTitle: idea.title, vote: "add", text: text.trim(), model: dlgModel });
@@ -672,7 +677,7 @@
     if (ds.removeplan) {
       if (needWho()) return;
       const idea = ideas[ds.removeplan];
-      const text = await feedbackDialog("❌", idea.title, "e.g. Not enough time that day. (optional)");
+      const text = await feedbackDialog("remove", idea.title, "e.g. Not enough time that day. (optional)");
       if (text === null) return;
       el.disabled = true;
       await submit({ who, kind: "idea", idea: idea.id, ideaTitle: idea.title, vote: "remove", text: text.trim(), model: dlgModel });
