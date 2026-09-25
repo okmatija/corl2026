@@ -410,7 +410,7 @@
       <div class="banner info">💡 These cards are suggestions from Claude. Want more, or something specific? Ask on the <a href="#comments">💬 Comments</a> tab (e.g. "ideas for a rainy day in Austin") and the hourly agent will add new cards. 🗓️ Add to plan puts an idea into the plan; 💬 Comment for anything else.</div>
       ${statusBanner()}
       <div class="chips fb-filters" role="group" aria-label="Filter ideas">
-        ${[...PEOPLE, AGENT].map(p => toggleChip("ideawho", p, p === AGENT ? "Agent" : esc(p), (ui.ideaWho || []).includes(p))).join("")}
+        ${PEOPLE.map(p => toggleChip("ideawho", p, esc(p), (ui.ideaWho || []).includes(p))).join("")}
         <span class="chip-sep"></span>
         ${toggleChip("ideaplan", "planned", "🗓️ Planned", !!ui.ideaPlanned)}${toggleChip("ideaplan", "unplanned", "🗓️ Not planned", !!ui.ideaUnplanned)}
       </div>
@@ -473,6 +473,8 @@
   }
   const fbText = f => isAnswer(f) ? f.text.split("\nA: ").slice(1).join("\nA: ") : f.text;
   const AGENT = "Claude";
+  // the Agent filter was removed - drop it from any saved filter state so lists aren't filtered invisibly
+  ["ideaWho", "fbWho"].forEach(k => { if (ui[k]) ui[k] = ui[k].filter(w => w !== AGENT); });
   // Agent comment = the note an agent leaves when it closes a comment (its "Resolution"), dated when it was closed.
   const agentComment = f => f.resolution ? { who: AGENT, text: f.resolution, date: f.closedAt || f.date } : null;
   // Thread under a comment: people's replies + the agent's comment, oldest first
@@ -510,7 +512,7 @@
       </div>
       <h2 class="section-title">Comment history</h2>
       <div class="chips fb-filters" role="group" aria-label="Filter comments">
-        ${[...PEOPLE, AGENT].map(p => toggleChip("fbwho", p, p === AGENT ? "Agent" : esc(p), whoSel.includes(p))).join("")}
+        ${PEOPLE.map(p => toggleChip("fbwho", p, esc(p), whoSel.includes(p))).join("")}
       </div>
       <p class="muted small">${list.length} comment${list.length === 1 ? "" : "s"} · ${open} pending</p>
       ${list.map(f => `
