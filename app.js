@@ -502,8 +502,8 @@
       // a name matches comments that person wrote AND comments they commented on (their replies / the agent's note in the thread)
       .filter(f => (!whoSel.length || [f.who, ...thread(f).map(r => r.who)].some(w => whoSel.includes(w))) && (!typeSel.length || typeSel.includes(fbType(f))))
       .sort((a, b) => b.date.localeCompare(a.date));
-    const all = list.flatMap(f => [f, ...replyItems(f)]);
-    const open = all.filter(f => f.state === "open").length;
+    // count the cards shown; "pending" = the ⏳ badges visible (cards + replies nested in them)
+    const open = list.flatMap(f => [f, ...replyItems(f)]).filter(f => f.state === "open").length;
     return `
       <h2>Comments</h2>
       ${statusBanner()}
@@ -526,7 +526,7 @@
         <span class="chip-sep"></span>
         ${FB_TYPES.map(([k, l]) => toggleChip("fbtype", k, l, typeSel.includes(k))).join("")}
       </div>
-      <p class="muted small">${all.length} comment${all.length === 1 ? "" : "s"} · ${open} pending</p>
+      <p class="muted small">${list.length} comment${list.length === 1 ? "" : "s"} · ${open} pending</p>
       ${list.map(f => `
         <div class="card fbitem ${f.state} ${tint(f.who)}">
           <div class="item-head">
