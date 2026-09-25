@@ -381,7 +381,7 @@
     const text = norm([a.title, a.why, place(a.place).name, state, place(a.place).type, a.cat, CATS[a.cat], a.cost, a.dur, inPlan.has(a.id) ? "in plan" : ""].join(" "));
     const deleting = feedback.some(f => f.kind === "idea" && f.idea === a.id && f.vote === "delete" && f.state === "open");
     return `<article class="idea${deleting ? " deleting" : ""}" data-text="${esc(text)}">
-      <div class="item-head"><h3>${esc(a.title)}</h3><span class="link-btns"><button class="icon-btn" data-deleteidea="${a.id}" aria-label="Delete this idea" title="Delete this idea">🗑️</button>${mapBtn(`https://www.google.com/maps/search/?api=1&query=${q}`)}${a.link ? webBtn(a.link) : ""}${T.details?.["idea:" + a.id] ? detailsBtn("idea:" + a.id) : ""}</span></div>
+      <div class="item-head"><h3>${esc(a.title)}</h3><span class="link-btns">${a.link ? webBtn(a.link) : ""}${T.details?.["idea:" + a.id] ? detailsBtn("idea:" + a.id) : ""}${mapBtn(`https://www.google.com/maps/search/?api=1&query=${q}`)}<button class="icon-btn" data-deleteidea="${a.id}" aria-label="Delete this idea" title="Delete this idea">🗑️</button></span></div>
       ${deleting ? `<div class="deleting-note">🗑️ Deleting… - to undo, 💬 Comment on the delete in the Comments tab</div>` : ""}
       <div class="item-meta">📍 ${esc(short(a.place))} · ${CATS[a.cat] || ""} · ${esc(a.dur)} · ${esc(a.cost)}</div>
       <p>${esc(a.why)}</p>
