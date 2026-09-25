@@ -533,6 +533,8 @@
     `;
   }
 
+  const short1 = t => { t = String(t).replace(/\s+/g, " ").trim(); return t.length > 90 ? t.slice(0, 88) + "…" : t; };
+
   function viewUpdates() {
     const runs = window.RUNS || [];
     const mins = r => Math.max(1, Math.round((new Date(r.end) - new Date(r.start)) / 60000));
@@ -542,35 +544,34 @@
     const issues = runs.reduce((n, r) => n + (r.issues?.length || 0), 0);
     const time = r => new Date(r.end).toLocaleString("en-GB", { weekday: "short", day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" });
     return `
-      <h2>About this site</h2>
+      <h2>Instructions</h2>
       <div class="card">
-        <p style="margin:0 0 8px">Matija & Maryna's plan for CoRL 2026 in Austin and a two-week holiday afterwards. Claude agents read what you say and update the plan every hour.</p>
+        <p style="margin:0 0 8px">Matija & Maryna's plan for CoRL 2026 in Austin. Tell Claude what you think and it updates the plan.</p>
         <ul class="plain">
           <li><b>👤 Pick who you are</b> with the name badge at the top right.</li>
-          <li><b>💬 Comment</b> on anything - a stop, a journey, a day, an idea etc. - and pick the model to action the comment: Sonnet (default), Haiku (quick) or Opus (most thorough).</li>
-          <li><b>🗓️ Add to plan</b> on an idea asks the agent to fit it into the plan; tapping <b>🗓️ Planned</b> asks it to take the idea out again.</li>
-          <li><b>📜 Details</b> on a stop or journey opens more (maps, hotels, flights, car hire). Ask for one on anything with 💬.</li>
+          <li><b>💬 Comment</b> on anything - a stop, a day, a journey, an idea, or in general on the Comments tab - and pick the model to action it: Sonnet (default), Haiku (quick) or Opus (most thorough).</li>
+          <li><b>🗓️ Add to plan</b> puts an idea into the plan; tap <b>🗓️ Planned</b> to take it out. <b>🗑️</b> deletes an idea card (undo by commenting on the delete).</li>
+          <li><b>📜 Details</b> opens more (maps, hotels, flights, car hire) - ask for it on anything with 💬.</li>
         </ul>
-      </div>
-      <h2>Agent usage</h2>
-      <div class="card">
-        <p style="margin:0">Three Claude agents check for new comments <b>${esc(window.AUTOMATION?.schedule || "")}</b>, one per model: Haiku at :00, Sonnet at :20 and Opus at :40 past the hour. Each only picks up comments sent to its model. If there's nothing new it stops straight away. Otherwise it updates the plan, closes the comment with a note (the ✅ you see on the Comments tab) and adds an entry to the changelog below.</p>
+        <p style="margin:8px 0 0">Claude checks for new comments <b>${esc(window.AUTOMATION?.schedule || "")}</b> (Haiku at :00, Sonnet at :20, Opus at :40 past the hour), updates the plan and replies to each comment with what it did - the grey Agent 💬 notes and ✅ on the Comments tab. Every update is listed in the changelog below.</p>
         <div class="stats">
           <div class="stat"><b>${runs.length}</b><span>updates</span></div>
           <div class="stat"><b>${issues}</b><span>comments handled</span></div>
           <div class="stat"><b>${totalMin} min</b><span>total agent time</span></div>
           <div class="stat"><b>${tokens ? Math.round(tokens / 1000) + "k" : "–"}</b><span>tokens${cost ? " · ~$" + cost.toFixed(2) : ""}</span></div>
         </div>
-        <p class="muted small" style="margin:8px 0 0">Tokens and cost are filled in only when they can be measured, which isn't always possible for scheduled runs. Runs are covered by Matija's Claude subscription usage rather than billed separately.</p>
+        <p class="muted small" style="margin:8px 0 0">Tokens and cost show only when they can be measured. Runs come out of Matija's Claude subscription, not billed separately.</p>
       </div>
       <h2>Changelog</h2>
       ${runs.map(r => `<div class="card">
-        <div class="item-head"><b>${time(r)}</b><span class="tag">${r.by === "scheduled" ? "🤖 " + esc(MODEL_NAME[Object.keys(MODEL_NAME).find(k => (r.model || "").includes(k))] || "scheduled") : "💬 with Matija"}</span></div>
+        <div class="item-head"><b>${time(r)}</b></div>
         <p style="margin:6px 0">${esc(r.summary)}</p>
         ${(r.issues || []).length ? `<ul class="plain changelog-items">${r.issues.map(n => {
           const f = feedback.find(x => x.number === n);
-          const label = f ? `${esc(f.who)} ${fbLabel(f)}` : "comment";
-          return `<li><a href="https://github.com/okmatija/corl2026/issues/${n}" target="_blank" rel="noopener">#${n}</a> ${label}</li>`;
+          // one line per comment: who said what, then what was done (the agent's resolution note)
+          const said = f ? `<b>${esc(f.who)}</b> ${fbLabel(f)}${f.text ? `: "${esc(short1(f.text))}"` : ""}` : "comment";
+          const done = f?.resolution ? `<div class="muted">→ ${esc(short1(f.resolution))}</div>` : "";
+          return `<li><a href="https://github.com/okmatija/corl2026/issues/${n}" target="_blank" rel="noopener">#${n}</a> ${said}${done}</li>`;
         }).join("")}</ul>` : ""}
         <div class="item-meta">${mins(r)} min${r.tokens ? ` · ${Math.round(r.tokens / 1000)}k tokens` : ""}${r.costUsd ? ` · ~$${r.costUsd.toFixed(2)}` : ""}</div>
       </div>`).join("") || '<p class="muted">No updates yet.</p>'}
