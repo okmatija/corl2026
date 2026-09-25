@@ -4,7 +4,7 @@ window.TRIP = {
   meta: {
     title: "CoRL 2026 · USA trip",
     travellers: ["Matija", "Maryna"],
-    updated: "2026-09-25T13:32Z",
+    updated: "2026-09-25T14:21Z",
     status: "Two plans to choose from (menu at the top left): Vegas or New York together, then Maryna flies home to London and Matija flies on to Austin for CoRL.",
   },
 
@@ -95,7 +95,6 @@ window.TRIP = {
     { id: "lv-ebike", place: "lasvegas", title: "E-bike tour of Red Rock Canyon", cat: "adventure", cost: "$$", dur: "half day", why: "Ride the 13-mile scenic loop without the car and the hills taking it out of you." },
     { id: "lv-horse", place: "lasvegas", title: "Horse riding at Red Rock", cat: "nature", cost: "$$", dur: "2h", why: "Guided trail rides at the edge of Red Rock; sunset rides are the best. No experience needed." },
     { id: "lv-zipline", place: "lasvegas", title: "Zipline: Flightlinez (Bootleg Canyon) or SlotZilla", cat: "adventure", cost: "$$", dur: "2-3h", why: "Flightlinez flies over desert canyons near Hoover Dam (easy to pair with it); SlotZilla shoots down Fremont Street." },
-    { id: "lv-skydive", place: "lasvegas", title: "Skydiving: tandem over Boulder City, or indoor", cat: "adventure", cost: "$$$", dur: "half day", why: "Tandem jumps over Lake Mead and the Hoover Dam area; indoor skydiving on the Strip if you want the feeling without the plane. Weight limits apply." },
     { id: "lv-deathvalley", place: "lasvegas", title: "Death Valley day trip", cat: "nature", cost: "$", dur: "full day", why: "About 2 h away and at its best in November: Zabriskie Point, Badwater salt flats, Artists Drive, Mesquite dunes at sunset." },
     { id: "lv-gcwest", place: "lasvegas", title: "Grand Canyon West (Skywalk) or helicopter", cat: "nature", cost: "$$$", dur: "full day", why: "The 2-2.5 h option from Vegas. Pricey and far less impressive than the South Rim - only if there is no time for a night there." },
     { id: "zion-overlook", place: "zion", title: "Canyon Overlook trail", cat: "nature", cost: "$", dur: "1h", why: "Short, huge payoff." },
