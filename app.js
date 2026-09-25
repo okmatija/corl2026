@@ -48,7 +48,7 @@
   const MODEL_NAME = { haiku: "Haiku", sonnet: "Sonnet", opus: "Opus" };
   const when = iso => iso.length <= 10 ? fmt(iso) : new Date(iso).toLocaleString("en-GB", { weekday: "short", day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" });
   const tint = name => name ? "tint-" + name.toLowerCase() : "";
-  const vIcon = v => ({ add: "🗓️", remove: "🗓️" })[v] || "💬";
+  const vIcon = v => ({ add: "🗓️", remove: "🗓️", delete: "🗑️" })[v] || "💬";
 
   // ---------- API ----------
   async function loadFeedback() {
@@ -379,8 +379,10 @@
       + agentNotes.map(f => `<div class="fb ${tint(AGENT)}"><b>Agent 💬</b> ${esc(f.resolution)}</div>`).join("");
     const state = STATES[place(a.place).name.split(", ").pop()] || "";
     const text = norm([a.title, a.why, place(a.place).name, state, place(a.place).type, a.cat, CATS[a.cat], a.cost, a.dur, inPlan.has(a.id) ? "in plan" : ""].join(" "));
-    return `<article class="idea" data-text="${esc(text)}">
-      <div class="item-head"><h3>${esc(a.title)}</h3><span class="link-btns">${mapBtn(`https://www.google.com/maps/search/?api=1&query=${q}`)}${a.link ? webBtn(a.link) : ""}${T.details?.["idea:" + a.id] ? detailsBtn("idea:" + a.id) : ""}</span></div>
+    const deleting = feedback.some(f => f.kind === "idea" && f.idea === a.id && f.vote === "delete" && f.state === "open");
+    return `<article class="idea${deleting ? " deleting" : ""}" data-text="${esc(text)}">
+      <div class="item-head"><h3>${esc(a.title)}</h3><span class="link-btns"><button class="icon-btn" data-deleteidea="${a.id}" aria-label="Delete this idea" title="Delete this idea">🗑️</button>${mapBtn(`https://www.google.com/maps/search/?api=1&query=${q}`)}${a.link ? webBtn(a.link) : ""}${T.details?.["idea:" + a.id] ? detailsBtn("idea:" + a.id) : ""}</span></div>
+      ${deleting ? `<div class="deleting-note">🗑️ Deleting… - to undo, 💬 Comment on the delete in the Comments tab</div>` : ""}
       <div class="item-meta">📍 ${esc(short(a.place))} · ${CATS[a.cat] || ""} · ${esc(a.dur)} · ${esc(a.cost)}</div>
       <p>${esc(a.why)}</p>
       ${reactions}
@@ -410,7 +412,7 @@
       <div class="chips fb-filters" role="group" aria-label="Filter ideas">
         ${[...PEOPLE, AGENT].map(p => toggleChip("ideawho", p, p === AGENT ? "Agent" : esc(p), (ui.ideaWho || []).includes(p))).join("")}
         <span class="chip-sep"></span>
-        ${toggleChip("ideaplan", "planned", "🗓️ Planned", !!ui.ideaPlanned)}${toggleChip("ideaplan", "unplanned", "Not planned", !!ui.ideaUnplanned)}
+        ${toggleChip("ideaplan", "planned", "🗓️ Planned", !!ui.ideaPlanned)}${toggleChip("ideaplan", "unplanned", "🗓️ Not planned", !!ui.ideaUnplanned)}
       </div>
       <input type="search" id="ideaSearch" placeholder="🔍 Search ideas (e.g. gators, rock, beach)" value="${esc(ui.q || "")}" autocomplete="off" aria-label="Search ideas">
       <select id="region" aria-label="Region"><option value="all">All places</option>${Object.entries(TYPE_ICON).map(([t, icon]) => `<option value="type:${t}" ${ui.region === "type:" + t ? "selected" : ""}>${icon} All ${{ city: "cities", nature: "nature", beach: "beaches" }[t]}</option>`).join("")}<option disabled>──────────</option>${regions.map(r => `<option value="${r}" ${ui.region === r ? "selected" : ""}>${esc(placeLabel(r))}</option>`).join("")}</select>
@@ -463,7 +465,7 @@
 
   // Title after the person's name on a comment card: "<icon> RE: <what it's about>" ("<icon>" alone for general comments)
   function fbLabel(f) {
-    if (f.kind === "idea") return `${vIcon(f.vote)} <b>${f.vote === "add" ? "Add to plan: " : f.vote === "remove" ? "Take out of plan: " : "RE: "}${esc(f.ideaTitle || ideas[f.idea]?.title || f.idea)}</b>`;
+    if (f.kind === "idea") return `${vIcon(f.vote)} <b>${f.vote === "add" ? "Add to plan: " : f.vote === "remove" ? "Take out of plan: " : f.vote === "delete" ? "Delete idea: " : "RE: "}${esc(f.ideaTitle || ideas[f.idea]?.title || f.idea)}</b>`;
     if (f.kind === "plan") return `${vIcon(f.vote)} <b>RE: Plan ${esc(f.targetTitle || f.target)}</b>`;
     if (f.kind === "reply") return `${vIcon(f.vote)} <b>RE: ${esc(f.replyToWho || "")}'s #${f.replyTo}</b>`;
     if (isAnswer(f)) return `💬 <b>RE: ${esc(f.text.slice(3).split("\nA: ")[0])}</b>`;
@@ -673,6 +675,14 @@
       el.disabled = true;
       await submit({ who, kind: "idea", idea: idea.id, ideaTitle: idea.title, vote: "add", text: text.trim(), model: dlgModel });
       el.disabled = false;
+    }
+    if (ds.deleteidea) {   // 🗑️ - sent immediately as a "delete" comment; undo by commenting on it in the Comments tab
+      if (needWho()) return;
+      const idea = ideas[ds.deleteidea];
+      el.disabled = true;
+      if (await submit({ who, kind: "idea", idea: idea.id, ideaTitle: idea.title, vote: "delete", text: "", model: "sonnet" })) toast("🗑️ Deleting - undo from the Comments tab");
+      el.disabled = false;
+      return;
     }
     if (ds.removeplan) {
       if (needWho()) return;
