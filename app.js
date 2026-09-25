@@ -325,13 +325,10 @@
     const route = `${name(from)} → ${name(to)}`;
     const icon = /✈️/.test(text || "") ? "✈️" : /🚗/.test(text || "") ? "🚗" : "🧳";
     const details = esc((text || "").replace(/^(✈️|🚗)\s*/u, "")).replace(idPattern, ideaRef);
-    const a = from && place(from), b = to && place(to);
-    const dir = a && b && a.lat && b.lat ? `https://www.google.com/maps/dir/?api=1&origin=${a.lat},${a.lng}&destination=${b.lat},${b.lng}${icon === "🚗" ? "&travelmode=driving" : ""}` : "";
     return `<div class="leg travel-leg">
         <div class="card travel-card">
           <div class="item-head"><span class="item-title">${icon} ${esc(route)}</span><span class="tag">${fmt(date)}</span></div>
           ${details ? `<div class="item-meta">${details}</div>` : ""}
-          ${dir ? `<div class="link-btns">${mapBtn(dir, "📍 Route")}</div>` : ""}
           <div class="vote">${detailsBtn(key)}${commentBtn(key, `Travel: ${route}`)}</div>
         </div>
       </div>`;
