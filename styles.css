@@ -190,9 +190,9 @@ select#region { margin-bottom: 4px; }
 .fbitem.closed { opacity: .8; }
 .resolution { background: var(--bg); border-left: 3px solid var(--ok); padding: 6px 10px; border-radius: 6px; font-size: 14px; }
 dialog textarea, dialog input { margin-top: 4px; }
-.day .mini { display: flex; gap: 4px; margin-top: 4px; }
-.day .mini button { border: 1px solid var(--line); background: var(--card); border-radius: 8px; padding: 2px 6px; font-size: 13px; line-height: 1.4; cursor: pointer; -webkit-tap-highlight-color: transparent; }
-.day .mini button.on { border-color: var(--accent); background: var(--accent-soft); }
+.mini { display: flex; gap: 4px; margin-top: 4px; }
+.mini button { border: 1px solid var(--line); background: var(--card); border-radius: 8px; padding: 2px 6px; font-size: 13px; line-height: 1.4; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+.mini button.on { border-color: var(--accent); background: var(--accent-soft); }
 .day .fb { font-size: 13px; padding: 4px 8px; margin: 4px 0 0; }
 .question { padding: 8px 0; border-bottom: 1px solid var(--line); }
 .question:last-child { border-bottom: 0; }
@@ -289,7 +289,7 @@ input[type=search] { width: 100%; border: 1px solid var(--line); background: var
 .sentiment button { border: 1px solid var(--line); background: var(--card); border-radius: 999px; min-width: 44px; height: 36px; font-size: 17px; cursor: pointer; -webkit-tap-highlight-color: transparent; }
 .sentiment button.on { border-color: var(--accent); background: var(--accent-soft); }
 .vote button.on { cursor: pointer; }
-.day .mini button { padding: 2px 8px; }
+.mini button { padding: 2px 8px; }
 .fb.tint-matija, .fb.tint-maryna { border: 1px solid; }
 
 /* Agent (Claude) comments: grey, same shape as people's comments */
