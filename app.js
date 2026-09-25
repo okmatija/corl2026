@@ -6,14 +6,21 @@
   const PEOPLE = T.meta.travellers;
   const CATS = { nature: "🌲 Nature", food: "🍽️ Food", culture: "🏛️ Culture", music: "🎸 Music", city: "🏙️ City", night: "🌙 Night", adventure: "🧗 Adventure" };
 
-  const ideas = Object.fromEntries(T.ideas.map(a => [a.id, a]));
-  const idPattern = new RegExp("\\b(" + T.ideas.map(a => a.id).sort((a, b) => b.length - a.length).join("|") + ")\\b", "g");
   // Several alternative plans (TRIP.plans); T.plan is the one picked in the menu at the top left.
+  // Each plan has its own idea cards (plan.ideas); T.ideas / ideas / idPattern always refer to the current plan's.
   const PLANS = T.plans || [T.plan];
-  const pickPlan = id => { T.plan = PLANS.find(p => p.id === id) || PLANS[0]; };
+  let ideas = {}, idPattern = /(?!)/g;
+  const pickPlan = id => {
+    T.plan = PLANS.find(p => p.id === id) || PLANS[0];
+    T.ideas = T.plan.ideas || [];
+    ideas = Object.fromEntries(T.ideas.map(a => [a.id, a]));
+    idPattern = T.ideas.length ? new RegExp("\\b(" + T.ideas.map(a => a.id).sort((a, b) => b.length - a.length).join("|") + ")\\b", "g") : /(?!)/g;
+  };
   try { pickPlan(JSON.parse(localStorage.getItem("corl2.plan"))); } catch { pickPlan(); }
   const inPlan = new Set();
   let plannedOn = {};   // idea id -> the first plan day it's on (YYYY-MM-DD), in the current plan
+  const onThisPlan = f => !f.plan || f.plan === T.plan.id;
+
   function computePlanned() {
     inPlan.clear(); plannedOn = {};
     // ideas on a journey card (a leg's travel text) count as planned on its arrive day
@@ -400,13 +407,13 @@
     const whoSel = ui.ideaWho || [];
     if (ui.ideaPlanned && !ui.ideaUnplanned && !inPlan.has(idea.id)) return false;
     if (ui.ideaUnplanned && !ui.ideaPlanned && inPlan.has(idea.id)) return false;
-    return !whoSel.length || feedback.some(f => f.kind === "idea" && f.idea === idea.id && (whoSel.includes(f.who) || (whoSel.includes(AGENT) && f.resolution)));
+    return !whoSel.length || feedback.some(f => f.kind === "idea" && f.idea === idea.id && onThisPlan(f) && (whoSel.includes(f.who) || (whoSel.includes(AGENT) && f.resolution)));
   }
 
   function ideaCard(a) {
     const q = encodeURIComponent(a.title.replace(/\(.*?\)/g, "") + " " + place(a.place).name);
-    const notes = feedback.filter(f => f.kind === "idea" && f.idea === a.id && (f.text || ["add", "remove"].includes(f.vote))).sort((x, y) => x.date.localeCompare(y.date));
-    const agentNotes = feedback.filter(f => f.kind === "idea" && f.idea === a.id && f.resolution).sort((x, y) => (x.closedAt || x.date).localeCompare(y.closedAt || y.date));
+    const notes = feedback.filter(f => f.kind === "idea" && f.idea === a.id && onThisPlan(f) && (f.text || ["add", "remove"].includes(f.vote))).sort((x, y) => x.date.localeCompare(y.date));
+    const agentNotes = feedback.filter(f => f.kind === "idea" && f.idea === a.id && onThisPlan(f) && f.resolution).sort((x, y) => (x.closedAt || x.date).localeCompare(y.closedAt || y.date));
     const reactions = notes.map(f => `<div class="fb ${tint(f.who)}"><b>${esc(f.who)} ${vIcon(f.vote)}</b>${f.vote === "add" ? " Add to plan." : f.vote === "remove" ? " Take out of plan." : ""} ${esc(f.text || "")}</div>`).join("")
       + agentNotes.map(f => `<div class="fb ${tint(AGENT)}"><b>Agent 💬</b> ${esc(f.resolution)}</div>`).join("");
     const state = STATES[place(a.place).name.split(", ").pop()] || "";
@@ -433,12 +440,13 @@
 
   // Ideas someone has 🗑️ deleted: hidden straight away, until the agent removes the card - unless someone has
   // commented on that delete (= undo), which brings the card back.
-  const deletedIdeas = () => new Set(feedback.filter(f => f.kind === "idea" && f.vote === "delete" && f.state === "open"
+  const deletedIdeas = () => new Set(feedback.filter(f => f.kind === "idea" && f.vote === "delete" && f.state === "open" && onThisPlan(f)
     && !feedback.some(r => r.kind === "reply" && +r.replyTo === +f.number)).map(f => f.idea));
 
   function viewIdeas() {
     const deleted = deletedIdeas();
     const regions = [...new Set(T.ideas.map(a => a.place))];
+    if (ui.region !== "all" && !ui.region?.startsWith("type:") && !regions.includes(ui.region)) ui.region = "all";   // place from another plan
     const inRegion = a => ui.region === "all" || a.place === ui.region || ui.region === "type:" + place(a.place).type;
     const list = T.ideas.filter(a => !deleted.has(a.id) && inRegion(a) && matches(a));
     const groups = regions.map(r => ({ r, items: list.filter(a => a.place === r) })).filter(g => g.items.length);

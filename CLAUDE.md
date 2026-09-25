@@ -4,8 +4,10 @@ Static site (no build step) on GitHub Pages: https://okmatija.github.io/corl2026
 Travellers: Matija and Maryna. CoRL 2026: Austin TX, workshops Nov 9, main conference Nov 10-12, JW Marriott.
 
 ## Files
-- `data/trip.js` - everything shown: meta, obligations, openQuestions, places, ideas (idea cards), details, and `plans` - the
-  alternative versions of the trip (currently `vegas` and `nyc`), picked with the menu at the top left. Edit this, not the HTML.
+- `data/trip.js` - everything shown: meta, obligations, openQuestions, places, details, and `plans` - the alternative
+  versions of the trip (currently `vegas`, `nyc`, `nyc-austin`), picked with the menu at the top left. Each plan has its OWN
+  idea cards (`plan.ideas`) - only places easily reached by car or train from that plan's stops. New ideas go into the plan
+  the comment was made on; copy a card into other plans only when asked ("duplicate"). Edit this, not the HTML.
 - `data/config.js` - `FEEDBACK_API` = URL of the Cloudflare Worker.
 - `app.js`, `styles.css`, `index.html` - the viewer. Vanilla JS, mobile-first. Tabs: Plan, Ideas, Comments (#comments; composer + filterable history, cards tinted blue=Matija / pink=Maryna), ℹ️ Help (#about: Instructions incl. agent usage + Changelog, one line per actioned comment: what was asked → its resolution).
 - `worker/` - Cloudflare Worker that turns site submissions into GitHub issues and lists them back. Secrets: GITHUB_TOKEN, TRIP_KEY.
@@ -82,7 +84,7 @@ to the person saying what you changed.
 - `plan.costs` = estimated flights / car hire (type flights|car, amount USD for both, date or from/to). The Trip Summary pies
   add hotels (from each leg's stay) and "things to do" (from the $ rating of ideas in the plan). Update costs when prices are
   looked up or things get booked.
-- Plans: `TRIP.plans[]` each have `id`, `label` (menu text), `home`, `costs`, `name`, `summary`, `budgetPerNight`, `legs`, `ends`,
+- Plans: `TRIP.plans[]` each have `id`, `label` (menu text), `ideas`, `home`, `costs`, `name`, `summary`, `budgetPerNight`, `legs`, `ends`,
   and optional `details` (📜 pages for that plan, taking precedence over the shared `TRIP.details`). "The plan" below means the
   plan a comment is about. To add a new alternative plan, append another entry; the menu picks it up automatically.
 - `plan.home` ("London") is where the trip starts and ends.
