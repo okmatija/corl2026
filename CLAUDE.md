@@ -24,7 +24,7 @@ issues with no model label); interactive sessions handle any model. `reply` = a 
 resolve it as noted.
 The body ends with `<!-- feedback-data {...json...} -->` (who, kind, vote up/down, and either `idea` id or plan `target`).
 `plan` targets are `stop:<place id>` (a whole stop/leg), `day:<YYYY-MM-DD>` (one day of the plan) or
-`travel:<place id>` (the journey INTO that stop, i.e. its leg's `travel` text) / `travel:home` (the flight home, `plan.end`).
+`travel:<place id>` (the journey INTO that stop, i.e. its leg's `travel` text) / `travel:home` (the flight home, `plan.ends`).
 `trip:summary` = a comment on the Trip Summary card (overall plan, costs, dates).
 `stay:<place id>` = a comment on that stop's place to stay (the leg's `stay`). The quoted lines are the reason/text.
 The site shows an issue as "done" once closed. The text after `**Resolution:**` in the body is shown as a grey comment
@@ -79,7 +79,13 @@ to the person saying what you changed.
   add hotels (from each leg's stay) and "things to do" (from the $ rating of ideas in the plan). Update costs when prices are
   looked up or things get booked.
 - `plan.home` ("London") is where the trip starts and ends.
-- Plan legs: `arrive`/`leave` are check-in/check-out; `days[k]` lists items for day k (the LAST leg has one extra entry for
-  its departure day, shown in that stop's card); idea ids inside strings are expanded to titles.
+- Common vs divergent plans: legs without `who` are shared (normal cards). A leg with `who: "Matija"|"Maryna"` is only that
+  person's: blue/pink outline, shown only when that person is picked (everyone sees it when nobody is). Give such a leg an
+  `id` (e.g. "austin-matija") - its targets are `stop:<id>`, `stay:<id>`, `travel:<id>`. `daysFrom` (default `arrive`) is the
+  date `days[0]` refers to - use it when the previous shared leg already shows the arrive day. A leg with no `travel` shows no
+  journey card. Flights home are `plan.ends: [{ who, date, text }]` (one per person; no `who` if they fly together); each is
+  shown after that person's last leg, and that leg gets one extra `days` entry for the departure day.
+- Plan legs: `arrive`/`leave` are check-in/check-out; `days[k]` lists items for day k (a leg that is someone's LAST leg has one extra entry
+  for their departure day, shown in that stop's card); idea ids inside strings are expanded to titles.
 - Stay prices are estimates - label them so; never present them as quotes.
 - Edit files with UTF-8 tools (not PowerShell 5.1 Get-Content/Set-Content, which mangles emoji).

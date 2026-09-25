@@ -12,7 +12,7 @@
   const plannedOn = {};   // idea id -> the first plan day it's on (YYYY-MM-DD)
   T.plan.legs.forEach(l => (l.days || []).forEach((items, k) => items.forEach(s => (s.match(idPattern) || []).forEach(id => {
     inPlan.add(id);
-    if (!plannedOn[id]) { const dt = new Date(l.arrive + "T12:00:00"); dt.setDate(dt.getDate() + k); plannedOn[id] = dt.toISOString().slice(0, 10); }
+    if (!plannedOn[id]) { const dt = new Date((l.daysFrom || l.arrive) + "T12:00:00"); dt.setDate(dt.getDate() + k); plannedOn[id] = dt.toISOString().slice(0, 10); }
   }))));
 
   // ---------- storage (never throws) ----------
@@ -92,17 +92,31 @@
   }
 
   // ---------- views ----------
+  // Common vs divergent plans: a leg / flight home with `who` is only that person's (blue/pink outline, and only
+  // shown to that person - or to everyone when nobody is picked). Legs without `who` are shared.
+  const legKey = l => l.id || l.place;
+  const planEnds = () => T.plan.ends || [T.plan.end || { date: T.plan.legs.at(-1).leave, text: "" }];
+  const visibleTo = x => !x.who || !who || x.who === who;
+  const lastLegFor = person => T.plan.legs.map((l, i) => (!l.who || !person || l.who === person) ? i : -1).reduce((a, b) => Math.max(a, b), -1);
+  const endsAfter = i => planEnds().filter(e => lastLegFor(e.who) === i);
+  // number of day rows a leg shows: its nights, plus its leave day when it's someone's last stop (the departure day)
+  const legDayCount = (l, i) => nightsBetween(l.daysFrom || l.arrive, l.leave) + (endsAfter(i).length ? 1 : 0);
+  const outline = x => x.who ? ` only-${x.who.toLowerCase()}` : "";
+  const onlyTag = x => x.who ? `<div class="only-note">${esc(x.who)} only</div>` : "";
+
   function viewPlan() {
     const P = T.plan;
     const nights = P.legs.reduce((n, l) => n + nightsBetween(l.arrive, l.leave), 0);
     const costs = costBreakdown();
     const expand = s => esc(s).replace(idPattern, ideaRef);
+    let dot = 0;
     const legs = P.legs.map((l, i) => {
+      if (!visibleTo(l)) return "";
       const n = nightsBetween(l.arrive, l.leave);
       const p = place(l.place);
-      const last = i === P.legs.length - 1;
-      const days = Array.from({ length: n + (last ? 1 : 0) }, (_, k) => {
-        const date = addDays(l.arrive, k);
+      const key = legKey(l);
+      const days = Array.from({ length: legDayCount(l, i) }, (_, k) => {
+        const date = addDays(l.daysFrom || l.arrive, k);
         const obl = T.obligations.filter(o => date >= o.start && date <= o.end).map(o => `<span class="oblig">💼 ${o.who ? esc(o.who) + ": " : ""}${esc(o.title)}</span>`);
         const items = (l.days?.[k] || []).map(expand);
         const lines = [...obl, ...items];
@@ -114,24 +128,29 @@
           <div class="mini"><button data-daydetails="${date}" data-title="${esc(dayTitle)}" aria-label="Idea cards for ${esc(dayTitle)}">📜</button>${commentBtn(key, dayTitle, true)}</div></div></div>`;
       }).join("");
       const s = l.stay;
+      const prev = P.legs.slice(0, i).reverse().find(x => !x.who || !l.who || x.who === l.who);
+      const home = endsAfter(i).filter(visibleTo).map(e => `
+        ${travelCard(l.place, null, e.date, e.text, "travel:home", e)}
+        <div class="leg"><div class="dot">✓</div><div class="travel">🏁 ${esc(P.home || "Home")} · ${fmt(e.date)}${e.who ? ` · ${esc(e.who)}` : ""}</div></div>`).join("");
       return `
-        ${travelCard(i === 0 ? null : P.legs[i - 1].place, l.place, l.arrive, l.travel, "travel:" + l.place)}
+        ${l.travel ? travelCard(prev ? prev.place : null, l.place, l.arrive, l.travel, "travel:" + key, l) : ""}
         <div class="leg">
-          <div class="dot">${i + 1}</div>
-          <div class="card">
+          <div class="dot">${++dot}</div>
+          <div class="card${outline(l)}">
+            ${onlyTag(l)}
             <div class="item-head"><h3>${esc(p.name)}</h3><span class="tag date-tag">${fmt(l.arrive)} – ${fmt(l.leave)}</span></div>
             <div class="item-meta">${n} night${n > 1 ? "s" : ""} · ${esc(p.blurb || "")}</div>
             ${s ? `<div class="stay"><div class="stay-row">
               <div><div>🛏️ ${esc(s.name)}</div>${s.notes ? `<div class="item-meta">${esc(s.notes)}</div>` : ""}</div>
               <div class="day-side">${s.covered ? '<span class="tag ok">paid by work</span>' : `<span class="tag ${s.price <= P.budgetPerNight ? "ok" : "over"}">~${money(s.price)}/nt</span>`}
-                <div class="mini">${mapBtn(gmaps(s.name + ", " + p.name), "📍")}${detailsBtn("stay:" + l.place, "📜")}${commentBtn("stay:" + l.place, `Stay: ${s.name}`, true)}</div></div>
+                <div class="mini">${mapBtn(gmaps(s.name + ", " + p.name), "📍")}${detailsBtn("stay:" + key, "📜")}${commentBtn("stay:" + key, `Stay: ${s.name}`, true)}</div></div>
             </div></div>` : ""}
             <div class="days">${days}</div>
-            <div class="vote">${detailsBtn("stop:" + l.place)}${commentBtn("stop:" + l.place, `Stop: ${p.name}`)}</div>
+            <div class="vote">${detailsBtn("stop:" + key)}${commentBtn("stop:" + key, `Stop: ${p.name}${l.who ? ` (${l.who})` : ""}`)}</div>
           </div>
-        </div>`;
+        </div>${home}`;
     }).join("");
-    const end = P.end || { date: P.legs.at(-1).leave, text: "" };
+    const end = { date: planEnds().map(e => e.date).sort().at(-1) };
 
     return `
       <div class="card accent">
@@ -151,8 +170,6 @@
         </div>`).join("")}</details>` : ""}
       <div id="map" role="img" aria-label="Route map"></div>
       ${legs}
-      ${travelCard(P.legs.at(-1).place, null, end.date, end.text, "travel:home")}
-      <div class="leg"><div class="dot">✓</div><div class="travel">🏁 ${esc(T.plan.home || "Home")} · ${fmt(end.date)}</div></div>
     `;
   }
 
@@ -202,11 +219,14 @@
       for (let k = 0; k < days; k++) add(c.type, addDays(c.from, k), c.amount / days);
     });
     // group days by stop (a date belongs to the leg that covers it; the trip's last day to the last stop)
-    const byStop = P.legs.map((l, i) => {
-      const last = i === P.legs.length - 1;
-      const dates = Object.keys(byDate).filter(dt => dt >= l.arrive && (dt < l.leave || (last && dt <= l.leave)));
-      const days = nightsBetween(l.arrive, l.leave) + (last ? 1 : 0);
-      return { label: short(l.place), amount: dates.reduce((n, dt) => n + byDate[dt], 0), days };
+    const byStop = [];
+    const tripEnd = planEnds().map(e => e.date).sort().at(-1);
+    P.legs.forEach((l, i) => {
+      const from = l.daysFrom || l.arrive, to = i === P.legs.length - 1 ? addDays(tripEnd, 1) : (P.legs[i + 1].daysFrom || P.legs[i + 1].arrive);
+      const dates = Object.keys(byDate).filter(dt => dt >= from && dt < to);
+      const amount = dates.reduce((n, dt) => n + byDate[dt], 0), days = nightsBetween(from, to);
+      const same = byStop.find(x => x.label === short(l.place));
+      if (same) { same.amount += amount; same.days += days; } else byStop.push({ label: short(l.place), amount, days });
     });
     const total = Object.values(byType).reduce((a, b) => a + b, 0);
     return { byType, byStop, total };
@@ -248,7 +268,7 @@
   function dayIdeas({ date, title }) {
     const P = T.plan, ids = [];
     P.legs.forEach(l => (l.days || []).forEach((items, k) => {
-      if (addDays(l.arrive, k) === date) items.forEach(x => (x.match(idPattern) || []).forEach(id => ids.includes(id) || ids.push(id)));
+      if (addDays(l.daysFrom || l.arrive, k) === date) items.forEach(x => (x.match(idPattern) || []).forEach(id => ids.includes(id) || ids.push(id)));
     }));
     return `<h3 style="margin:4px 4px 8px">📜 ${esc(title)}</h3>${ids.map(id => ideaCard(ideas[id])).join("") || '<p class="muted" style="margin:4px">No idea cards for this day - it\'s free time, travel or work.</p>'}`;
   }
@@ -266,7 +286,7 @@
   // Automatic details page for a stop / journey / stay that has no written TRIP.details entry yet
   function autoDetails(key) {
     const [kind, id] = key.split(":");
-    const P = T.plan, legIdx = P.legs.findIndex(l => l.place === id), l = P.legs[legIdx], p = place(id);
+    const P = T.plan, legIdx = P.legs.findIndex(l => legKey(l) === id), l = P.legs[legIdx], p = l ? place(l.place) : place(id);
     const sec = (title, items) => ({ title, items });
     if (kind === "stay" && l?.stay) {
       const st = l.stay;
@@ -278,17 +298,18 @@
         ]) ] };
     }
     if (kind === "stop" && l) {
-      const n = nightsBetween(l.arrive, l.leave) + (legIdx === P.legs.length - 1 ? 1 : 0);
+      const n = legDayCount(l, legIdx);
       return { title: p.name, intro: `${fmt(l.arrive)} → ${fmt(l.leave)} · ${p.blurb || ""}`, sections: [
         ...(l.stay ? [sec("Where to stay", [{ name: `🛏️ ${l.stay.name}`, text: l.stay.notes || "", link: "#details/stay:" + id }])] : []),
-        sec("Day by day", Array.from({ length: n }, (_, k) => ({ name: fmt(addDays(l.arrive, k)), text: (l.days?.[k] || []).map(x => x.replace(idPattern, i => ideas[i].title)).join(" · ") || "Free" }))),
+        sec("Day by day", Array.from({ length: n }, (_, k) => ({ name: fmt(addDays(l.daysFrom || l.arrive, k)), text: (l.days?.[k] || []).map(x => x.replace(idPattern, i => ideas[i].title)).join(" · ") || "Free" }))),
         sec("On the map", [{ name: `📍 ${p.name}`, link: gmaps(p.name) }]),
       ] };
     }
     if (kind === "travel") {
-      const to = id === "home" ? null : id, from = id === "home" ? P.legs.at(-1).place : legIdx > 0 ? P.legs[legIdx - 1].place : null;
+      const e = planEnds().find(x => visibleTo(x)) || planEnds()[0];
+      const to = id === "home" ? null : l?.place, from = id === "home" ? P.legs[lastLegFor(e.who)].place : legIdx > 0 ? P.legs[legIdx - 1].place : null;
       const nm = x => x ? short(x) : (P.home || "Home");
-      const text = id === "home" ? P.end?.text : l?.travel;
+      const text = id === "home" ? planEnds().filter(visibleTo).map(x => x.text).join(" · ") : l?.travel;
       const a = from && place(from), b = to && place(to);
       return { title: `${nm(from)} → ${nm(to)}`, intro: (text || "").replace(idPattern, i => ideas[i].title), sections: [
         ...(a && b ? [sec("Route", [{ name: "📍 Route", link: `https://www.google.com/maps/dir/?api=1&origin=${a.lat},${a.lng}&destination=${b.lat},${b.lng}` }])] : []),
@@ -313,13 +334,14 @@
   }
 
   // Card for a journey between stops (from/to = place ids; null = home). Same 📜 💬 buttons as a stop.
-  function travelCard(from, to, date, text, key) {
+  function travelCard(from, to, date, text, key, owner = {}) {
     const name = id => id ? short(id) : (T.plan.home || "Home");
     const route = `${name(from)} → ${name(to)}`;
     const icon = /✈️/.test(text || "") ? "✈️" : /🚗/.test(text || "") ? "🚗" : "🧳";
     const details = esc((text || "").replace(/^(✈️|🚗)\s*/u, "")).replace(idPattern, ideaRef);
     return `<div class="leg travel-leg">
-        <div class="card travel-card">
+        <div class="card travel-card${outline(owner)}">
+          ${onlyTag(owner)}
           <div class="item-head"><span class="item-title">${icon} ${esc(route)}</span><span class="tag">${fmt(date)}</span></div>
           ${details ? `<div class="item-meta">${details}</div>` : ""}
           <div class="vote">${detailsBtn(key)}${commentBtn(key, `Travel: ${route}`)}</div>
@@ -347,7 +369,7 @@
     const el = document.getElementById("map");
     if (!el) return;
     if (!window.L) { el.innerHTML = '<p class="muted" style="padding:12px">Map unavailable offline.</p>'; return; }
-    const pts = T.plan.legs.map(l => place(l.place)).filter(p => p.lat);
+    const pts = T.plan.legs.filter(visibleTo).map(l => place(l.place)).filter((p, i, a) => p.lat && a[i - 1] !== p);
     map = L.map(el, { scrollWheelZoom: false });
     L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", { maxZoom: 18, attribution: "© OpenStreetMap" }).addTo(map);
     const latlngs = pts.map(p => [p.lat, p.lng]);

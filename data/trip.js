@@ -320,13 +320,17 @@ window.TRIP = {
         travel: "🚗 Morning: sa-missions, then pick up a rental car · 1.5 h drive",
         stay: { name: "Guesthaus / cottage near Main St", price: 180, notes: "" },
         days: [["sa-alamo on the way out", "fbg-wine"], ["Together: fbg-rock (early start)", "fbg-luck"]] },
-      { place: "austin", arrive: "2026-11-06", leave: "2026-11-14",
+      { place: "austin", arrive: "2026-11-06", leave: "2026-11-08",
         travel: "🚗 1.5 h drive via fbg-pedernales, drop the car in Austin",
-        stay: { name: "Downtown hotel near the venues", covered: true, notes: "Fri 6 Nov is our own booking (~$250, in the costs). From Sat 7 Nov Matija's work pays for the hotel near the venues - check Maryna can share it for the weekend. Matija checks out Sat 14 Nov." },
+        stay: { name: "Downtown hotel near the venues", covered: true, notes: "Fri 6 Nov is our own booking (~$250, in the costs). From Sat 7 Nov Matija's work pays for the hotel near the venues - check Maryna can share it for the weekend." },
         days: [
           ["Drop the car", "atx-soco", "Dinner: atx-bbq (Terry Black's is walk-in)"],
           ["Breakfast: atx-tacos", "Together, nature day: atx-barton", "atx-wildflower", "Sunset: atx-bonnell"],
           ["Last morning together: atx-kayak", "atx-lbj (check Sunday hours)", "Evening: Maryna flies Austin → London (lands Mon 9 Nov)"],
+        ] },
+      { id: "austin-matija", who: "Matija", place: "austin", arrive: "2026-11-08", leave: "2026-11-14", daysFrom: "2026-11-09",
+        stay: { name: "Downtown hotel near the venues", covered: true, notes: "Paid by work. Matija checks out Sat 14 Nov." },
+        days: [
           ["Evening: atx-music"],
           ["Evening: atx-stubbs"],
           ["Free evening"],
@@ -335,6 +339,10 @@ window.TRIP = {
           ["Check out", "Fly Austin → London"],
         ] },
     ],
-    end: { date: "2026-11-14", text: "✈️ Matija: Austin → London (Maryna flew home on Sun 8 Nov)" },
+    // Flights home: one per person when they leave on different days (`who`); a single entry without `who` if together.
+    ends: [
+      { who: "Maryna", date: "2026-11-08", text: "✈️ Maryna: Austin → London, evening (lands Mon 9 Nov)" },
+      { who: "Matija", date: "2026-11-14", text: "✈️ Matija: Austin → London" },
+    ],
   },
 };

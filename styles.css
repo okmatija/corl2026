@@ -331,3 +331,12 @@ input[type=search] { width: 100%; border: 1px solid var(--line); background: var
 /* Idea cards: 🗑️ delete (top-right), faded while the delete is pending; Planned not bold */
 .icon-btn { border: 1px solid var(--line); background: var(--card); border-radius: 10px; padding: 3px 8px; font-size: 13px; cursor: pointer; -webkit-tap-highlight-color: transparent; }
 .vote button.planned-btn { font-weight: 400; }
+
+/* One person's part of the plan (leg / journey with `who`): coloured outline + small label */
+:root { --matija-strong: #3b82f6; --maryna-strong: #ec4899; }
+.card.only-matija { border: 2px solid var(--matija-strong); }
+.card.only-maryna { border: 2px solid var(--maryna-strong); }
+.travel-leg .card.only-matija, .travel-leg .card.only-maryna { border-style: dashed; }
+.only-note { font-size: 12px; font-weight: 600; margin-bottom: 4px; }
+.only-matija > .only-note { color: var(--matija-strong); }
+.only-maryna > .only-note { color: var(--maryna-strong); }
