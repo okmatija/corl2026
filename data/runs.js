@@ -1,6 +1,7 @@
 // Log of plan updates made from feedback (newest first). Appended by Claude on every run that changes something.
 // { start, end: ISO UTC, by: "scheduled" | "manual", model, issues: [numbers], summary, tokens?: number, costUsd?: number }
 window.RUNS = [
+  { start: "2026-09-25T09:25:00Z", end: "2026-09-25T09:40:35Z", by: "manual", model: "claude-opus-5-5", issues: [], summary: "Deleted ideas hide at once; Help tidied" },
   { start: "2026-09-25T09:20:35Z", end: "2026-09-25T09:23:00Z", by: "scheduled", model: "claude-sonnet-5", issues: [63], summary: "Wine tour clashes with Fredericksburg day - asked you" },
   { start: "2026-09-25T09:00:25Z", end: "2026-09-25T09:00:41Z", by: "manual", model: "claude-opus-5-5", issues: [62], summary: "Test comment - no change" },
   { start: "2026-09-25T08:27:00Z", end: "2026-09-25T09:05:00Z", by: "manual", model: "claude-opus-5-5", issues: [60, 61], summary: "New plan: Vegas → Texas before CoRL" },

@@ -61,6 +61,9 @@ to the person saying what you changed.
 4. Prepend an entry to `window.RUNS` in `data/runs.js`: start/end ISO UTC times (`date -u +%Y-%m-%dT%H:%M:%SZ` at start and just
    before committing), `by` ("scheduled" or "manual"), model id, issue numbers, a SHORT summary (max ~6 words, e.g. "Wine tour clashes - asked you"; no issue numbers
    or reasoning - each comment's resolution is already listed under it). Add `tokens`/`costUsd` only if known.
+   EVERY change pushed to the site gets one such card - plan updates and website changes alike (interactive sessions
+   too; `issues: []` if no comment was involved). Past cards are READ-ONLY: never edit, reword or delete an existing
+   entry in `window.RUNS` - only prepend new ones.
    Then commit and push to `main` (Pages redeploys in ~1 min).
 5. For each issue: `scripts/resolve.sh <n> "<one line: what changed>"` - use `not_planned` as 3rd arg if deliberately not acted on, and say why.
    Superseded votes: resolve with "Superseded by #m".
