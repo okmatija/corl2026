@@ -139,7 +139,7 @@
         <p class="muted" style="margin:4px 0">${esc(P.summary)}</p>
         <div class="stats">
           <div class="stat"><b>${fmt(P.legs[0].arrive, { day: "numeric", month: "short" })} – ${fmt(end.date, { day: "numeric", month: "short" })}</b><span>${nights} nights</span></div>
-          <div class="stat"><b>${money(costs.total)}</b><span>(excl. work-paid nights, food & shopping)</span></div>
+          <div class="stat"><b>${money(costs.total)}</b><span>excl. work-paid nights, food & shopping</span></div>
         </div>
         ${costCharts(costs)}
         <p class="muted small" style="margin:10px 0 0">Updated ${esc(when(T.meta.updated))}</p>
