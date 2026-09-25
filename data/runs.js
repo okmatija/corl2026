@@ -1,6 +1,7 @@
 // Log of plan updates made from feedback (newest first). Appended by Claude on every run that changes something.
 // { start, end: ISO UTC, by: "scheduled" | "manual", model, issues: [numbers], summary, tokens?: number, costUsd?: number }
 window.RUNS = [
+  { start: "2026-09-25T09:20:35Z", end: "2026-09-25T09:23:00Z", by: "scheduled", model: "claude-sonnet-5", issues: [63], summary: "Matija's #63 vote to add 'Maryna: Hill Country wine day tour' (guided, from Austin) conflicts with the already-planned self-drive wine day in Fredericksburg and a full together-schedule in Austin - added an open question instead of guessing; no plan change." },
   { start: "2026-09-25T09:00:25Z", end: "2026-09-25T09:00:41Z", by: "manual", model: "claude-opus-5-5", issues: [62], summary: "Test comment (\"Hello\") on Red Rock Canyon - no plan change; idea cards now show 📍 Map then 🗑️ in the top-right." },
   { start: "2026-09-25T08:27:00Z", end: "2026-09-25T09:05:00Z", by: "manual", model: "claude-opus-5-5", issues: [60, 61], summary: "New plan: holiday before CoRL (Vegas → San Antonio → Hill Country → Austin), Maryna home Sun 8 Nov, Matija stays for CoRL; flight/car details updated; comment count fix." },
   { start: "2026-09-24T19:14:00Z", end: "2026-09-24T19:30:00Z", by: "manual", model: "claude-opus-5-5", issues: [52, 53, 54, 55, 56, 57], summary: "Central Park back on Thanksgiving morning; ⏳ pending badges only (no done ticks); Route buttons; stay Details before Map; simpler cost wording." },

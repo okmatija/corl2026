@@ -4,7 +4,7 @@ window.TRIP = {
   meta: {
     title: "CoRL 2026 · USA trip",
     travellers: ["Matija", "Maryna"],
-    updated: "2026-09-25T08:30Z",
+    updated: "2026-09-25T09:22Z",
     status: "Maryna has to be back in London on Mon 9 Nov, so the holiday is now BEFORE CoRL: Vegas, then San Antonio and the Hill Country, then Austin. Matija stays on alone for CoRL and the team summit.",
   },
 
@@ -24,6 +24,7 @@ window.TRIP = {
     "Thanksgiving in New York with Maja & Amit no longer fits - skip it this time?",
     "Flights: Matija might fly business (BA Club Suite). Should Maryna fly business too, both take premium economy together, or split cabins? See the 📜 Details on the London → Las Vegas card.",
     "Any must-sees already on your list?",
+    "Matija voted to add 'Maryna: Hill Country wine day tour' (mar-wine, guided tour from Austin, no car needed) to the plan - but the together days in Austin (Fri 6 - Sun 8 Nov) are already full, and we already do Hill Country wine tasting self-drive on Wed 4 Nov (fbg-wine) while based in Fredericksburg. Should the guided Austin tour replace that self-drive wine day, or should something else in the Austin days move to make room for both?",
   ],
 
   // type: city | nature | beach  (shown as 🏙️ / 🌲 / 🏖️ on the Ideas page). Names always end with ", <state>".
