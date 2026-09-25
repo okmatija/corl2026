@@ -4,7 +4,7 @@ window.TRIP = {
   meta: {
     title: "CoRL 2026 · USA trip",
     travellers: ["Matija", "Maryna"],
-    updated: "2026-09-25T13:11Z",
+    updated: "2026-09-25T13:22Z",
     status: "Two plans to choose from (menu at the top left): Vegas or New York together, then Maryna flies home to London and Matija flies on to Austin for CoRL.",
   },
 
@@ -17,7 +17,7 @@ window.TRIP = {
 
   openQuestions: [
     "Vegas or New York? Switch between the two plans with the menu at the top left. Vegas: Halloween weekend, desert, the Zion + Grand Canyon loop and active stuff. New York: a city week with the Halloween parade, the Marathon and Maja & Amit.",
-    "Start: both plans now fly out on Fri 30 Oct, so Halloween (Sat 31) is a whole day there. Or fly on Sat 31 (cheaper to New York on JetBlue) - see the prices on the first flight card?",
+    "Start: both plans fly out on Fri 30 Oct, so Halloween (Sat 31) is a whole day there - Maryna's return costs the same either day. OK?",
     "Maryna flies Las Vegas → London on the evening of Sat 7 Nov (lands Sun 8 Nov) - or stay one more night and land on Mon 9 Nov around lunchtime?",
     "The Zion + Grand Canyon loop (3 nights, hire car) - keep it, or stay in Vegas and do day trips (Valley of Fire, Red Rock, Death Valley, Black Canyon kayak) instead?",
     "Sphere in Vegas: Metallica (residency runs through the autumn - check dates) or The Wizard of Oz (daily)?",
@@ -169,11 +169,8 @@ window.TRIP = {
       // Hotels come from each leg's stay; "events" are estimated from the cost level ($/$$/$$$) of ideas in the plan.
       // A cost has a date, or from/to (spread evenly per day, to exclusive). Estimates only - update as things get booked.
       costs: [
-        { type: "flights", label: "London → Las Vegas Fri 30 Oct, 2 people, economy nonstop one-way (estimate from Google Flights, 25 Sep)", amount: 1930, date: "2026-10-30" },
+        { type: "flights", label: "Maryna: return London ⇄ Las Vegas, economy nonstop (from ~$624, Google Flights 25 Sep - estimate). Matija's flights are paid by work.", amount: 624, date: "2026-10-30" },
         { type: "car", label: "Car hire for the Zion + Grand Canyon loop, 3 days (estimate)", amount: 200, from: "2026-11-02", to: "2026-11-05" },
-        { type: "flights", label: "Maryna: Las Vegas → London, economy (estimate)", amount: 500, date: "2026-11-07" },
-        { type: "flights", label: "Matija: Las Vegas → Austin (estimate)", amount: 130, date: "2026-11-07" },
-        { type: "flights", label: "Matija: Austin → London, economy (estimate)", amount: 500, date: "2026-11-14" },
       ],
       name: "Vegas, Zion & the Grand Canyon, then CoRL",
       summary: "Together: from Fri 30 Oct, a week around Las Vegas - Halloween on the Strip, Valley of Fire, a hire-car loop through Zion, Horseshoe Bend and the Grand Canyon, then back to Vegas. On Sat 7 Nov Maryna flies home to London and Matija flies to Austin for CoRL and the team summit, home Sat 14 Nov.",
@@ -183,7 +180,7 @@ window.TRIP = {
           travel: "✈️ Fly London → Las Vegas together (nonstop, ~10h40)",
           stay: { name: "Mid-Strip hotel", price: 170, notes: "Estimate. Halloween Saturday is pricier, and most Strip hotels add a ~$45/night resort fee." },
           days: [
-            ["Land ~20:00 (BA nonstop), check in", "Short late walk: lv-fountains"],
+            ["Land in the evening (~20:00-21:30), check in", "Short late walk: lv-fountains"],
             ["Halloween! Early start (jet lag helps): lv-calico", "Pool afternoon and a nap", "Halloween night: lv-fremont - costumes everywhere", "Clocks go back tonight (an extra hour of sleep)"],
             ["Early start: lv-valleyfire", "Evening: lv-sphere-oz or lv-sphere-metallica (check dates)"],
           ] },
@@ -228,12 +225,14 @@ window.TRIP = {
       details: {
         "travel:lasvegas": {
           title: "✈️ Flights London → Las Vegas (Fri 30 Oct)",
-          intro: "British Airways and Virgin Atlantic fly nonstop Heathrow → Las Vegas, about 10h45. The BA flight leaves at 16:05 and lands at 19:50 the same day.",
+          intro: "British Airways and Virgin Atlantic fly nonstop Heathrow → Las Vegas, about 10h45, landing the same evening.",
           sections: [
-            { title: "Fri 30 vs Sat 31 Oct - one-way, economy, per person (estimates from Google Flights, 25 Sep)", items: [
-              { name: "Fri 30 Oct", text: "Nonstop: British Airways from ~$967 (16:05 → 19:50). With 1 stop: from ~$515 (JetBlue, ~18 h).", link: "https://www.google.com/travel/flights?q=Flights%20to%20LAS%20from%20LON%20on%202026-10-30%20one%20way" },
-              { name: "Sat 31 Oct", text: "Nonstop: British Airways from ~$1,156, Virgin Atlantic ~$1,397. With 1 stop: from ~$515. Friday is ~$190 cheaper nonstop - and gives a whole Halloween day.", link: "https://www.google.com/travel/flights?q=Flights%20to%20LAS%20from%20LON%20on%202026-10-31%20one%20way" },
-              { name: "Live prices", text: "Tap a date above for today's fares on Google Flights. One-ways are shown; pricing it as one ticket with the flight home (open-jaw) is sometimes cheaper." },
+            { title: "Maryna's ticket: a return, out Fri 30 or Sat 31 Oct, back Sat 7 Nov (economy, estimates from Google Flights, 25 Sep)", items: [
+              { name: "Out Fri 30 Oct", text: "Virgin Atlantic nonstop from ~$624 return (17:40 → 21:25); British Airways nonstop ~$793 (16:05 → 19:50).", link: "https://www.google.com/travel/flights?q=Flights%20to%20LAS%20from%20LON%20on%202026-10-30%20returning%202026-11-07" },
+              { name: "Out Sat 31 Oct", text: "Virgin Atlantic nonstop from ~$624 return - the same price, so Friday costs nothing extra and gives a whole Halloween day.", link: "https://www.google.com/travel/flights?q=Flights%20to%20LAS%20from%20LON%20on%202026-10-31%20returning%202026-11-07" },
+              { name: "Book a return, not one-ways", text: "One-ways are far pricier (~$967+ nonstop just to get there). Maryna's trip is a simple round trip, so a return is the cheapest way." },
+              { name: "Matija", text: "Paid by work - ideally booked on the same outbound flight (the Virgin 17:40 is the cheapest one for Maryna)." },
+              { name: "Live prices", text: "Tap a date above for today's return fares on Google Flights; use Track prices for alerts. Google says the cheapest time to book this route is now, until about 9 Oct." },
             ] },
             { title: "Nonstop options", items: [
               { name: "British Airways (LHR → LAS)", text: "Economy, World Traveller Plus (premium economy) or Club Suite business.", link: "https://www.britishairways.com/" },
@@ -268,10 +267,10 @@ window.TRIP = {
           intro: "Maryna flies home from Vegas; Matija flies on to Austin for CoRL and the team summit, then home.",
           sections: [
             { title: "Maryna - Sat 7 Nov", items: [
-              { name: "British Airways or Virgin Atlantic, Las Vegas → London (nonstop)", text: "Evening departure, about 10 h overnight, landing at Heathrow on Sun 8 Nov.", link: "https://www.britishairways.com/" },
+              { name: "Las Vegas → London (nonstop), the return half of her ticket", text: "Evening departure, about 10 h overnight, landing at Heathrow on Sun 8 Nov. See the London → Las Vegas card for prices." },
             ] },
             { title: "Matija - Sat 14 Nov", items: [
-              { name: "British Airways Austin → London (nonstop)", text: "After checking out of the work hotel; lands Sun 15 Nov. Or add a weekend in New York first - see the open questions.", link: "https://www.britishairways.com/content/flights/usa/texas/austin" },
+              { name: "British Airways Austin → London (nonstop)", text: "Paid by work. After checking out of the work hotel; lands Sun 15 Nov. Or add a weekend in New York first - see the open questions.", link: "https://www.britishairways.com/content/flights/usa/texas/austin" },
             ] },
           ],
         },
@@ -291,10 +290,7 @@ window.TRIP = {
       label: "🗽 NYC plan",
       home: "London",
       costs: [
-        { type: "flights", label: "London → New York Fri 30 Oct, 2 people, economy nonstop one-way (estimate from Google Flights, 25 Sep)", amount: 1370, date: "2026-10-30" },
-        { type: "flights", label: "Maryna: New York → London, economy (estimate)", amount: 450, date: "2026-11-07" },
-        { type: "flights", label: "Matija: New York → Austin (estimate)", amount: 200, date: "2026-11-07" },
-        { type: "flights", label: "Matija: Austin → London, economy (estimate)", amount: 500, date: "2026-11-14" },
+        { type: "flights", label: "Maryna: return London ⇄ New York, economy nonstop (from ~$534, Google Flights 25 Sep - estimate). Matija's flights are paid by work.", amount: 534, date: "2026-10-30" },
       ],
       name: "A week in New York, then CoRL",
       summary: "Together: from Fri 30 Oct, a week in New York - Halloween parade, the Marathon, museums, Broadway, jazz, and time with Maja & Amit in Brooklyn. On Sat 7 Nov Maryna flies home to London and Matija flies to Austin for CoRL and the team summit, home Sat 14 Nov.",
@@ -336,10 +332,12 @@ window.TRIP = {
           title: "✈️ Flights London → New York (Fri 30 Oct)",
           intro: "The busiest route across the Atlantic: British Airways, Virgin Atlantic, American, Delta, United and JetBlue all fly nonstop Heathrow → JFK or Newark many times a day, about 8 h.",
           sections: [
-            { title: "Fri 30 vs Sat 31 Oct - one-way, economy, per person (estimates from Google Flights, 25 Sep)", items: [
-              { name: "Fri 30 Oct", text: "Nonstop: JetBlue from ~$687 (08:05 → 12:19 at JFK); British Airways / American from ~$959, United to Newark ~$981.", link: "https://www.google.com/travel/flights?q=Flights%20to%20NYC%20from%20LON%20on%202026-10-30%20one%20way" },
-              { name: "Sat 31 Oct", text: "Nonstop: JetBlue from ~$450; British Airways from ~$959. Saturday is cheaper on JetBlue, but Friday gives a whole Halloween day in the city.", link: "https://www.google.com/travel/flights?q=Flights%20to%20NYC%20from%20LON%20on%202026-10-31%20one%20way" },
-              { name: "Live prices", text: "Tap a date above for today's fares on Google Flights. One-ways are shown; pricing it as one ticket with the flight home is sometimes cheaper." },
+            { title: "Maryna's ticket: a return, out Fri 30 or Sat 31 Oct, back Sat 7 Nov (economy, estimates from Google Flights, 25 Sep)", items: [
+              { name: "Out Fri 30 Oct", text: "Nonstop from ~$534 return on United (to Newark), American, Delta or Virgin Atlantic (to JFK) - lots of times to choose from.", link: "https://www.google.com/travel/flights?q=Flights%20to%20NYC%20from%20LON%20on%202026-10-30%20returning%202026-11-07" },
+              { name: "Out Sat 31 Oct", text: "Also from ~$534 return nonstop (United, JetBlue, Virgin, Delta) - Friday costs nothing extra and gives a whole Halloween day.", link: "https://www.google.com/travel/flights?q=Flights%20to%20NYC%20from%20LON%20on%202026-10-31%20returning%202026-11-07" },
+              { name: "Book a return, not one-ways", text: "One-ways are pricier (~$687+ nonstop just to get there). Maryna's trip is a simple round trip, so a return is the cheapest way." },
+              { name: "Matija", text: "Paid by work - ideally booked on the same outbound flight." },
+              { name: "Live prices", text: "Tap a date above for today's return fares on Google Flights; use Track prices for alerts." },
             ] },
             { title: "Nonstop options", items: [
               { name: "British Airways / American (LHR → JFK)", text: "Many flights a day; morning departures land early afternoon.", link: "https://www.britishairways.com/" },
@@ -355,10 +353,10 @@ window.TRIP = {
           intro: "Maryna flies home from New York; Matija flies on to Austin for CoRL and the team summit, then home.",
           sections: [
             { title: "Maryna - Sat 7 Nov", items: [
-              { name: "New York → London (nonstop, overnight)", text: "Evening departures from JFK or Newark land at Heathrow on Sun 8 Nov morning (~7 h)." },
+              { name: "New York → London (nonstop, overnight), the return half of her ticket", text: "Evening departures from JFK or Newark land at Heathrow on Sun 8 Nov morning (~7 h). See the London → New York card for prices." },
             ] },
             { title: "Matija - Sat 14 Nov", items: [
-              { name: "British Airways Austin → London (nonstop)", text: "After checking out of the work hotel; lands Sun 15 Nov.", link: "https://www.britishairways.com/content/flights/usa/texas/austin" },
+              { name: "British Airways Austin → London (nonstop)", text: "Paid by work. After checking out of the work hotel; lands Sun 15 Nov.", link: "https://www.britishairways.com/content/flights/usa/texas/austin" },
             ] },
           ],
         },

@@ -78,6 +78,7 @@ to the person saying what you changed.
   to an existing page). The card then shows a "📜 Details" button. When feedback asks for "more details" on something, do this.
 - Ideas can have `link` (official website / booking page): shown on the idea card and makes the idea's name a link in the plan.
   Add one whenever feedback asks for a booking/website link.
+- Matija's flights are all paid by work: `costs` only count Maryna's flights (a return ticket is far cheaper than one-ways).
 - `plan.costs` = estimated flights / car hire (type flights|car, amount USD for both, date or from/to). The Trip Summary pies
   add hotels (from each leg's stay) and "things to do" (from the $ rating of ideas in the plan). Update costs when prices are
   looked up or things get booked.
