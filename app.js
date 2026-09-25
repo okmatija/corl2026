@@ -102,7 +102,6 @@
   // number of day rows a leg shows: its nights, plus its leave day when it's someone's last stop (the departure day)
   const legDayCount = (l, i) => nightsBetween(l.daysFrom || l.arrive, l.leave) + (endsAfter(i).length ? 1 : 0);
   const outline = x => x.who ? ` only-${x.who.toLowerCase()}` : "";
-  const onlyTag = x => x.who ? `<div class="only-note">${esc(x.who)} only</div>` : "";
 
   function viewPlan() {
     const P = T.plan;
@@ -137,7 +136,6 @@
         <div class="leg">
           <div class="dot">${++dot}</div>
           <div class="card${outline(l)}">
-            ${onlyTag(l)}
             <div class="item-head"><h3>${esc(p.name)}</h3><span class="tag date-tag">${fmt(l.arrive)} – ${fmt(l.leave)}</span></div>
             <div class="item-meta">${n} night${n > 1 ? "s" : ""} · ${esc(p.blurb || "")}</div>
             ${s ? `<div class="stay"><div class="stay-row">
@@ -341,7 +339,6 @@
     const details = esc((text || "").replace(/^(✈️|🚗)\s*/u, "")).replace(idPattern, ideaRef);
     return `<div class="leg travel-leg">
         <div class="card travel-card${outline(owner)}">
-          ${onlyTag(owner)}
           <div class="item-head"><span class="item-title">${icon} ${esc(route)}</span><span class="tag">${fmt(date)}</span></div>
           ${details ? `<div class="item-meta">${details}</div>` : ""}
           <div class="vote">${detailsBtn(key)}${commentBtn(key, `Travel: ${route}`)}</div>

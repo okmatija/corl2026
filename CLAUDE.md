@@ -80,7 +80,7 @@ to the person saying what you changed.
   looked up or things get booked.
 - `plan.home` ("London") is where the trip starts and ends.
 - Common vs divergent plans: legs without `who` are shared (normal cards). A leg with `who: "Matija"|"Maryna"` is only that
-  person's: blue/pink outline, shown only when that person is picked (everyone sees it when nobody is). Give such a leg an
+  person's: solid blue/pink outline (no label), shown only when that person is picked (everyone sees it when nobody is). Give such a leg an
   `id` (e.g. "austin-matija") - its targets are `stop:<id>`, `stay:<id>`, `travel:<id>`. `daysFrom` (default `arrive`) is the
   date `days[0]` refers to - use it when the previous shared leg already shows the arrive day. A leg with no `travel` shows no
   journey card. Flights home are `plan.ends: [{ who, date, text }]` (one per person; no `who` if they fly together); each is
