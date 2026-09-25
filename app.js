@@ -23,7 +23,6 @@
   const ui = store.get("ui", { filter: "all", region: "all" });
   let map = null;
   let dlgModel = "sonnet";   // model picked in the last feedback dialog
-  let dlgVote = null;        // optional 👍/👎 picked in the last feedback dialog
   let openDay = null;        // { date, title } shown in the 📜 day pop-up
 
   // ---------- helpers ----------
@@ -45,17 +44,7 @@
   const MODEL_NAME = { haiku: "Haiku", sonnet: "Sonnet", opus: "Opus" };
   const when = iso => iso.length <= 10 ? fmt(iso) : new Date(iso).toLocaleString("en-GB", { weekday: "short", day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" });
   const tint = name => name ? "tint-" + name.toLowerCase() : "";
-  const vIcon = v => ({ up: "👍", down: "👎", add: "📌", remove: "❌", note: "💬" })[v] || "💬";
-
-  // Latest vote per person per idea
-  // key: an idea id, or a plan target like "stop:austin" / "day:2026-11-08"
-  function votes(key) {
-    const out = {};
-    feedback.filter(f => ((f.kind === "idea" && f.idea === key) || (f.kind === "plan" && f.target === key)) && ["up", "down", "add", "remove"].includes(f.vote))
-      .sort((a, b) => a.date.localeCompare(b.date))
-      .forEach(f => { out[f.who] = f; });
-    return out;
-  }
+  const vIcon = v => ({ add: "📌", remove: "❌" })[v] || "💬";
 
   // ---------- API ----------
   async function loadFeedback() {
@@ -319,7 +308,7 @@
       <p class="muted small">${written ? "Prices are estimates - check live rates before booking. " : "This page is put together from the plan. "}Want more here? 💬 Comment on the card in the plan and ask the agent for details.</p>`;
   }
 
-  // Card for a journey between stops (from/to = place ids; null = home). Same 👍 👎 💬 buttons as a stop.
+  // Card for a journey between stops (from/to = place ids; null = home). Same 📜 💬 buttons as a stop.
   function travelCard(from, to, date, text, key) {
     const name = id => id ? short(id) : (T.plan.home || "Home");
     const route = `${name(from)} → ${name(to)}`;
@@ -378,11 +367,10 @@
   }
 
   function ideaCard(a) {
-    const v = votes(a.id);
     const q = encodeURIComponent(a.title.replace(/\(.*?\)/g, "") + " " + place(a.place).name);
-    const notes = feedback.filter(f => f.kind === "idea" && f.idea === a.id && f.vote === "note" && f.text).sort((x, y) => x.date.localeCompare(y.date));
+    const notes = feedback.filter(f => f.kind === "idea" && f.idea === a.id && (f.text || ["add", "remove"].includes(f.vote))).sort((x, y) => x.date.localeCompare(y.date));
     const agentNotes = feedback.filter(f => f.kind === "idea" && f.idea === a.id && f.resolution).sort((x, y) => (x.closedAt || x.date).localeCompare(y.closedAt || y.date));
-    const reactions = voteChips(v) + notes.map(f => `<div class="fb ${tint(f.who)}"><b>${esc(f.who)} 💬</b> ${esc(f.text)}</div>`).join("")
+    const reactions = notes.map(f => `<div class="fb ${tint(f.who)}"><b>${esc(f.who)} ${vIcon(f.vote)}</b>${f.vote === "add" ? " Add to plan." : f.vote === "remove" ? " Remove from plan." : ""} ${esc(f.text || "")}</div>`).join("")
       + agentNotes.map(f => `<div class="fb ${tint(AGENT)}"><b>Agent 💬</b> ${esc(f.resolution)}</div>`).join("");
     const state = STATES[place(a.place).name.split(", ").pop()] || "";
     const text = norm([a.title, a.why, place(a.place).name, state, place(a.place).type, a.cat, CATS[a.cat], a.cost, a.dur, inPlan.has(a.id) ? "in plan" : ""].join(" "));
@@ -399,11 +387,6 @@
   }
 
   const isAnswer = f => f.kind === "general" && /^Q: [\s\S]*\nA: /.test(f.text || "");
-
-  function voteChips(v) {
-    return PEOPLE.filter(p => v[p]).map(p => `
-      <div class="fb ${tint(p)}"><b>${esc(p)} ${vIcon(v[p].vote)}</b>${v[p].text ? ` ${esc(v[p].text)}` : ""}</div>`).join("");
-  }
 
   // 💬 button for a plan stop, day or journey (mini = icon only, for day rows). Sentiment is picked inside the pop-up.
   function commentBtn(key, title, mini) {
@@ -491,17 +474,14 @@
     .filter(Boolean).sort((a, b) => a.date.localeCompare(b.date));
   const whoLabel = w => w === AGENT ? "Agent 💬" : esc(w);
 
-  // 👍 / 👎 votes vs everything written (general notes, answers, replies, plan comments)
-  const fbType = f => f.vote === "up" || f.vote === "add" ? "up" : f.vote === "down" || f.vote === "remove" ? "down" : "general";
-  const FB_TYPES = [["general", "💬"], ["up", "👍"], ["down", "👎"]];
 
   function viewFeedback() {
     // Toggle filters: nothing selected in a group = show all of that group
-    const whoSel = ui.fbWho || [], typeSel = ui.fbType || [];
+    const whoSel = ui.fbWho || [];
     const list = feedback
       .filter(f => f.kind !== "reply")
       // a name matches comments that person wrote AND comments they commented on (their replies / the agent's note in the thread)
-      .filter(f => (!whoSel.length || [f.who, ...thread(f).map(r => r.who)].some(w => whoSel.includes(w))) && (!typeSel.length || typeSel.includes(fbType(f))))
+      .filter(f => (!whoSel.length || [f.who, ...thread(f).map(r => r.who)].some(w => whoSel.includes(w))))
       .sort((a, b) => b.date.localeCompare(a.date));
     // count the cards shown; "pending" = the ⏳ badges visible (cards + replies nested in them)
     const open = list.flatMap(f => [f, ...replyItems(f)]).filter(f => f.state === "open").length;
@@ -524,8 +504,6 @@
       <h2 class="section-title">Comment history</h2>
       <div class="chips fb-filters" role="group" aria-label="Filter comments">
         ${[...PEOPLE, AGENT].map(p => toggleChip("fbwho", p, p === AGENT ? "Agent" : esc(p), whoSel.includes(p))).join("")}
-        <span class="chip-sep"></span>
-        ${FB_TYPES.map(([k, l]) => toggleChip("fbtype", k, l, typeSel.includes(k))).join("")}
       </div>
       <p class="muted small">${list.length} comment${list.length === 1 ? "" : "s"} · ${open} pending</p>
       ${list.map(f => `
@@ -556,7 +534,7 @@
         <p style="margin:0 0 8px">Matija & Maryna's plan for CoRL 2026 in Austin and a two-week holiday afterwards. Claude agents read what you say and update the plan every hour.</p>
         <ul class="plain">
           <li><b>👤 Pick who you are</b> with the name badge at the top right.</li>
-          <li><b>💬 Comment</b> on anything - a stop, a journey, a day, an idea etc. - and add an optional 👍 or 👎 sentiment and pick the model to action the comment: Sonnet (default), Haiku (quick) or Opus (most thorough).</li>
+          <li><b>💬 Comment</b> on anything - a stop, a journey, a day, an idea etc. - and pick the model to action the comment: Sonnet (default), Haiku (quick) or Opus (most thorough).</li>
           <li><b>📌 Add to plan</b> on an idea asks the agent to fit it into the plan; tapping <b>📌 In plan</b> asks it to take the idea out again.</li>
           <li><b>📜 Details</b> on a stop or journey opens more (maps, hotels, flights, car hire). Ask for one on anything with 💬.</li>
         </ul>
@@ -594,17 +572,13 @@
 
   // ---------- dialog ----------
   // Every comment pop-up looks like the Comments tab's box: "<emoji> Add comment as <you>", then what it's about.
-  // sentiment: show the optional 👍/👎 toggle (the choice is left in dlgVote).
-  const feedbackDialog = (icon, subject, placeholder, sentiment = true) =>
-    ask({ title: icon === "📌" ? `📌 Add to plan as ${who}` : icon === "❌" ? `📌 Remove from plan as ${who}` : `${icon} Add comment as ${who}`, body: subject, placeholder, ok: "Send", model: true, as: who, sentiment });
+  const feedbackDialog = (icon, subject, placeholder) =>
+    ask({ title: icon === "📌" ? `📌 Add to plan as ${who}` : icon === "❌" ? `📌 Remove from plan as ${who}` : `${icon} Add comment as ${who}`, body: subject, placeholder, ok: "Send", model: true, as: who });
 
   // model: show the 🤖 model picker (its value is left in dlgModel for the caller); as: tint the dialog for that person
-  function ask({ title, body, placeholder, input, ok = "OK", model, as, sentiment }) {
+  function ask({ title, body, placeholder, input, ok = "OK", model, as }) {
     return new Promise(resolve => {
       const dlg = document.getElementById("dlg");
-      dlgVote = null;
-      document.getElementById("dlgSentiment").hidden = !sentiment;
-      document.querySelectorAll("#dlgSentiment [data-sent]").forEach(b => { b.classList.remove("on"); b.setAttribute("aria-pressed", "false"); });
       dlg.className = tint(as);
       document.getElementById("dlgModel").hidden = !model;
       document.getElementById("dlgModel").innerHTML = modelOptions("sonnet");
@@ -683,18 +657,13 @@
       document.getElementById("ideaDlg").showModal();
       return;
     }
-    if (ds.sent) {   // 👍/👎 toggle inside the pop-up
-      dlgVote = dlgVote === ds.sent ? null : ds.sent;
-      document.querySelectorAll("#dlgSentiment [data-sent]").forEach(b => { b.classList.toggle("on", b.dataset.sent === dlgVote); b.setAttribute("aria-pressed", b.dataset.sent === dlgVote); });
-      return;
-    }
     const needWho = () => { if (!who) toast("Tap your name at the top to pick who you are"); return !who; };
-    // A comment needs words unless it carries a 👍/👎
-    const empty = text => text === null || (!text.trim() && !dlgVote);
+    // A comment needs words
+    const empty = text => text === null || !text.trim();
     if (ds.addplan) {
       if (needWho()) return;
       const idea = ideas[ds.addplan];
-      const text = await feedbackDialog("📌", idea.title, "e.g. Any afternoon in Austin works. (optional)", false);
+      const text = await feedbackDialog("📌", idea.title, "e.g. Any afternoon in Austin works. (optional)");
       if (text === null) return;
       el.disabled = true;
       await submit({ who, kind: "idea", idea: idea.id, ideaTitle: idea.title, vote: "add", text: text.trim(), model: dlgModel });
@@ -703,7 +672,7 @@
     if (ds.removeplan) {
       if (needWho()) return;
       const idea = ideas[ds.removeplan];
-      const text = await feedbackDialog("❌", idea.title, "e.g. Not enough time that day. (optional)", false);
+      const text = await feedbackDialog("❌", idea.title, "e.g. Not enough time that day. (optional)");
       if (text === null) return;
       el.disabled = true;
       await submit({ who, kind: "idea", idea: idea.id, ideaTitle: idea.title, vote: "remove", text: text.trim(), model: dlgModel });
@@ -715,7 +684,7 @@
       const text = await feedbackDialog("💬", idea.title, "e.g. Only if it's warm enough.");
       if (empty(text)) return;
       el.disabled = true;
-      await submit({ who, kind: "idea", idea: idea.id, ideaTitle: idea.title, vote: dlgVote || "note", text: text.trim(), model: dlgModel });
+      await submit({ who, kind: "idea", idea: idea.id, ideaTitle: idea.title, vote: "note", text: text.trim(), model: dlgModel });
       el.disabled = false;
     }
     if (ds.plancomment) {
@@ -723,13 +692,13 @@
       const text = await feedbackDialog("💬", ds.title, "e.g. Is one night here enough?");
       if (empty(text)) return;
       el.disabled = true;
-      await submit({ who, kind: "plan", target: ds.plancomment, targetTitle: ds.title, vote: dlgVote || "note", text: text.trim(), model: dlgModel });
+      await submit({ who, kind: "plan", target: ds.plancomment, targetTitle: ds.title, vote: "note", text: text.trim(), model: dlgModel });
       el.disabled = false;
     }
     if (ds.answer) {
       if (!who) { toast("Tap 👤 at the top to pick who you are"); return; }
       const q = T.openQuestions[+ds.answer];
-      const text = (await feedbackDialog("💬", q, "e.g. Yes - and we'd rather…", false))?.trim();
+      const text = (await feedbackDialog("💬", q, "e.g. Yes - and we'd rather…"))?.trim();
       if (!text) return;
       el.disabled = true;
       await submit({ who, kind: "general", text: `Q: ${q}\nA: ${text}`, model: dlgModel });
@@ -740,11 +709,11 @@
       const text = await feedbackDialog("💬", `${ds.replywho}: ${ds.replytitle}`, "e.g. Agreed! Or maybe…");
       if (empty(text)) return;
       el.disabled = true;
-      await submit({ who, kind: "reply", replyTo: +ds.reply, replyToWho: ds.replywho, text: text.trim(), vote: dlgVote || undefined, model: dlgModel });
+      await submit({ who, kind: "reply", replyTo: +ds.reply, replyToWho: ds.replywho, text: text.trim(), model: dlgModel });
       el.disabled = false;
     }
-    if (ds.fbwho || ds.fbtype) {
-      const key = ds.fbwho ? "fbWho" : "fbType", v = ds.fbwho || ds.fbtype;
+    if (ds.fbwho) {
+      const key = "fbWho", v = ds.fbwho;
       const cur = new Set(ui[key] || []);
       cur.has(v) ? cur.delete(v) : cur.add(v);
       ui[key] = [...cur]; store.set("ui", ui); return rerender();

@@ -50,8 +50,7 @@ to the person saying what you changed.
    then remove (or reword) that entry in `openQuestions` once it's settled.
    Votes (`vote`): `add` (📌 "Add to plan" on an idea) → fit it into the plan; `remove` (tapping 📌 "In plan") → take it out
    of the plan (and rebalance that day). `note` = a 💬 comment with no sentiment - act on
-   the text. `up`/`down` = an optional 👍/👎 the person attached to a comment (on ideas, plan stops/days/journeys, replies and
-   general notes): 👍 = keep/more of this, 👎 = rework/avoid it, using the text as the reason.
+   the text. `up`/`down` = old 👍/👎 sentiment (no longer offered on the site; treat as 👍 keep / 👎 rework, with the text as the reason).
    Idea votes: 👍 → consider adding to the plan; 👎 → remove/avoid. Plan votes: 👍 → keep as is; 👎 → rework that stop/day using the reason. Plan `vote: "note"` = 💬 comment on a stop (question/idea, no sentiment). General notes: budget, dates, must-sees, new ideas (add idea cards).
 3. Edit `data/trip.js` (plan, ideas, openQuestions; set `meta.updated` to the current UTC time as `date -u +%Y-%m-%dT%H:%MZ` -
    the Trip Summary shows it). Validate BOTH data files load before committing:
