@@ -25,7 +25,8 @@
   }
   computePlanned();
   // 📜 Details: the current plan's own pages first, then the shared ones
-  const detailsFor = key => T.plan.details?.[key] || T.details?.[key];
+  // (a link to another plan's page - e.g. shared before switching plans - still opens it)
+  const detailsFor = key => T.plan.details?.[key] || T.details?.[key] || PLANS.map(p => p.details?.[key]).find(Boolean);
 
   // ---------- storage (never throws) ----------
   const store = {
@@ -315,7 +316,7 @@
         sec("On the map", [{ name: `📍 ${p.name}`, link: gmaps(p.name) }]),
       ] };
     }
-    if (kind === "travel") {
+    if (kind === "travel" && (id === "home" || l)) {
       const e = planEnds().find(x => visibleTo(x)) || planEnds()[0];
       const to = id === "home" ? null : l?.place, from = id === "home" ? P.legs[lastLegFor(e.who)].place : legIdx > 0 ? P.legs[legIdx - 1].place : null;
       const nm = x => x ? short(x) : (P.home || "Home");

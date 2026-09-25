@@ -4,7 +4,7 @@ window.TRIP = {
   meta: {
     title: "CoRL 2026 · USA trip",
     travellers: ["Matija", "Maryna"],
-    updated: "2026-09-25T13:01Z",
+    updated: "2026-09-25T13:11Z",
     status: "Two plans to choose from (menu at the top left): Vegas or New York together, then Maryna flies home to London and Matija flies on to Austin for CoRL.",
   },
 
@@ -17,7 +17,7 @@ window.TRIP = {
 
   openQuestions: [
     "Vegas or New York? Switch between the two plans with the menu at the top left. Vegas: Halloween weekend, desert, the Zion + Grand Canyon loop and active stuff. New York: a city week with the Halloween parade, the Marathon and Maja & Amit.",
-    "Start: fly London → Las Vegas together on Sat 31 Oct (Halloween night in Vegas!) - or a day or two earlier/later?",
+    "Start: both plans now fly out on Fri 30 Oct, so Halloween (Sat 31) is a whole day there. Or fly on Sat 31 (cheaper to New York on JetBlue) - see the prices on the first flight card?",
     "Maryna flies Las Vegas → London on the evening of Sat 7 Nov (lands Sun 8 Nov) - or stay one more night and land on Mon 9 Nov around lunchtime?",
     "The Zion + Grand Canyon loop (3 nights, hire car) - keep it, or stay in Vegas and do day trips (Valley of Fire, Red Rock, Death Valley, Black Canyon kayak) instead?",
     "Sphere in Vegas: Metallica (residency runs through the autumn - check dates) or The Wizard of Oz (daily)?",
@@ -169,22 +169,23 @@ window.TRIP = {
       // Hotels come from each leg's stay; "events" are estimated from the cost level ($/$$/$$$) of ideas in the plan.
       // A cost has a date, or from/to (spread evenly per day, to exclusive). Estimates only - update as things get booked.
       costs: [
-        { type: "flights", label: "London → Las Vegas, 2 people, economy (estimate)", amount: 900, date: "2026-10-31" },
+        { type: "flights", label: "London → Las Vegas Fri 30 Oct, 2 people, economy nonstop one-way (estimate from Google Flights, 25 Sep)", amount: 1930, date: "2026-10-30" },
         { type: "car", label: "Car hire for the Zion + Grand Canyon loop, 3 days (estimate)", amount: 200, from: "2026-11-02", to: "2026-11-05" },
         { type: "flights", label: "Maryna: Las Vegas → London, economy (estimate)", amount: 500, date: "2026-11-07" },
         { type: "flights", label: "Matija: Las Vegas → Austin (estimate)", amount: 130, date: "2026-11-07" },
         { type: "flights", label: "Matija: Austin → London, economy (estimate)", amount: 500, date: "2026-11-14" },
       ],
       name: "Vegas, Zion & the Grand Canyon, then CoRL",
-      summary: "Together: a week around Las Vegas - Halloween on the Strip, Valley of Fire, a hire-car loop through Zion, Horseshoe Bend and the Grand Canyon, then back to Vegas. On Sat 7 Nov Maryna flies home to London and Matija flies to Austin for CoRL and the team summit, home Sat 14 Nov.",
+      summary: "Together: from Fri 30 Oct, a week around Las Vegas - Halloween on the Strip, Valley of Fire, a hire-car loop through Zion, Horseshoe Bend and the Grand Canyon, then back to Vegas. On Sat 7 Nov Maryna flies home to London and Matija flies to Austin for CoRL and the team summit, home Sat 14 Nov.",
       budgetPerNight: 200,
       legs: [
-        { place: "lasvegas", arrive: "2026-10-31", leave: "2026-11-02",
+        { place: "lasvegas", arrive: "2026-10-30", leave: "2026-11-02",
           travel: "✈️ Fly London → Las Vegas together (nonstop, ~10h40)",
           stay: { name: "Mid-Strip hotel", price: 170, notes: "Estimate. Halloween Saturday is pricier, and most Strip hotels add a ~$45/night resort fee." },
           days: [
-            ["Land mid-afternoon, check in", "Halloween night on the Strip: lv-fountains (jet lag - keep it short)"],
-            ["Clocks go back tonight", "Early start: lv-valleyfire", "Evening: lv-sphere-oz or lv-sphere-metallica (check dates)"],
+            ["Land ~20:00 (BA nonstop), check in", "Short late walk: lv-fountains"],
+            ["Halloween! Early start (jet lag helps): lv-calico", "Pool afternoon and a nap", "Halloween night: lv-fremont - costumes everywhere", "Clocks go back tonight (an extra hour of sleep)"],
+            ["Early start: lv-valleyfire", "Evening: lv-sphere-oz or lv-sphere-metallica (check dates)"],
           ] },
         { place: "zion", arrive: "2026-11-02", leave: "2026-11-03",
           travel: "🚗 Pick up a hire car at the airport · 2.5 h drive to Springdale",
@@ -201,7 +202,7 @@ window.TRIP = {
           travel: "🚗 Drive back to Vegas via gc-route66 (~5 h), drop the car",
           stay: { name: "Hotel in Vegas", price: 150, notes: "Estimate - weeknights are cheaper." },
           days: [
-            ["Drive back", "Evening: lv-fremont"],
+            ["Drive back", "Easy evening on the Strip"],
             ["lv-blackcanyon (full day)", "Evening: lv-cirque"],
             ["Morning: lv-redrock or lv-atv", "Evening: Maryna flies Vegas → London; Matija flies to Austin"],
           ] },
@@ -226,13 +227,17 @@ window.TRIP = {
       // 📜 Details pages for this plan (same keys as TRIP.details, which are shared by all plans)
       details: {
         "travel:lasvegas": {
-          title: "✈️ Flights London → Las Vegas (Sat 31 Oct)",
-          intro: "Both British Airways (13 a week) and Virgin Atlantic (daily) fly nonstop Heathrow → Las Vegas, about 10h40. Leaving London late morning, you land in Vegas the same afternoon.",
+          title: "✈️ Flights London → Las Vegas (Fri 30 Oct)",
+          intro: "British Airways and Virgin Atlantic fly nonstop Heathrow → Las Vegas, about 10h45. The BA flight leaves at 16:05 and lands at 19:50 the same day.",
           sections: [
+            { title: "Fri 30 vs Sat 31 Oct - one-way, economy, per person (estimates from Google Flights, 25 Sep)", items: [
+              { name: "Fri 30 Oct", text: "Nonstop: British Airways from ~$967 (16:05 → 19:50). With 1 stop: from ~$515 (JetBlue, ~18 h).", link: "https://www.google.com/travel/flights?q=Flights%20to%20LAS%20from%20LON%20on%202026-10-30%20one%20way" },
+              { name: "Sat 31 Oct", text: "Nonstop: British Airways from ~$1,156, Virgin Atlantic ~$1,397. With 1 stop: from ~$515. Friday is ~$190 cheaper nonstop - and gives a whole Halloween day.", link: "https://www.google.com/travel/flights?q=Flights%20to%20LAS%20from%20LON%20on%202026-10-31%20one%20way" },
+              { name: "Live prices", text: "Tap a date above for today's fares on Google Flights. One-ways are shown; pricing it as one ticket with the flight home (open-jaw) is sometimes cheaper." },
+            ] },
             { title: "Nonstop options", items: [
               { name: "British Airways (LHR → LAS)", text: "Economy, World Traveller Plus (premium economy) or Club Suite business.", link: "https://www.britishairways.com/" },
               { name: "Virgin Atlantic (LHR → LAS)", text: "Economy, Premium or Upper Class - daily.", link: "https://flights.virginatlantic.com/en/flights-from-london-to-las-vegas" },
-              { name: "Rough price", text: "Comparison sites show London → Las Vegas from roughly $570 return in economy (estimate) - one-ways into Vegas and home from Austin are often priced as an open-jaw ticket.", link: "https://www.kayak.com/flight-routes/London-Heathrow-LHR/Las-Vegas-McCarran-LAS" },
             ] },
             { title: "Business for Matija, Maryna too?", items: [
               { name: "Options", text: "Both economy; both premium economy; or Matija in business and Maryna in economy or premium on the same flight. If Matija's ticket is booked through work, check which cabin the travel policy allows." },
@@ -286,25 +291,26 @@ window.TRIP = {
       label: "🗽 NYC plan",
       home: "London",
       costs: [
-        { type: "flights", label: "London → New York, 2 people, economy (estimate)", amount: 1000, date: "2026-10-31" },
+        { type: "flights", label: "London → New York Fri 30 Oct, 2 people, economy nonstop one-way (estimate from Google Flights, 25 Sep)", amount: 1370, date: "2026-10-30" },
         { type: "flights", label: "Maryna: New York → London, economy (estimate)", amount: 450, date: "2026-11-07" },
         { type: "flights", label: "Matija: New York → Austin (estimate)", amount: 200, date: "2026-11-07" },
         { type: "flights", label: "Matija: Austin → London, economy (estimate)", amount: 500, date: "2026-11-14" },
       ],
       name: "A week in New York, then CoRL",
-      summary: "Together: a week in New York - Halloween parade, the Marathon, museums, Broadway, jazz, and time with Maja & Amit in Brooklyn. On Sat 7 Nov Maryna flies home to London and Matija flies to Austin for CoRL and the team summit, home Sat 14 Nov.",
+      summary: "Together: from Fri 30 Oct, a week in New York - Halloween parade, the Marathon, museums, Broadway, jazz, and time with Maja & Amit in Brooklyn. On Sat 7 Nov Maryna flies home to London and Matija flies to Austin for CoRL and the team summit, home Sat 14 Nov.",
       budgetPerNight: 200,
       legs: [
-        { place: "nyc", arrive: "2026-10-31", leave: "2026-11-07",
+        { place: "nyc", arrive: "2026-10-30", leave: "2026-11-07",
           travel: "✈️ Fly London → New York together (nonstop, ~8 h)",
           stay: { name: "Hotel in Manhattan or Brooklyn", price: 280, notes: "Estimate - New York hotels are pricey; Brooklyn (near Maja & Amit in Cobble Hill) is a bit cheaper than Manhattan." },
           days: [
-            ["Land mid-afternoon, check in", "Evening: nyc-halloween"],
-            ["Clocks go back tonight", "Morning: nyc-marathon", "nyc-central", "Evening: nyc-jazz"],
-            ["nyc-highline", "Evening: nyc-broadway"],
-            ["nyc-met", "Sunset: nyc-summit"],
-            ["nyc-911memorial", "Dusk: nyc-brooklyn", "Dinner in Brooklyn with Maja & Amit?"],
-            ["nyc-veselka", "Evening: nyc-rock"],
+            ["Land around lunchtime, check in", "Easy evening: nyc-veselka"],
+            ["Halloween! nyc-highline", "Evening: nyc-halloween", "Clocks go back tonight (an extra hour of sleep)"],
+            ["Morning: nyc-marathon", "nyc-central", "Evening: nyc-jazz"],
+            ["nyc-met", "Evening: nyc-broadway"],
+            ["nyc-911memorial", "Sunset: nyc-summit"],
+            ["Dusk: nyc-brooklyn", "Dinner in Brooklyn with Maja & Amit?"],
+            ["Free day", "Evening: nyc-rock"],
             ["Free day"],
             ["Last morning together", "Evening: Maryna flies New York → London; Matija flies to Austin"],
           ] },
@@ -327,9 +333,14 @@ window.TRIP = {
       ],
       details: {
         "travel:nyc": {
-          title: "✈️ Flights London → New York (Sat 31 Oct)",
+          title: "✈️ Flights London → New York (Fri 30 Oct)",
           intro: "The busiest route across the Atlantic: British Airways, Virgin Atlantic, American, Delta, United and JetBlue all fly nonstop Heathrow → JFK or Newark many times a day, about 8 h.",
           sections: [
+            { title: "Fri 30 vs Sat 31 Oct - one-way, economy, per person (estimates from Google Flights, 25 Sep)", items: [
+              { name: "Fri 30 Oct", text: "Nonstop: JetBlue from ~$687 (08:05 → 12:19 at JFK); British Airways / American from ~$959, United to Newark ~$981.", link: "https://www.google.com/travel/flights?q=Flights%20to%20NYC%20from%20LON%20on%202026-10-30%20one%20way" },
+              { name: "Sat 31 Oct", text: "Nonstop: JetBlue from ~$450; British Airways from ~$959. Saturday is cheaper on JetBlue, but Friday gives a whole Halloween day in the city.", link: "https://www.google.com/travel/flights?q=Flights%20to%20NYC%20from%20LON%20on%202026-10-31%20one%20way" },
+              { name: "Live prices", text: "Tap a date above for today's fares on Google Flights. One-ways are shown; pricing it as one ticket with the flight home is sometimes cheaper." },
+            ] },
             { title: "Nonstop options", items: [
               { name: "British Airways / American (LHR → JFK)", text: "Many flights a day; morning departures land early afternoon.", link: "https://www.britishairways.com/" },
               { name: "Virgin Atlantic / Delta (LHR → JFK)", text: "Several a day.", link: "https://www.virginatlantic.com/" },
