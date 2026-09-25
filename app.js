@@ -234,7 +234,7 @@
   function costCharts(c) {
     return `<div class="pies">
       ${pie("Cost by type", COST_TYPES.map(([k, l]) => ({ label: l, amount: c.byType[k] })))}
-      ${pie("Cost per day, by stop", c.byStop.map(x => ({ label: x.label, amount: x.amount, sub: `${x.days}d · ~${money(x.amount / x.days)}/day` })))}
+      ${pie("Cost by location", c.byStop.map(x => ({ label: x.label, amount: x.amount, sub: `${x.days}d · ~${money(x.amount / x.days)}/day` })))}
     </div>`;
   }
 
