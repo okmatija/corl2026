@@ -533,7 +533,7 @@
     `;
   }
 
-  const short1 = t => { t = String(t).replace(/\s+/g, " ").trim(); return t.length > 90 ? t.slice(0, 88) + "…" : t; };
+  const short1 = t => { t = String(t).replace(/\s+/g, " ").trim(); return t.length > 70 ? t.slice(0, 68) + "…" : t; };
 
   function viewUpdates() {
     const runs = window.RUNS || [];
