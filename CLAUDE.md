@@ -4,7 +4,8 @@ Static site (no build step) on GitHub Pages: https://okmatija.github.io/corl2026
 Travellers: Matija and Maryna. CoRL 2026: Austin TX, workshops Nov 9, main conference Nov 10-12, JW Marriott.
 
 ## Files
-- `data/trip.js` - everything shown: meta, obligations, openQuestions, places, ideas (idea cards), plan (the ONE plan). Edit this, not the HTML.
+- `data/trip.js` - everything shown: meta, obligations, openQuestions, places, ideas (idea cards), details, and `plans` - the
+  alternative versions of the trip (currently `vegas` and `nyc`), picked with the menu at the top left. Edit this, not the HTML.
 - `data/config.js` - `FEEDBACK_API` = URL of the Cloudflare Worker.
 - `app.js`, `styles.css`, `index.html` - the viewer. Vanilla JS, mobile-first. Tabs: Plan, Ideas, Comments (#comments; composer + filterable history, cards tinted blue=Matija / pink=Maryna), ℹ️ Help (#about: Instructions incl. agent usage + Changelog, one line per actioned comment: what was asked → its resolution).
 - `worker/` - Cloudflare Worker that turns site submissions into GitHub issues and lists them back. Secrets: GITHUB_TOKEN, TRIP_KEY.
@@ -23,6 +24,8 @@ issues with no model label); interactive sessions handle any model. `reply` = a 
 (`replyTo` issue number, `replyToWho`): read the original issue for context; act on it if it changes the plan, otherwise
 resolve it as noted.
 The body ends with `<!-- feedback-data {...json...} -->` (who, kind, vote up/down, and either `idea` id or plan `target`).
+`plan` = the id of the plan (in `TRIP.plans`) the person was looking at: edit THAT plan (plan targets, and 🗓️ add/remove of ideas).
+Comments without `plan` predate multiple plans - treat them as about `vegas`. General notes may concern either plan - read them.
 `plan` targets are `stop:<place id>` (a whole stop/leg), `day:<YYYY-MM-DD>` (one day of the plan) or
 `travel:<place id>` (the journey INTO that stop, i.e. its leg's `travel` text) / `travel:home` (the flight home, `plan.ends`).
 `trip:summary` = a comment on the Trip Summary card (overall plan, costs, dates).
@@ -78,6 +81,9 @@ to the person saying what you changed.
 - `plan.costs` = estimated flights / car hire (type flights|car, amount USD for both, date or from/to). The Trip Summary pies
   add hotels (from each leg's stay) and "things to do" (from the $ rating of ideas in the plan). Update costs when prices are
   looked up or things get booked.
+- Plans: `TRIP.plans[]` each have `id`, `label` (menu text), `home`, `costs`, `name`, `summary`, `budgetPerNight`, `legs`, `ends`,
+  and optional `details` (📜 pages for that plan, taking precedence over the shared `TRIP.details`). "The plan" below means the
+  plan a comment is about. To add a new alternative plan, append another entry; the menu picks it up automatically.
 - `plan.home` ("London") is where the trip starts and ends.
 - Common vs divergent plans: legs without `who` are shared (normal cards). A leg with `who: "Matija"|"Maryna"` is only that
   person's: solid blue/pink outline (no label), shown only when that person is picked (everyone sees it when nobody is). Give such a leg an

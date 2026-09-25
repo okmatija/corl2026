@@ -4,8 +4,8 @@ window.TRIP = {
   meta: {
     title: "CoRL 2026 · USA trip",
     travellers: ["Matija", "Maryna"],
-    updated: "2026-09-25T12:54Z",
-    status: "Two versions: Vegas or New York together, then Maryna flies home to London and Matija flies on to Austin for CoRL. The plan shows the Vegas version (with a Zion + Grand Canyon loop) - see the open questions.",
+    updated: "2026-09-25T13:01Z",
+    status: "Two plans to choose from (menu at the top left): Vegas or New York together, then Maryna flies home to London and Matija flies on to Austin for CoRL.",
   },
 
   // Matija's work commitments. Maryna is free the whole time.
@@ -16,7 +16,7 @@ window.TRIP = {
   ],
 
   openQuestions: [
-    "Vegas or New York? The plan shows Vegas: Halloween weekend, desert, the Zion + Grand Canyon loop and active stuff. The New York version: a week in NYC together, then Maryna flies home from New York and Matija flies New York → Austin on Sat 7 Nov.",
+    "Vegas or New York? Switch between the two plans with the menu at the top left. Vegas: Halloween weekend, desert, the Zion + Grand Canyon loop and active stuff. New York: a city week with the Halloween parade, the Marathon and Maja & Amit.",
     "Start: fly London → Las Vegas together on Sat 31 Oct (Halloween night in Vegas!) - or a day or two earlier/later?",
     "Maryna flies Las Vegas → London on the evening of Sat 7 Nov (lands Sun 8 Nov) - or stay one more night and land on Mon 9 Nov around lunchtime?",
     "The Zion + Grand Canyon loop (3 nights, hire car) - keep it, or stay in Vegas and do day trips (Valley of Fire, Red Rock, Death Valley, Black Canyon kayak) instead?",
@@ -118,7 +118,9 @@ window.TRIP = {
     { id: "nyc-highline", place: "nyc", title: "High Line + Little Island + Chelsea Market", cat: "city", cost: "free", dur: "half day", why: "Great first-day walk." },
     { id: "nyc-broadway", place: "nyc", title: "Broadway show", cat: "night", cost: "$$$", dur: "evening", why: "TKTS booth for same-day discounts." },
     { id: "nyc-brooklyn", place: "nyc", title: "Walk Brooklyn Bridge to DUMBO", cat: "city", cost: "free", dur: "2h", why: "Go early morning or at dusk." },
-    { id: "nyc-rock", place: "nyc", title: "Thanksgiving Eve rock show (Beacon Theatre / Irving Plaza / Brooklyn Steel)", cat: "music", cost: "$$", dur: "evening", why: "The night before Thanksgiving is a big going-out night; classic and alt-rock acts often play these venues. Check listings nearer the time." },
+    { id: "nyc-rock", place: "nyc", title: "Rock show (Beacon Theatre / Irving Plaza / Brooklyn Steel)", cat: "music", cost: "$$", dur: "evening", why: "New York's classic rock rooms - check who is playing that week." },
+    { id: "nyc-halloween", place: "nyc", title: "Village Halloween Parade (Sat 31 Oct)", cat: "night", cost: "free", dur: "evening", why: "The huge costume parade up Sixth Avenue from 19:00 - anyone in costume can march in it." },
+    { id: "nyc-marathon", place: "nyc", title: "Cheer the New York City Marathon (Sun 1 Nov)", cat: "city", cost: "free", dur: "2-3h", why: "Usually the first Sunday of November (check the date): 50,000 runners through all five boroughs - First Avenue or Fifth Avenue by Central Park are great spots." },
     { id: "nyc-veselka", place: "nyc", title: "Veselka + the East Village's Ukrainian corner", cat: "food", cost: "$", dur: "2h", why: "Legendary Ukrainian diner (varenyky, borscht) at the heart of Little Ukraine; the Ukrainian Museum is a few blocks away." },
     { id: "nyc-jazz", place: "nyc", title: "Village Vanguard jazz", cat: "music", cost: "$$", dur: "evening", why: "Legendary basement club." },
     { id: "nyc-summit", place: "nyc", title: "Top of the Rock or SUMMIT at sunset", cat: "city", cost: "$$", dur: "2h", why: "Top of the Rock has the Empire State in view." },
@@ -155,120 +157,206 @@ window.TRIP = {
   details: {
     "stop:austin-matija": { href: "#austin" },
     "stay:austin-matija": { href: "#austin" },
-    "travel:lasvegas": {
-      title: "✈️ Flights London → Las Vegas (Sat 31 Oct)",
-      intro: "Both British Airways (13 a week) and Virgin Atlantic (daily) fly nonstop Heathrow → Las Vegas, about 10h40. Leaving London late morning, you land in Vegas the same afternoon.",
-      sections: [
-        { title: "Nonstop options", items: [
-          { name: "British Airways (LHR → LAS)", text: "Economy, World Traveller Plus (premium economy) or Club Suite business.", link: "https://www.britishairways.com/" },
-          { name: "Virgin Atlantic (LHR → LAS)", text: "Economy, Premium or Upper Class - daily.", link: "https://flights.virginatlantic.com/en/flights-from-london-to-las-vegas" },
-          { name: "Rough price", text: "Comparison sites show London → Las Vegas from roughly $570 return in economy (estimate) - one-ways into Vegas and home from Austin are often priced as an open-jaw ticket.", link: "https://www.kayak.com/flight-routes/London-Heathrow-LHR/Las-Vegas-McCarran-LAS" },
-        ] },
-        { title: "Business for Matija, Maryna too?", items: [
-          { name: "Options", text: "Both economy; both premium economy; or Matija in business and Maryna in economy or premium on the same flight. If Matija's ticket is booked through work, check which cabin the travel policy allows." },
-        ] },
-        { title: "Before you fly", items: [
-          { name: "Entry to the US", text: "UK passports need an approved ESTA; other passports may need a US visa, which can take months - check each passport early.", link: "https://esta.cbp.dhs.gov/" },
-        ] },
-      ],
-    },
-    "travel:zion": {
-      title: "🚗 Car hire for the Zion + Grand Canyon loop",
-      intro: "Pick up at Las Vegas airport (Harry Reid, LAS) on Mon 2 Nov and drop it back there on Thu 5 Nov - a round trip, so no one-way fee. You don't need a car on the Strip.",
-      sections: [
-        { title: "The route", items: [
-          { name: "Scenic route map", text: "Vegas → Springdale (Zion) → Zion-Mount Carmel Highway → Horseshoe Bend → Desert View → Grand Canyon Village.", link: "https://www.google.com/maps/dir/?api=1&origin=Las+Vegas,+NV&destination=Grand+Canyon+Village,+AZ&waypoints=Springdale,+UT%7CHorseshoe+Bend,+Page,+AZ%7CDesert+View+Watchtower,+AZ&travelmode=driving" },
-          { name: "Back to Vegas", text: "About 4.5-5 h direct; swap I-40 for old Route 66 between Seligman and Kingman." },
-        ] },
-        { title: "Rough cost (estimate)", items: [
-          { name: "3 days, mid-size, round trip", text: "Roughly $150-250 all-in - check live prices and book a free-cancellation rate. Park entry: an America the Beautiful annual pass covers Zion and the Grand Canyon." },
-        ] },
-        { title: "For UK drivers", items: [
-          { name: "What to bring", text: "Full UK photocard licence (usually held 12+ months), passport, and a credit card in the main driver's name. An International Driving Permit is normally not needed. A UK car-hire excess policy is usually cheaper than the desk's waiver." },
-        ] },
-      ],
-    },    "travel:home": {
-      title: "✈️ Flights home to London",
-      intro: "Maryna flies home from Vegas; Matija flies on to Austin for CoRL and the team summit, then home.",
-      sections: [
-        { title: "Maryna - Sat 7 Nov", items: [
-          { name: "British Airways or Virgin Atlantic, Las Vegas → London (nonstop)", text: "Evening departure, about 10 h overnight, landing at Heathrow on Sun 8 Nov.", link: "https://www.britishairways.com/" },
-        ] },
-        { title: "Matija - Sat 14 Nov", items: [
-          { name: "British Airways Austin → London (nonstop)", text: "After checking out of the work hotel; lands Sun 15 Nov. Or add a weekend in New York first - see the open questions.", link: "https://www.britishairways.com/content/flights/usa/texas/austin" },
-        ] },
-      ],
-    },
-    "travel:austin-matija": {
-      title: "✈️ Matija: Las Vegas → Austin (Sat 7 Nov)",
-      intro: "Southwest flies nonstop several times a day, about 3 h. Austin is 2 hours ahead of Vegas.",
-      sections: [
-        { title: "Book", items: [
-          { name: "Southwest - Las Vegas → Austin", text: "Two free checked bags. Fares often around $100-150 one-way (estimate).", link: "https://www.southwest.com/" },
-        ] },
-      ],
-    },  },
-
-  // THE plan. A leg = where you sleep between arrive (check-in) and leave (check-out).
-  // days[k] = items for the k-th day of the leg; idea ids are expanded to their titles on the page.
-  plan: {
-    home: "London",
-    // Hotels come from each leg's stay; "events" are estimated from the cost level ($/$$/$$$) of ideas in the plan.
-    // A cost has a date, or from/to (spread evenly per day, to exclusive). Estimates only - update as things get booked.
-    costs: [
-      { type: "flights", label: "London → Las Vegas, 2 people, economy (estimate)", amount: 900, date: "2026-10-31" },
-      { type: "car", label: "Car hire for the Zion + Grand Canyon loop, 3 days (estimate)", amount: 200, from: "2026-11-02", to: "2026-11-05" },
-      { type: "flights", label: "Maryna: Las Vegas → London, economy (estimate)", amount: 500, date: "2026-11-07" },
-      { type: "flights", label: "Matija: Las Vegas → Austin (estimate)", amount: 130, date: "2026-11-07" },
-      { type: "flights", label: "Matija: Austin → London, economy (estimate)", amount: 500, date: "2026-11-14" },
-    ],
-    name: "Vegas, Zion & the Grand Canyon, then CoRL",
-    summary: "Together: a week around Las Vegas - Halloween on the Strip, Valley of Fire, a hire-car loop through Zion, Horseshoe Bend and the Grand Canyon, then back to Vegas. On Sat 7 Nov Maryna flies home to London and Matija flies to Austin for CoRL and the team summit, home Sat 14 Nov. (The New York version is an open question.)",
-    budgetPerNight: 200,
-    legs: [
-      { place: "lasvegas", arrive: "2026-10-31", leave: "2026-11-02",
-        travel: "✈️ Fly London → Las Vegas together (nonstop, ~10h40)",
-        stay: { name: "Mid-Strip hotel", price: 170, notes: "Estimate. Halloween Saturday is pricier, and most Strip hotels add a ~$45/night resort fee." },
-        days: [
-          ["Land mid-afternoon, check in", "Halloween night on the Strip: lv-fountains (jet lag - keep it short)"],
-          ["Clocks go back tonight", "Early start: lv-valleyfire", "Evening: lv-sphere-oz or lv-sphere-metallica (check dates)"],
-        ] },
-      { place: "zion", arrive: "2026-11-02", leave: "2026-11-03",
-        travel: "🚗 Pick up a hire car at the airport · 2.5 h drive to Springdale",
-        stay: { name: "Hotel in Springdale, at the park gate", price: 200, notes: "Estimate." },
-        days: [["Afternoon: zion-narrows", "Evening in Springdale"]] },
-      { place: "grandcanyon", arrive: "2026-11-03", leave: "2026-11-05",
-        travel: "🚗 gc-scenic, day 2: zion-drive with zion-overlook, page-horseshoe, then gc-desertview (~5 h driving)",
-        stay: { name: "Lodge inside the park (El Tovar / Bright Angel / Maswik)", price: 250, notes: "Estimate - in-park lodges book up early." },
-        days: [
-          ["Arrive along the rim", "Sunset: gc-sunrise"],
-          ["Sunrise at Mather Point", "gc-kaibab", "Afternoon: rim walk and rest"],
-        ] },
-      { id: "lasvegas-2", place: "lasvegas", arrive: "2026-11-05", leave: "2026-11-07",
-        travel: "🚗 Drive back to Vegas via gc-route66 (~5 h), drop the car",
-        stay: { name: "Hotel in Vegas", price: 150, notes: "Estimate - weeknights are cheaper." },
-        days: [
-          ["Drive back", "Evening: lv-fremont"],
-          ["lv-blackcanyon (full day)", "Evening: lv-cirque"],
-          ["Morning: lv-redrock or lv-atv", "Evening: Maryna flies Vegas → London; Matija flies to Austin"],
-        ] },
-      { id: "austin-matija", who: "Matija", place: "austin", arrive: "2026-11-07", leave: "2026-11-14", daysFrom: "2026-11-08",
-        travel: "✈️ Matija: Las Vegas → Austin (Southwest nonstop, ~3 h)",
-        stay: { name: "Downtown hotel near the venues", covered: true, notes: "Paid by work from Sat 7 Nov. Matija checks out Sat 14 Nov." },
-        days: [
-          ["Breakfast: atx-tacos", "atx-barton", "atx-soco", "Dinner: atx-bbq"],
-          ["Evening: atx-music"],
-          ["Evening: atx-stubbs"],
-          ["Free evening"],
-          ["Evening: team social"],
-          ["Evening: celebrate the end of CoRL"],
-          ["Check out", "Fly Austin → London"],
-        ] },
-    ],
-    // Flights home: one per person when they leave on different days (`who`); a single entry without `who` if together.
-    ends: [
-      { who: "Maryna", date: "2026-11-07", text: "✈️ Maryna: Las Vegas → London, overnight (lands Sun 8 Nov)" },
-      { who: "Matija", date: "2026-11-14", text: "✈️ Matija: Austin → London" },
-    ],
   },
+
+  // THE PLANS: alternative versions of the trip, picked with the plan menu at the top of the site. Each has its own legs,
+  // costs, flights home and optional details (merged over TRIP.details). Comments carry the plan id they were made on.
+  plans: [
+    {
+      id: "vegas",
+      label: "🎰 Vegas plan",
+      home: "London",
+      // Hotels come from each leg's stay; "events" are estimated from the cost level ($/$$/$$$) of ideas in the plan.
+      // A cost has a date, or from/to (spread evenly per day, to exclusive). Estimates only - update as things get booked.
+      costs: [
+        { type: "flights", label: "London → Las Vegas, 2 people, economy (estimate)", amount: 900, date: "2026-10-31" },
+        { type: "car", label: "Car hire for the Zion + Grand Canyon loop, 3 days (estimate)", amount: 200, from: "2026-11-02", to: "2026-11-05" },
+        { type: "flights", label: "Maryna: Las Vegas → London, economy (estimate)", amount: 500, date: "2026-11-07" },
+        { type: "flights", label: "Matija: Las Vegas → Austin (estimate)", amount: 130, date: "2026-11-07" },
+        { type: "flights", label: "Matija: Austin → London, economy (estimate)", amount: 500, date: "2026-11-14" },
+      ],
+      name: "Vegas, Zion & the Grand Canyon, then CoRL",
+      summary: "Together: a week around Las Vegas - Halloween on the Strip, Valley of Fire, a hire-car loop through Zion, Horseshoe Bend and the Grand Canyon, then back to Vegas. On Sat 7 Nov Maryna flies home to London and Matija flies to Austin for CoRL and the team summit, home Sat 14 Nov.",
+      budgetPerNight: 200,
+      legs: [
+        { place: "lasvegas", arrive: "2026-10-31", leave: "2026-11-02",
+          travel: "✈️ Fly London → Las Vegas together (nonstop, ~10h40)",
+          stay: { name: "Mid-Strip hotel", price: 170, notes: "Estimate. Halloween Saturday is pricier, and most Strip hotels add a ~$45/night resort fee." },
+          days: [
+            ["Land mid-afternoon, check in", "Halloween night on the Strip: lv-fountains (jet lag - keep it short)"],
+            ["Clocks go back tonight", "Early start: lv-valleyfire", "Evening: lv-sphere-oz or lv-sphere-metallica (check dates)"],
+          ] },
+        { place: "zion", arrive: "2026-11-02", leave: "2026-11-03",
+          travel: "🚗 Pick up a hire car at the airport · 2.5 h drive to Springdale",
+          stay: { name: "Hotel in Springdale, at the park gate", price: 200, notes: "Estimate." },
+          days: [["Afternoon: zion-narrows", "Evening in Springdale"]] },
+        { place: "grandcanyon", arrive: "2026-11-03", leave: "2026-11-05",
+          travel: "🚗 gc-scenic, day 2: zion-drive with zion-overlook, page-horseshoe, then gc-desertview (~5 h driving)",
+          stay: { name: "Lodge inside the park (El Tovar / Bright Angel / Maswik)", price: 250, notes: "Estimate - in-park lodges book up early." },
+          days: [
+            ["Arrive along the rim", "Sunset: gc-sunrise"],
+            ["Sunrise at Mather Point", "gc-kaibab", "Afternoon: rim walk and rest"],
+          ] },
+        { id: "lasvegas-2", place: "lasvegas", arrive: "2026-11-05", leave: "2026-11-07",
+          travel: "🚗 Drive back to Vegas via gc-route66 (~5 h), drop the car",
+          stay: { name: "Hotel in Vegas", price: 150, notes: "Estimate - weeknights are cheaper." },
+          days: [
+            ["Drive back", "Evening: lv-fremont"],
+            ["lv-blackcanyon (full day)", "Evening: lv-cirque"],
+            ["Morning: lv-redrock or lv-atv", "Evening: Maryna flies Vegas → London; Matija flies to Austin"],
+          ] },
+        { id: "austin-matija", who: "Matija", place: "austin", arrive: "2026-11-07", leave: "2026-11-14", daysFrom: "2026-11-08",
+          travel: "✈️ Matija: Las Vegas → Austin (Southwest nonstop, ~3 h)",
+          stay: { name: "Downtown hotel near the venues", covered: true, notes: "Paid by work from Sat 7 Nov. Matija checks out Sat 14 Nov." },
+          days: [
+            ["Breakfast: atx-tacos", "atx-barton", "atx-soco", "Dinner: atx-bbq"],
+            ["Evening: atx-music"],
+            ["Evening: atx-stubbs"],
+            ["Free evening"],
+            ["Evening: team social"],
+            ["Evening: celebrate the end of CoRL"],
+            ["Check out", "Fly Austin → London"],
+          ] },
+      ],
+      // Flights home: one per person when they leave on different days (`who`); a single entry without `who` if together.
+      ends: [
+        { who: "Maryna", date: "2026-11-07", text: "✈️ Maryna: Las Vegas → London, overnight (lands Sun 8 Nov)" },
+        { who: "Matija", date: "2026-11-14", text: "✈️ Matija: Austin → London" },
+      ],
+      // 📜 Details pages for this plan (same keys as TRIP.details, which are shared by all plans)
+      details: {
+        "travel:lasvegas": {
+          title: "✈️ Flights London → Las Vegas (Sat 31 Oct)",
+          intro: "Both British Airways (13 a week) and Virgin Atlantic (daily) fly nonstop Heathrow → Las Vegas, about 10h40. Leaving London late morning, you land in Vegas the same afternoon.",
+          sections: [
+            { title: "Nonstop options", items: [
+              { name: "British Airways (LHR → LAS)", text: "Economy, World Traveller Plus (premium economy) or Club Suite business.", link: "https://www.britishairways.com/" },
+              { name: "Virgin Atlantic (LHR → LAS)", text: "Economy, Premium or Upper Class - daily.", link: "https://flights.virginatlantic.com/en/flights-from-london-to-las-vegas" },
+              { name: "Rough price", text: "Comparison sites show London → Las Vegas from roughly $570 return in economy (estimate) - one-ways into Vegas and home from Austin are often priced as an open-jaw ticket.", link: "https://www.kayak.com/flight-routes/London-Heathrow-LHR/Las-Vegas-McCarran-LAS" },
+            ] },
+            { title: "Business for Matija, Maryna too?", items: [
+              { name: "Options", text: "Both economy; both premium economy; or Matija in business and Maryna in economy or premium on the same flight. If Matija's ticket is booked through work, check which cabin the travel policy allows." },
+            ] },
+            { title: "Before you fly", items: [
+              { name: "Entry to the US", text: "UK passports need an approved ESTA; other passports may need a US visa, which can take months - check each passport early.", link: "https://esta.cbp.dhs.gov/" },
+            ] },
+          ],
+        },
+        "travel:zion": {
+          title: "🚗 Car hire for the Zion + Grand Canyon loop",
+          intro: "Pick up at Las Vegas airport (Harry Reid, LAS) on Mon 2 Nov and drop it back there on Thu 5 Nov - a round trip, so no one-way fee. You don't need a car on the Strip.",
+          sections: [
+            { title: "The route", items: [
+              { name: "Scenic route map", text: "Vegas → Springdale (Zion) → Zion-Mount Carmel Highway → Horseshoe Bend → Desert View → Grand Canyon Village.", link: "https://www.google.com/maps/dir/?api=1&origin=Las+Vegas,+NV&destination=Grand+Canyon+Village,+AZ&waypoints=Springdale,+UT%7CHorseshoe+Bend,+Page,+AZ%7CDesert+View+Watchtower,+AZ&travelmode=driving" },
+              { name: "Back to Vegas", text: "About 4.5-5 h direct; swap I-40 for old Route 66 between Seligman and Kingman." },
+            ] },
+            { title: "Rough cost (estimate)", items: [
+              { name: "3 days, mid-size, round trip", text: "Roughly $150-250 all-in - check live prices and book a free-cancellation rate. Park entry: an America the Beautiful annual pass covers Zion and the Grand Canyon." },
+            ] },
+            { title: "For UK drivers", items: [
+              { name: "What to bring", text: "Full UK photocard licence (usually held 12+ months), passport, and a credit card in the main driver's name. An International Driving Permit is normally not needed. A UK car-hire excess policy is usually cheaper than the desk's waiver." },
+            ] },
+          ],
+        },
+        "travel:home": {
+          title: "✈️ Flights home to London",
+          intro: "Maryna flies home from Vegas; Matija flies on to Austin for CoRL and the team summit, then home.",
+          sections: [
+            { title: "Maryna - Sat 7 Nov", items: [
+              { name: "British Airways or Virgin Atlantic, Las Vegas → London (nonstop)", text: "Evening departure, about 10 h overnight, landing at Heathrow on Sun 8 Nov.", link: "https://www.britishairways.com/" },
+            ] },
+            { title: "Matija - Sat 14 Nov", items: [
+              { name: "British Airways Austin → London (nonstop)", text: "After checking out of the work hotel; lands Sun 15 Nov. Or add a weekend in New York first - see the open questions.", link: "https://www.britishairways.com/content/flights/usa/texas/austin" },
+            ] },
+          ],
+        },
+        "travel:austin-matija": {
+          title: "✈️ Matija: Las Vegas → Austin (Sat 7 Nov)",
+          intro: "Southwest flies nonstop several times a day, about 3 h. Austin is 2 hours ahead of Vegas.",
+          sections: [
+            { title: "Book", items: [
+              { name: "Southwest - Las Vegas → Austin", text: "Two free checked bags. Fares often around $100-150 one-way (estimate).", link: "https://www.southwest.com/" },
+            ] },
+          ],
+        },
+      },
+    },
+    {
+      id: "nyc",
+      label: "🗽 NYC plan",
+      home: "London",
+      costs: [
+        { type: "flights", label: "London → New York, 2 people, economy (estimate)", amount: 1000, date: "2026-10-31" },
+        { type: "flights", label: "Maryna: New York → London, economy (estimate)", amount: 450, date: "2026-11-07" },
+        { type: "flights", label: "Matija: New York → Austin (estimate)", amount: 200, date: "2026-11-07" },
+        { type: "flights", label: "Matija: Austin → London, economy (estimate)", amount: 500, date: "2026-11-14" },
+      ],
+      name: "A week in New York, then CoRL",
+      summary: "Together: a week in New York - Halloween parade, the Marathon, museums, Broadway, jazz, and time with Maja & Amit in Brooklyn. On Sat 7 Nov Maryna flies home to London and Matija flies to Austin for CoRL and the team summit, home Sat 14 Nov.",
+      budgetPerNight: 200,
+      legs: [
+        { place: "nyc", arrive: "2026-10-31", leave: "2026-11-07",
+          travel: "✈️ Fly London → New York together (nonstop, ~8 h)",
+          stay: { name: "Hotel in Manhattan or Brooklyn", price: 280, notes: "Estimate - New York hotels are pricey; Brooklyn (near Maja & Amit in Cobble Hill) is a bit cheaper than Manhattan." },
+          days: [
+            ["Land mid-afternoon, check in", "Evening: nyc-halloween"],
+            ["Clocks go back tonight", "Morning: nyc-marathon", "nyc-central", "Evening: nyc-jazz"],
+            ["nyc-highline", "Evening: nyc-broadway"],
+            ["nyc-met", "Sunset: nyc-summit"],
+            ["nyc-911memorial", "Dusk: nyc-brooklyn", "Dinner in Brooklyn with Maja & Amit?"],
+            ["nyc-veselka", "Evening: nyc-rock"],
+            ["Free day"],
+            ["Last morning together", "Evening: Maryna flies New York → London; Matija flies to Austin"],
+          ] },
+        { id: "austin-matija", who: "Matija", place: "austin", arrive: "2026-11-07", leave: "2026-11-14", daysFrom: "2026-11-08",
+          travel: "✈️ Matija: New York → Austin (nonstop, ~4 h)",
+          stay: { name: "Downtown hotel near the venues", covered: true, notes: "Paid by work from Sat 7 Nov. Matija checks out Sat 14 Nov." },
+          days: [
+            ["Breakfast: atx-tacos", "atx-barton", "atx-soco", "Dinner: atx-bbq"],
+            ["Evening: atx-music"],
+            ["Evening: atx-stubbs"],
+            ["Free evening"],
+            ["Evening: team social"],
+            ["Evening: celebrate the end of CoRL"],
+            ["Check out", "Fly Austin → London"],
+          ] },
+      ],
+      ends: [
+        { who: "Maryna", date: "2026-11-07", text: "✈️ Maryna: New York → London, overnight (lands Sun 8 Nov)" },
+        { who: "Matija", date: "2026-11-14", text: "✈️ Matija: Austin → London" },
+      ],
+      details: {
+        "travel:nyc": {
+          title: "✈️ Flights London → New York (Sat 31 Oct)",
+          intro: "The busiest route across the Atlantic: British Airways, Virgin Atlantic, American, Delta, United and JetBlue all fly nonstop Heathrow → JFK or Newark many times a day, about 8 h.",
+          sections: [
+            { title: "Nonstop options", items: [
+              { name: "British Airways / American (LHR → JFK)", text: "Many flights a day; morning departures land early afternoon.", link: "https://www.britishairways.com/" },
+              { name: "Virgin Atlantic / Delta (LHR → JFK)", text: "Several a day.", link: "https://www.virginatlantic.com/" },
+            ] },
+            { title: "Before you fly", items: [
+              { name: "Entry to the US", text: "UK passports need an approved ESTA; other passports may need a US visa, which can take months - check each passport early.", link: "https://esta.cbp.dhs.gov/" },
+            ] },
+          ],
+        },
+        "travel:home": {
+          title: "✈️ Flights home to London",
+          intro: "Maryna flies home from New York; Matija flies on to Austin for CoRL and the team summit, then home.",
+          sections: [
+            { title: "Maryna - Sat 7 Nov", items: [
+              { name: "New York → London (nonstop, overnight)", text: "Evening departures from JFK or Newark land at Heathrow on Sun 8 Nov morning (~7 h)." },
+            ] },
+            { title: "Matija - Sat 14 Nov", items: [
+              { name: "British Airways Austin → London (nonstop)", text: "After checking out of the work hotel; lands Sun 15 Nov.", link: "https://www.britishairways.com/content/flights/usa/texas/austin" },
+            ] },
+          ],
+        },
+        "travel:austin-matija": {
+          title: "✈️ Matija: New York → Austin (Sat 7 Nov)",
+          intro: "Nonstops from JFK, LaGuardia and Newark (American, Delta, United, JetBlue), about 4 h. Austin is an hour behind New York.",
+          sections: [],
+        },
+      },
+    },
+  ],
 };

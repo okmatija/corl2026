@@ -336,3 +336,10 @@ input[type=search] { width: 100%; border: 1px solid var(--line); background: var
 :root { --matija-strong: #3b82f6; --maryna-strong: #ec4899; }
 .card.only-matija { border: 2px solid var(--matija-strong); }
 .card.only-maryna { border: 2px solid var(--maryna-strong); }
+
+/* Plan picker in the header */
+.plan-sel { font: inherit; font-size: 16px; font-weight: 600; color: var(--ink); background: var(--card); border: 1px solid var(--line); border-radius: 999px; padding: 3px 10px; max-width: 60vw; }
+
+/* No grey/blue flash when tapping buttons on Android */
+* { -webkit-tap-highlight-color: transparent; }
+button:focus:not(:focus-visible), select:focus:not(:focus-visible), a:focus:not(:focus-visible) { outline: none; }

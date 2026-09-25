@@ -8,12 +8,24 @@
 
   const ideas = Object.fromEntries(T.ideas.map(a => [a.id, a]));
   const idPattern = new RegExp("\\b(" + T.ideas.map(a => a.id).sort((a, b) => b.length - a.length).join("|") + ")\\b", "g");
+  // Several alternative plans (TRIP.plans); T.plan is the one picked in the menu at the top left.
+  const PLANS = T.plans || [T.plan];
+  const pickPlan = id => { T.plan = PLANS.find(p => p.id === id) || PLANS[0]; };
+  try { pickPlan(JSON.parse(localStorage.getItem("corl2.plan"))); } catch { pickPlan(); }
   const inPlan = new Set();
-  const plannedOn = {};   // idea id -> the first plan day it's on (YYYY-MM-DD)
-  T.plan.legs.forEach(l => (l.days || []).forEach((items, k) => items.forEach(s => (s.match(idPattern) || []).forEach(id => {
-    inPlan.add(id);
-    if (!plannedOn[id]) { const dt = new Date((l.daysFrom || l.arrive) + "T12:00:00"); dt.setDate(dt.getDate() + k); plannedOn[id] = dt.toISOString().slice(0, 10); }
-  }))));
+  let plannedOn = {};   // idea id -> the first plan day it's on (YYYY-MM-DD), in the current plan
+  function computePlanned() {
+    inPlan.clear(); plannedOn = {};
+    // ideas on a journey card (a leg's travel text) count as planned on its arrive day
+    T.plan.legs.forEach(l => (l.travel?.match(idPattern) || []).forEach(id => { inPlan.add(id); plannedOn[id] = plannedOn[id] || l.arrive; }));
+    T.plan.legs.forEach(l => (l.days || []).forEach((items, k) => items.forEach(s => (s.match(idPattern) || []).forEach(id => {
+      inPlan.add(id);
+      if (!plannedOn[id]) { const dt = new Date((l.daysFrom || l.arrive) + "T12:00:00"); dt.setDate(dt.getDate() + k); plannedOn[id] = dt.toISOString().slice(0, 10); }
+    }))));
+  }
+  computePlanned();
+  // 📜 Details: the current plan's own pages first, then the shared ones
+  const detailsFor = key => T.plan.details?.[key] || T.details?.[key];
 
   // ---------- storage (never throws) ----------
   const store = {
@@ -79,11 +91,11 @@
     const key = await passcode();
     if (!key) return false;
     try {
-      const res = await fetch(API + "/feedback", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ...payload, key }) });
+      const res = await fetch(API + "/feedback", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ...payload, plan: T.plan.id, key }) });
       const body = await res.json().catch(() => ({}));
       if (res.status === 403) { store.set("key", ""); toast("Passcode rejected - try again"); return false; }
       if (!res.ok) throw new Error(body.error || res.status);
-      feedback.unshift({ ...payload, number: body.number, url: body.url, state: "open", date: new Date().toISOString(), resolution: null });
+      feedback.unshift({ ...payload, plan: T.plan.id, number: body.number, url: body.url, state: "open", date: new Date().toISOString(), resolution: null });
       store.set("feedback", feedback);
       toast("Sent ✓");
       rerender();
@@ -277,7 +289,7 @@
   const webBtn = url => `<a class="details-btn" href="${esc(url)}" target="_blank" rel="noopener">🔗 Website</a>`;
 
   function detailsBtn(key, label = "📜 Details") {
-    const dd = T.details?.[key];
+    const dd = detailsFor(key);
     return `<a class="details-btn" href="${esc(dd?.href || "#details/" + key)}" aria-label="Details">${label}</a>`;
   }
 
@@ -317,7 +329,7 @@
   }
 
   function viewDetails(key) {
-    const written = T.details?.[key], dd = written || autoDetails(key);
+    const written = detailsFor(key), dd = written || autoDetails(key);
     if (!dd) return `<p><a href="#plan">← Plan</a></p><p class="muted">No details here yet.</p>`;
     return `
       <p style="margin:4px 0"><a href="#plan">← Plan</a></p>
@@ -399,7 +411,7 @@
     const state = STATES[place(a.place).name.split(", ").pop()] || "";
     const text = norm([a.title, a.why, place(a.place).name, state, place(a.place).type, a.cat, CATS[a.cat], a.cost, a.dur, inPlan.has(a.id) ? "in plan" : ""].join(" "));
     return `<article class="idea" data-text="${esc(text)}">
-      <div class="item-head"><h3>${esc(a.title)}</h3><span class="link-btns">${a.link ? webBtn(a.link) : ""}${T.details?.["idea:" + a.id] ? detailsBtn("idea:" + a.id) : ""}${mapBtn(`https://www.google.com/maps/search/?api=1&query=${q}`)}<button class="icon-btn" data-deleteidea="${a.id}" aria-label="Delete this idea" title="Delete this idea">🗑️</button></span></div>
+      <div class="item-head"><h3>${esc(a.title)}</h3><span class="link-btns">${a.link ? webBtn(a.link) : ""}${detailsFor("idea:" + a.id) ? detailsBtn("idea:" + a.id) : ""}${mapBtn(`https://www.google.com/maps/search/?api=1&query=${q}`)}<button class="icon-btn" data-deleteidea="${a.id}" aria-label="Delete this idea" title="Delete this idea">🗑️</button></span></div>
       <div class="item-meta">📍 ${esc(short(a.place))} · ${CATS[a.cat] || ""} · ${esc(a.dur)} · ${esc(a.cost)}</div>
       <p>${esc(a.why)}</p>
       ${reactions}
@@ -487,9 +499,12 @@
   }
 
   // Title after the person's name on a comment card: "<icon> RE: <what it's about>" ("<icon>" alone for general comments)
+  // "Vegas plan:" etc. for comments on a plan (older comments have no plan id: they were all on the one plan)
+  const planName = id => { const p = PLANS.find(x => x.id === id); return p && PLANS.length > 1 ? p.label.replace(/^\S+\s/, "") + ":" : "Plan"; };
+
   function fbLabel(f) {
     if (f.kind === "idea") return `${vIcon(f.vote)} <b>${f.vote === "add" ? "Add to plan: " : f.vote === "remove" ? "Take out of plan: " : f.vote === "delete" ? "Delete idea: " : "RE: "}${esc(f.ideaTitle || ideas[f.idea]?.title || f.idea)}</b>`;
-    if (f.kind === "plan") return `${vIcon(f.vote)} <b>RE: Plan ${esc(f.targetTitle || f.target)}</b>`;
+    if (f.kind === "plan") return `${vIcon(f.vote)} <b>RE: ${esc(planName(f.plan))} ${esc(f.targetTitle || f.target)}</b>`;
     if (f.kind === "reply") return `${vIcon(f.vote)} <b>RE: ${esc(f.replyToWho || "")}'s #${f.replyTo}</b>`;
     if (isAnswer(f)) return `💬 <b>RE: ${esc(f.text.slice(3).split("\nA: ")[0])}</b>`;
     return vIcon(f.vote);
@@ -661,6 +676,17 @@
     badge.className = "who-btn " + tint(who);
   }
   const rerender = () => render(true);
+
+  // Plan picker (top left): switching plans re-renders every tab for that plan
+  const planSel = document.getElementById("planSel");
+  if (planSel) {
+    planSel.innerHTML = PLANS.map(p => `<option value="${esc(p.id)}"${p === T.plan ? " selected" : ""}>${esc(p.label || p.name)}</option>`).join("");
+    planSel.hidden = PLANS.length < 2;
+    planSel.addEventListener("change", () => {
+      pickPlan(planSel.value); computePlanned(); store.set("plan", T.plan.id);
+      toast(T.plan.label); rerender();
+    });
+  }
 
   let toastTimer;
   function toast(msg, ms = 2500) {

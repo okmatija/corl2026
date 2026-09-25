@@ -68,6 +68,8 @@ async function createFeedback(req, env) {
   // Which Claude model should action this (each model has its own hourly routine). Sonnet by default.
   const model = ["haiku", "sonnet", "opus"].includes(b.model) ? b.model : "sonnet";
   const data = { who, kind, model, date: new Date().toISOString() };
+  const plan = clean(b.plan, 40);
+  if (/^[\w-]+$/.test(plan)) data.plan = plan;   // which alternative plan the comment was made on (TRIP.plans[].id)
   let title;
   if (kind === "idea") {
     data.idea = clean(b.idea, 80);
@@ -99,7 +101,7 @@ async function createFeedback(req, env) {
 
   const body = [
     kind === "idea" ? `**${who}** ${{ up: "likes 👍", down: "dislikes 👎", add: "wants to add 🗓️ to the plan:", remove: "wants to take 🗓️ out of the plan:", delete: "wants to delete 🗑️", note: "comments 💬 on" }[data.vote]} idea \`${data.idea}\` - ${data.ideaTitle}`
-      : kind === "plan" ? `**${who}** ${{ up: "likes 👍", down: "dislikes 👎", note: "comments 💬 on" }[data.vote]} this part of the plan: \`${data.target}\` - ${data.targetTitle}`
+      : kind === "plan" ? `**${who}** ${{ up: "likes 👍", down: "dislikes 👎", note: "comments 💬 on" }[data.vote]} this part of the ${data.plan ? `**${data.plan}** ` : ""}plan: \`${data.target}\` - ${data.targetTitle}`
       : kind === "reply" ? `**${who}** ${data.vote ? ICON[data.vote] + " " : ""}commented on #${data.replyTo}${data.replyToWho ? ` (${data.replyToWho}'s feedback)` : ""}:`
       : `**${who}**${data.vote ? " " + ICON[data.vote] : ""} wrote:`,
     "",
@@ -128,7 +130,7 @@ async function listFeedback(env) {
       out.push({
         number: i.number, url: i.html_url, state: i.state,
         who: d.who, kind: d.kind, idea: d.idea, ideaTitle: d.ideaTitle, target: d.target, targetTitle: d.targetTitle, vote: d.vote,
-        replyTo: d.replyTo, replyToWho: d.replyToWho, model: d.model,
+        replyTo: d.replyTo, replyToWho: d.replyToWho, model: d.model, plan: d.plan,
         text: quoted, date: d.date || i.created_at, closedAt: i.closed_at,
         resolution: res ? res[1].trim() : null,
       });
