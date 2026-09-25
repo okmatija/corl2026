@@ -403,7 +403,7 @@
       <div class="banner info">💡 These cards are suggestions from Claude. Want more, or something specific? Ask on the <a href="#comments">💬 Comments</a> tab (e.g. "ideas for a rainy day in Austin") and the hourly agent will add new cards. 📌 Add to plan puts an idea into the plan; 💬 Comment for anything else.</div>
       ${statusBanner()}
       <div class="chips fb-filters" role="group" aria-label="Filter ideas">
-        ${[...PEOPLE, AGENT].map(p => toggleChip("ideawho", p, p === AGENT ? "Agent 💬" : `💬 ${esc(p)}`, (ui.ideaWho || []).includes(p))).join("")}
+        ${[...PEOPLE, AGENT].map(p => toggleChip("ideawho", p, p === AGENT ? "Agent" : esc(p), (ui.ideaWho || []).includes(p))).join("")}
         <span class="chip-sep"></span>
         ${toggleChip("ideaplan", "plan", "📌 In plan", !!ui.ideaPlan)}
       </div>
