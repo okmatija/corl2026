@@ -1,6 +1,7 @@
 // Log of plan updates made from feedback (newest first). Appended by Claude on every run that changes something.
 // { start, end: ISO UTC, by: "scheduled" | "manual", model, issues: [numbers], summary, tokens?: number, costUsd?: number }
 window.RUNS = [
+  { start: "2026-09-25T10:55:00Z", end: "2026-09-25T12:54:56Z", by: "manual", model: "claude-opus-5-5", issues: [], summary: "Vegas loop, then Austin; ideas trimmed" },
   { start: "2026-09-25T10:40:00Z", end: "2026-09-25T12:46:49Z", by: "manual", model: "claude-opus-5-5", issues: [], summary: "17 new Vegas and nature ideas" },
   { start: "2026-09-25T10:20:56Z", end: "2026-09-25T10:21:32Z", by: "scheduled", model: "claude-sonnet-5", issues: [64, 65, 66, 67], summary: "Deleted 2 ideas; kept jazz club" },
   { start: "2026-09-25T10:05:00Z", end: "2026-09-25T09:54:54Z", by: "manual", model: "claude-opus-5-5", issues: [], summary: "Solid outlines, no \"only\" labels" },

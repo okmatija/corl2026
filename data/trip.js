@@ -4,8 +4,8 @@ window.TRIP = {
   meta: {
     title: "CoRL 2026 · USA trip",
     travellers: ["Matija", "Maryna"],
-    updated: "2026-09-25T12:46Z",
-    status: "Maryna has to be back in London on Mon 9 Nov, so the holiday is now BEFORE CoRL: Vegas, then San Antonio and the Hill Country, then Austin. Matija stays on alone for CoRL and the team summit.",
+    updated: "2026-09-25T12:54Z",
+    status: "Two versions: Vegas or New York together, then Maryna flies home to London and Matija flies on to Austin for CoRL. The plan shows the Vegas version (with a Zion + Grand Canyon loop) - see the open questions.",
   },
 
   // Matija's work commitments. Maryna is free the whole time.
@@ -16,44 +16,27 @@ window.TRIP = {
   ],
 
   openQuestions: [
+    "Vegas or New York? The plan shows Vegas: Halloween weekend, desert, the Zion + Grand Canyon loop and active stuff. The New York version: a week in NYC together, then Maryna flies home from New York and Matija flies New York → Austin on Sat 7 Nov.",
     "Start: fly London → Las Vegas together on Sat 31 Oct (Halloween night in Vegas!) - or a day or two earlier/later?",
-    "Maryna flies Austin → London on the evening of Sun 8 Nov and lands at Heathrow on the morning of Mon 9 Nov - is that early enough, or should she fly on Sat 7 Nov?",
+    "Maryna flies Las Vegas → London on the evening of Sat 7 Nov (lands Sun 8 Nov) - or stay one more night and land on Mon 9 Nov around lunchtime?",
+    "The Zion + Grand Canyon loop (3 nights, hire car) - keep it, or stay in Vegas and do day trips (Valley of Fire, Red Rock, Death Valley, Black Canyon kayak) instead?",
+    "Sphere in Vegas: Metallica (residency runs through the autumn - check dates) or The Wizard of Oz (daily)?",
     "Matija after the team summit (ends Fri 13 Nov, 16:00): fly home Sat 14 Nov, or a weekend in New York first (e.g. see Maja & Amit)?",
-    "Big Bend and Marfa are dropped - too far out west for 5 days. Swap them in instead of Fredericksburg, or keep it relaxed?",
-    "Sphere in Vegas: Metallica (residency runs through the autumn - check if they play 31 Oct - 2 Nov) or The Wizard of Oz (daily)?",
-    "Thanksgiving in New York with Maja & Amit no longer fits - skip it this time?",
     "Flights: Matija might fly business (BA Club Suite). Should Maryna fly business too, both take premium economy together, or split cabins? See the 📜 Details on the London → Las Vegas card.",
     "Any must-sees already on your list?",
-    "Matija voted to add 'Maryna: Hill Country wine day tour' (mar-wine, guided tour from Austin, no car needed) to the plan - but the together days in Austin (Fri 6 - Sun 8 Nov) are already full, and we already do Hill Country wine tasting self-drive on Wed 4 Nov (fbg-wine) while based in Fredericksburg. Should the guided Austin tour replace that self-drive wine day, or should something else in the Austin days move to make room for both?",
   ],
 
   // type: city | nature | beach  (shown as 🏙️ / 🌲 / 🏖️ on the Ideas page). Names always end with ", <state>".
   places: {
     austin:         { name: "Austin, TX",                  type: "city",   lat: 30.2672, lng: -97.7431,  blurb: "Live music, tacos & BBQ, swimming holes. Conference base." },
     fredericksburg: { name: "Fredericksburg, TX",          type: "nature", lat: 30.2752, lng: -98.8720,  blurb: "German-Texan Hill Country town, wineries, Enchanted Rock." },
-    marfa:          { name: "Marfa, TX",                   type: "nature", lat: 30.3094, lng: -104.0206, blurb: "Tiny high-desert art town, Donald Judd, dark skies." },
-    bigbend:        { name: "Big Bend National Park, TX",  type: "nature", lat: 29.3214, lng: -103.6160, blurb: "Remote desert and canyon national park on the Rio Grande (stay in Terlingua)." },
     sanantonio:     { name: "San Antonio, TX",             type: "city",   lat: 29.4241, lng: -98.4936,  blurb: "River Walk, Spanish missions (UNESCO), Pearl district." },
-    houston:        { name: "Houston, TX",                 type: "city",   lat: 29.7604, lng: -95.3698,  blurb: "Space Center, Menil & Rothko Chapel, great food." },
-    starbase:       { name: "Starbase & South Padre, TX",  type: "beach",  lat: 25.9971, lng: -97.1560,  blurb: "SpaceX Starship site at Boca Chica, next to the Gulf beaches of South Padre Island." },
-    neworleans:     { name: "New Orleans, LA",             type: "city",   lat: 29.9511, lng: -90.0715,  blurb: "Jazz, Creole food, architecture, swamps." },
-    miami:          { name: "Miami, FL",                   type: "beach",  lat: 25.7617, lng: -80.1918,  blurb: "~27°C in November. South Beach, Art Deco, Cuban food; the Everglades next door." },
-    keywest:        { name: "Key West, FL",                type: "beach",  lat: 24.5551, lng: -81.7800,  blurb: "End of the Overseas Highway: reefs, sunsets, pastel Old Town. ~27°C in November." },
-    spacecoast:     { name: "Space Coast, FL",             type: "beach",  lat: 28.3922, lng: -80.6077,  blurb: "Cape Canaveral / Kennedy Space Center - the busiest launch site in the US." },
-    sandiego:       { name: "San Diego, CA",               type: "beach",  lat: 32.7157, lng: -117.1611, blurb: "~21°C and sunny in November; beaches, La Jolla, Balboa Park." },
-    sanjuan:        { name: "San Juan, PR",                type: "beach",  lat: 18.4655, lng: -66.1057,  blurb: "Puerto Rico: ~29°C, Old San Juan, rainforest, bioluminescent bays. US territory (ESTA works)." },
-    fortworth:      { name: "Fort Worth, TX",              type: "city",   lat: 32.7555, lng: -97.3308,  blurb: "Cowboy town: Stockyards cattle drives, rodeo, and Texas Motor Speedway just north." },
-    orlando:        { name: "Orlando, FL",                 type: "city",   lat: 28.5384, lng: -81.3789,  blurb: "Theme park capital: Walt Disney World, Universal & Epic Universe; an hour from the Space Coast." },
-    anaheim:        { name: "Anaheim (Disneyland), CA",    type: "city",   lat: 33.8121, lng: -117.9190, blurb: "The original Disneyland; pairs with a San Diego warm leg (1.5 h away)." },
     lasvegas:       { name: "Las Vegas, NV",               type: "city",   lat: 36.1699, lng: -115.1398, blurb: "Gateway airport for the parks; Red Rock & Valley of Fire nearby." },
     zion:           { name: "Zion National Park, UT",      type: "nature", lat: 37.1889, lng: -112.9986, blurb: "Towering red canyon walls, iconic hikes (stay in Springdale)." },
     page:           { name: "Page, AZ",                    type: "nature", lat: 36.9147, lng: -111.4558, blurb: "Horseshoe Bend, Antelope Canyon, Lake Powell." },
     grandcanyon:    { name: "Grand Canyon South Rim, AZ",  type: "nature", lat: 36.0544, lng: -112.1401, blurb: "Needs no introduction. Sunrise & sunset on the rim." },
-    sedona:         { name: "Sedona, AZ",                  type: "nature", lat: 34.8697, lng: -111.7610, blurb: "Red rock hiking, late fall colours in Oak Creek Canyon." },
-    phoenix:        { name: "Phoenix, AZ",                 type: "city",   lat: 33.4484, lng: -112.0740, blurb: "Departure airport (PHX)." },
     nyc:            { name: "New York City, NY",           type: "city",   lat: 40.7128, lng: -74.0060,  blurb: "Museums, Broadway, late-fall Central Park - and Thanksgiving on Thu 26 Nov." },
   },
-
 
   // Idea cards. Region groups them on the Ideas page; ideas outside the plan's regions are alternatives to vote on.
   // cat: nature | food | culture | music | city | night | adventure. Optional link: official website / booking page.
@@ -76,49 +59,11 @@ window.TRIP = {
     { id: "atx-bats", place: "austin", title: "Congress Avenue bat bridge", cat: "nature", cost: "free", dur: "30m", why: "Season is Mar-Oct; by November most bats have left - low odds." },
     { id: "atx-zilker", place: "austin", title: "Zilker Botanical Garden", cat: "nature", cost: "$", dur: "1-2h", why: "Japanese Garden, cactus and rose gardens right by Zilker Park - a quieter option than Barton Springs." },
 
-    // Maryna's options while Matija works (Mon 9 - Fri 13 Nov)
-    { id: "mar-nola", place: "neworleans", title: "Maryna: side trip to New Orleans (Mon-Thu)", cat: "adventure", cost: "$$$", dur: "3-4 days", why: "~1.5 h direct flight from Austin. Walkable and easy solo; jazz, food, streetcars. Back in Austin Thu night." },
-    { id: "mar-houston", place: "houston", title: "Maryna: 1-2 nights in Houston", cat: "culture", cost: "$$", dur: "1-2 days", why: "~2.5 h by bus. Space Center, Menil Collection, Rothko Chapel, great food." },
-    { id: "mar-sa", place: "sanantonio", title: "Maryna: overnight in San Antonio", cat: "culture", cost: "$$", dur: "1-2 days", why: "~1.5 h by bus. River Walk, Mission trail by bike, Pearl district. (Then skip it at the end of the road trip.)" },
-    { id: "mar-wine", place: "fredericksburg", title: "Maryna: Hill Country wine day tour", cat: "food", cost: "$$", dur: "1 day", why: "Guided tours leave from Austin - no car needed." },
-    { id: "mar-food", place: "austin", title: "Maryna: Austin food tour or cooking class", cat: "food", cost: "$$", dur: "3h", why: "Nice way to meet people solo; lots of options on East 6th / South Congress." },
-
-    // Warm places (November)
-    { id: "mia-southbeach", place: "miami", title: "South Beach & the Art Deco district", cat: "city", cost: "free", dur: "half day", why: "Swim, people-watch on Ocean Drive, pastel 1930s hotels. Sea is still ~26°C." },
-    { id: "mia-wynwood", place: "miami", title: "Wynwood Walls street art", cat: "culture", cost: "$", dur: "2h", why: "Huge outdoor mural park plus galleries, breweries and cafés around it." },
-    { id: "mia-havana", place: "miami", title: "Little Havana (Calle Ocho)", cat: "food", cost: "$", dur: "2-3h", why: "Cuban coffee, sandwiches, domino park, live music at Ball & Chain." },
-    { id: "mia-everglades", place: "miami", title: "Everglades: Shark Valley bike loop or airboat", cat: "nature", cost: "$$", dur: "half day", why: "Alligators, herons and sawgrass; Shark Valley's 15-mile loop by rental bike is the classic. Easy stop on the way to the Keys." },
-    { id: "kw-highway", place: "keywest", title: "Drive the Overseas Highway", cat: "adventure", cost: "free", dur: "4h", why: "113 miles of bridges over turquoise water; stop at Islamorada and Bahia Honda beach." },
-    { id: "kw-sunset", place: "keywest", title: "Sunset at Mallory Square", cat: "night", cost: "free", dur: "1-2h", why: "Nightly street-performer sunset party." },
-    { id: "kw-snorkel", place: "keywest", title: "Reef snorkel trip", cat: "nature", cost: "$$", dur: "half day", why: "The only living coral barrier reef in the continental US." },
-    { id: "kw-oldtown", place: "keywest", title: "Old Town by bike + Hemingway House", cat: "culture", cost: "$", dur: "half day", why: "Flat, pastel streets; the six-toed cats at Hemingway's house." },
-    { id: "kw-tortugas", place: "keywest", title: "Dry Tortugas National Park day trip", cat: "nature", cost: "$$$", dur: "full day", why: "Ferry to a 19th-century fort on a remote island with great snorkelling. Books out - reserve early." },
-    { id: "sd-coast", place: "sandiego", title: "Warm alternative: San Diego (La Jolla, beaches, Balboa Park)", cat: "nature", cost: "$$", dur: "3-4 days", why: "Dry, sunny ~21°C; sea lions at La Jolla Cove, coastal walks, great tacos. Direct flights from Texas." },
-    { id: "pr-island", place: "sanjuan", title: "Warm alternative: Puerto Rico (Old San Juan, El Yunque, bio bay)", cat: "adventure", cost: "$$", dur: "3-4 days", why: "Hottest option (~29°C): colourful old town, rainforest hikes, kayaking a glowing bioluminescent bay." },
-
-    // Alligators
-    { id: "gator-brazos", place: "houston", title: "Alligators at Brazos Bend State Park", cat: "nature", cost: "$", dur: "half day", why: "~1 h from Houston; 250-350 big gators around Elm Lake and 40-Acre Lake, and Sep-Nov is peak viewing. Best on a sunny morning when they bask." },
-    { id: "gator-nola-swamp", place: "neworleans", title: "Honey Island Swamp boat tour", cat: "nature", cost: "$$", dur: "half day", why: "Small-boat tour into a protected cypress swamp (not an airboat park); gators get less active as it cools, so pick a warm day." },
-    { id: "gator-nola-barataria", place: "neworleans", title: "Jean Lafitte Barataria Preserve boardwalk", cat: "nature", cost: "free", dur: "2-3h", why: "Free National Park boardwalk through swamp 30 min from the French Quarter; gators and herons on warm days." },
-    { id: "gator-gatorland", place: "orlando", title: "Gatorland", cat: "adventure", cost: "$$", dur: "half day", why: "Classic Florida gator park with thousands of alligators, breeding marsh boardwalk and a zipline over the pens." },
-    { id: "gator-bigcypress", place: "miami", title: "Gator spotting on Loop Road / Big Cypress", cat: "nature", cost: "free", dur: "half day", why: "Wild alligators line the canals along the Tamiami Trail - pairs with Shark Valley in the Everglades." },
-
     // Theme parks
-    { id: "park-disneyworld", place: "orlando", title: "Walt Disney World (Magic Kingdom / EPCOT)", cat: "adventure", cost: "$$$", dur: "1-2 days", why: "The big one. Mid-November before Thanksgiving is a relatively quiet week; Thanksgiving week itself is very busy." },
-    { id: "park-universal", place: "orlando", title: "Universal Orlando + Epic Universe", cat: "adventure", cost: "$$$", dur: "1-2 days", why: "Harry Potter worlds, big coasters; Epic Universe (opened 2025) is the newest theme park in the US." },
-    { id: "park-kennedy", place: "spacecoast", title: "Kennedy Space Center Visitor Complex", cat: "culture", cost: "$$", dur: "full day", why: "Space Shuttle Atlantis, Saturn V, astronaut encounters - and a launch if the timing works. 1 h from Orlando." },
-    { id: "park-disneyland", place: "anaheim", title: "Disneyland Resort", cat: "adventure", cost: "$$$", dur: "1-2 days", why: "The original park + California Adventure; an easy add-on if we pick San Diego as the warm leg." },
     { id: "park-fiesta", place: "sanantonio", title: "Six Flags Fiesta Texas", cat: "adventure", cost: "$$", dur: "full day", why: "Big coasters in an old quarry. Heads-up: 'Holiday in the Park' only starts 21 Nov, so it's probably closed on our San Antonio day - check the calendar." },
 
     // NASCAR / motorsport
-    { id: "nascar-tms", place: "fortworth", title: "Drive (or ride in) a NASCAR stock car at Texas Motor Speedway", cat: "adventure", cost: "$$$", dur: "half day", why: "Ride-alongs at up to ~160 mph or drive yourself in timed sessions on the 1.5-mile oval. Fort Worth is ~3 h from Austin - would need a dedicated day." },
-    { id: "nascar-stockyards", place: "fortworth", title: "Fort Worth Stockyards cattle drive + rodeo", cat: "culture", cost: "$", dur: "half day", why: "Longhorns walk the street twice a day; Friday/Saturday night rodeo. Pairs with the Speedway for a 'very Texas' day." },
     { id: "nascar-cota", place: "austin", title: "Circuit of the Americas (COTA)", cat: "adventure", cost: "$$", dur: "half day", why: "Austin's F1/NASCAR circuit, 20 min from downtown. Easiest evening drop-in is Speed City (karting + mini-golf + zipline, ~$25-40pp estimate karting); COTA Driving Experience (~$1,837pp estimate) and Xtreme Xperience supercar rides (from ~$99pp estimate) are pricier day-session bookings, not evening drop-ins. No F1 or NASCAR Cup race clashes in Nov 2026 (F1 is in October); Schnell Fest club racing runs Nov 11-12 (daytime, may mean extra track traffic those days). Sources disagree on exact evening hours - confirm nearer the time." },
-    { id: "nascar-final", place: "miami", title: "NASCAR Cup championship race, Homestead-Miami (Sun 8 Nov)", cat: "adventure", cost: "$$-$$$", dur: "full day", why: "The 2026 season finale, 45 min from Miami. Tickets already on sale, ~$100-250pp estimate for a good grandstand seat (premium/hospitality $250-500+pp). Race should end ~7:30-8:30pm; American has a 9:45pm Miami -> Austin nonstop (backup 10:13pm) landing well before Monday's conference start - tight but doable if we head straight to the airport after the trophy presentation. Clashes with our Austin weekend - only works if we fly into Miami first (see open questions)." },
-
-    // Space / rockets
-    { id: "space-starbase", place: "starbase", title: "SpaceX Starbase (Starship) + South Padre beaches", cat: "adventure", cost: "$", dur: "1-2 days", why: "~5 h drive from San Antonio. You can see the Starship towers from the road/beach any time; a launch is a bonus - dates are only set weeks ahead and slip often." },
-    { id: "space-cape", place: "spacecoast", title: "Watch a Falcon 9 launch on the Space Coast", cat: "adventure", cost: "$$", dur: "2-3 days", why: "The most reliable way to see a SpaceX launch: several per week in 2026. Fly to Orlando; watch from Playalinda Beach or Jetty Park, plus Kennedy Space Center visitor complex." },
 
     // Fredericksburg / Hill Country
     { id: "fbg-rock", place: "fredericksburg", title: "Hike Enchanted Rock", cat: "nature", cost: "$", dur: "3h", why: "Huge pink granite dome; book a state-park day pass in advance." },
@@ -127,39 +72,11 @@ window.TRIP = {
     { id: "fbg-luck", place: "fredericksburg", title: "Luckenbach dance hall", cat: "music", cost: "free", dur: "2h", why: "Tiny town, big country music legend." },
     { id: "fbg-pacific", place: "fredericksburg", title: "National Museum of the Pacific War", cat: "culture", cost: "$", dur: "3h", why: "Excellent if you like history." },
 
-    // Marfa
-    { id: "mfa-chinati", place: "marfa", title: "Chinati Foundation (Donald Judd)", cat: "culture", cost: "$$", dur: "half day", why: "Guided tours - reserve ahead; open limited days." },
-    { id: "mfa-prada", place: "marfa", title: "Prada Marfa photo stop", cat: "culture", cost: "free", dur: "1h", why: "Art installation in the middle of nowhere near Valentine." },
-    { id: "mfa-lights", place: "marfa", title: "Marfa Lights viewing area", cat: "night", cost: "free", dur: "1h", why: "Mystery lights + incredible stars." },
-    { id: "mfa-mcdonald", place: "marfa", title: "McDonald Observatory star party", cat: "night", cost: "$", dur: "evening", why: "Some of the darkest skies in the US; tickets sell out." },
-
-    // Big Bend
-    { id: "bb-santaelena", place: "bigbend", title: "Santa Elena Canyon trail", cat: "nature", cost: "free", dur: "2h", why: "1500 ft canyon walls over the Rio Grande." },
-    { id: "bb-lostmine", place: "bigbend", title: "Lost Mine Trail (Chisos)", cat: "nature", cost: "free", dur: "3-4h", why: "Best view-per-effort hike in the park." },
-    { id: "bb-window", place: "bigbend", title: "Window View at sunset", cat: "nature", cost: "free", dur: "1h", why: "Easy walk, classic sunset frame." },
-    { id: "bb-hotsprings", place: "bigbend", title: "Soak in the Hot Springs", cat: "nature", cost: "free", dur: "2h", why: "Historic hot spring right on the Rio Grande." },
-    { id: "bb-river", place: "bigbend", title: "River Road (FM 170) scenic drive", cat: "adventure", cost: "free", dur: "half day", why: "One of the most beautiful drives in Texas." },
-    { id: "bb-stars", place: "bigbend", title: "Stargazing in Big Bend (Dark Sky Park)", cat: "nature", cost: "free", dur: "1-2h", why: "One of the darkest places in the lower 48 - just lie back anywhere away from lights." },
-    { id: "bb-terlingua", place: "bigbend", title: "Terlingua ghost town + Starlight Theatre", cat: "food", cost: "$$", dur: "evening", why: "Porch sunset, then dinner and live music." },
-
     // San Antonio
     { id: "sa-missions", place: "sanantonio", title: "Mission trail by bike", cat: "culture", cost: "$", dur: "half day", why: "UNESCO missions, bike-share along the river." },
     { id: "sa-riverwalk", place: "sanantonio", title: "River Walk evening", cat: "city", cost: "free", dur: "2h", why: "Touristy but charming at night." },
     { id: "sa-pearl", place: "sanantonio", title: "Pearl district + Hotel Emma bar", cat: "food", cost: "$$", dur: "3h", why: "Best food hall and farmers market (weekends)." },
     { id: "sa-alamo", place: "sanantonio", title: "The Alamo", cat: "culture", cost: "free", dur: "1h", why: "Quick visit - smaller than people expect." },
-
-    // Houston
-    { id: "hou-space", place: "houston", title: "Space Center Houston + tram tour", cat: "culture", cost: "$$", dur: "half day", why: "Mission Control and Saturn V - great for a robotics person." },
-    { id: "hou-menil", place: "houston", title: "Menil Collection + Rothko Chapel", cat: "culture", cost: "free", dur: "3h", why: "World-class, free and calm." },
-
-    // New Orleans
-    { id: "nola-frenchmen", place: "neworleans", title: "Jazz on Frenchmen Street", cat: "music", cost: "$", dur: "evening", why: "Better than Bourbon St; Spotted Cat, Snug Harbor." },
-    { id: "nola-preservation", place: "neworleans", title: "Preservation Hall concert", cat: "music", cost: "$$", dur: "1h", why: "Book tickets ahead." },
-    { id: "nola-streetcar", place: "neworleans", title: "St Charles streetcar + Garden District", cat: "city", cost: "$", dur: "half day", why: "Oak-lined avenue, mansions, Lafayette Cemetery." },
-    { id: "nola-beignets", place: "neworleans", title: "Beignets at Café du Monde", cat: "food", cost: "$", dur: "30m", why: "Go early to skip the queue." },
-    { id: "nola-swamp", place: "neworleans", title: "Swamp / bayou boat tour", cat: "nature", cost: "$$", dur: "half day", why: "Alligators still around in mild November weather." },
-    { id: "nola-ww2", place: "neworleans", title: "National WWII Museum", cat: "culture", cost: "$$", dur: "half day", why: "Consistently rated one of the best museums in the US." },
-    { id: "nola-brunch", place: "neworleans", title: "Jazz brunch (Commander's Palace)", cat: "food", cost: "$$$", dur: "2h", why: "Dress code; reserve ahead." },
 
     // Southwest
     { id: "lv-redrock", place: "lasvegas", title: "Red Rock Canyon scenic loop", cat: "nature", cost: "$", dur: "half day", why: "30 min from the Strip; timed entry reservation." },
@@ -194,10 +111,6 @@ window.TRIP = {
     { id: "gc-kaibab", place: "grandcanyon", title: "South Kaibab Trail to Ooh Aah Point or Cedar Ridge", cat: "nature", cost: "free", dur: "1.5-3h", why: "Ridge-top trail with open views the whole way down. Ooh Aah Point ~1.5 h round trip, Cedar Ridge ~2-3 h. Never try river-and-back in a day." },
     { id: "gc-route66", place: "grandcanyon", title: "Old Route 66: Seligman to Kingman", cat: "culture", cost: "free", dur: "2h", why: "Swap the I-40 motorway for the old road on the drive back to Vegas: quirky diners and the Hackberry General Store. ~30 min extra." },
     { id: "gc-rafting", place: "grandcanyon", title: "One-day white-water rafting (Hualapai River Runners)", cat: "adventure", cost: "$$$", dur: "full day", why: "The only one-day Grand Canyon white-water trip. It usually runs spring to October, so early November is probably too late - check the season." },
-    { id: "sed-cathedral", place: "sedona", title: "Cathedral Rock hike", cat: "nature", cost: "$", dur: "2h", why: "Short scramble, famous view." },
-    { id: "sed-westfork", place: "sedona", title: "West Fork of Oak Creek", cat: "nature", cost: "$", dur: "3h", why: "Fall colours can still be around in early-mid November." },
-    { id: "sed-chapel", place: "sedona", title: "Chapel of the Holy Cross + Tlaquepaque", cat: "culture", cost: "free", dur: "2h", why: "Easy afternoon." },
-    { id: "sed-stars", place: "sedona", title: "Stargazing tour", cat: "night", cost: "$$", dur: "2h", why: "Dark-sky community." },
 
     // New York
     { id: "nyc-central", place: "nyc", title: "Central Park in late fall", cat: "nature", cost: "free", dur: "half day", why: "Foliage often peaks early-mid November." },
@@ -240,8 +153,8 @@ window.TRIP = {
   // Either { href } to an existing page, or { title, intro, sections: [{ title, items: [{ name, text, link }] }] }.
   // Prices are estimates. Any stop or travel card with an entry here gets a Details button.
   details: {
-    "stop:austin": { href: "#austin" },
-    "stay:austin": { href: "#austin" },
+    "stop:austin-matija": { href: "#austin" },
+    "stay:austin-matija": { href: "#austin" },
     "travel:lasvegas": {
       title: "✈️ Flights London → Las Vegas (Sat 31 Oct)",
       intro: "Both British Airways (13 a week) and Virgin Atlantic (daily) fly nonstop Heathrow → Las Vegas, about 10h40. Leaving London late morning, you land in Vegas the same afternoon.",
@@ -259,93 +172,91 @@ window.TRIP = {
         ] },
       ],
     },
-    "travel:sanantonio": {
-      title: "✈️ Las Vegas → San Antonio (Tue 3 Nov)",
-      intro: "Southwest flies nonstop about four times a day, ~3 hours. Two free checked bags each on Southwest.",
+    "travel:zion": {
+      title: "🚗 Car hire for the Zion + Grand Canyon loop",
+      intro: "Pick up at Las Vegas airport (Harry Reid, LAS) on Mon 2 Nov and drop it back there on Thu 5 Nov - a round trip, so no one-way fee. You don't need a car on the Strip.",
       sections: [
-        { title: "Book", items: [
-          { name: "Southwest - Las Vegas → San Antonio", text: "Fares often from ~$85 one-way (estimate).", link: "https://www.southwest.com/en/flights/flights-from-las-vegas-to-san-antonio" },
-        ] },
-      ],
-    },
-    "travel:home": {
-      title: "✈️ Flights home to London",
-      intro: "Maryna flies home first; Matija stays for CoRL and the team summit.",
-      sections: [
-        { title: "Maryna - Sun 8 Nov", items: [
-          { name: "British Airways Austin → London (nonstop)", text: "The only nonstop: an evening departure landing at Heathrow on the morning of Mon 9 Nov (~9.5 h).", link: "https://www.britishairways.com/content/flights/usa/texas/austin" },
-        ] },
-        { title: "Matija - Sat 14 Nov", items: [
-          { name: "British Airways Austin → London (nonstop)", text: "After checking out of the work hotel; lands Sun 15 Nov. Or add a weekend in New York first - see the open questions." },
-        ] },
-      ],
-    },
-    "travel:fredericksburg": {
-      title: "🚗 Car hire for the Hill Country",
-      intro: "A short one-way rental: pick up at San Antonio airport on Wed 4 Nov, drop off in Austin on Fri 6 Nov. Avis and Budget are the same company and have desks at both.",
-      sections: [
-        { title: "Pick up - Wed 4 Nov", items: [
-          { name: "Avis / Budget - San Antonio airport (SAT)", text: "Grab the car after the morning at the Missions, then drive 1.5 h to Fredericksburg.", link: "https://www.avis.com/en/locations/nam/us/tx/san-antonio/sat" },
-        ] },
-        { title: "Drop off - Fri 6 Nov", items: [
-          { name: "Avis / Budget - Austin airport (AUS) or downtown", text: "Downtown Budget (1104 N I-35) is handiest for the hotel but closes at 18:00 on weekdays; the airport is open late. In Austin you won't need a car.", link: "https://www.budget.com/en/locations/us/tx/austin/aus" },
+        { title: "The route", items: [
+          { name: "Scenic route map", text: "Vegas → Springdale (Zion) → Zion-Mount Carmel Highway → Horseshoe Bend → Desert View → Grand Canyon Village.", link: "https://www.google.com/maps/dir/?api=1&origin=Las+Vegas,+NV&destination=Grand+Canyon+Village,+AZ&waypoints=Springdale,+UT%7CHorseshoe+Bend,+Page,+AZ%7CDesert+View+Watchtower,+AZ&travelmode=driving" },
+          { name: "Back to Vegas", text: "About 4.5-5 h direct; swap I-40 for old Route 66 between Seligman and Kingman." },
         ] },
         { title: "Rough cost (estimate)", items: [
-          { name: "2 days, mid-size, one-way", text: "Roughly $150-250 all-in including the one-way fee - check live prices and book a free-cancellation rate." },
+          { name: "3 days, mid-size, round trip", text: "Roughly $150-250 all-in - check live prices and book a free-cancellation rate. Park entry: an America the Beautiful annual pass covers Zion and the Grand Canyon." },
         ] },
         { title: "For UK drivers", items: [
           { name: "What to bring", text: "Full UK photocard licence (usually held 12+ months), passport, and a credit card in the main driver's name. An International Driving Permit is normally not needed. A UK car-hire excess policy is usually cheaper than the desk's waiver." },
         ] },
       ],
+    },    "travel:home": {
+      title: "✈️ Flights home to London",
+      intro: "Maryna flies home from Vegas; Matija flies on to Austin for CoRL and the team summit, then home.",
+      sections: [
+        { title: "Maryna - Sat 7 Nov", items: [
+          { name: "British Airways or Virgin Atlantic, Las Vegas → London (nonstop)", text: "Evening departure, about 10 h overnight, landing at Heathrow on Sun 8 Nov.", link: "https://www.britishairways.com/" },
+        ] },
+        { title: "Matija - Sat 14 Nov", items: [
+          { name: "British Airways Austin → London (nonstop)", text: "After checking out of the work hotel; lands Sun 15 Nov. Or add a weekend in New York first - see the open questions.", link: "https://www.britishairways.com/content/flights/usa/texas/austin" },
+        ] },
+      ],
     },
-  },
+    "travel:austin-matija": {
+      title: "✈️ Matija: Las Vegas → Austin (Sat 7 Nov)",
+      intro: "Southwest flies nonstop several times a day, about 3 h. Austin is 2 hours ahead of Vegas.",
+      sections: [
+        { title: "Book", items: [
+          { name: "Southwest - Las Vegas → Austin", text: "Two free checked bags. Fares often around $100-150 one-way (estimate).", link: "https://www.southwest.com/" },
+        ] },
+      ],
+    },  },
 
   // THE plan. A leg = where you sleep between arrive (check-in) and leave (check-out).
   // days[k] = items for the k-th day of the leg; idea ids are expanded to their titles on the page.
   plan: {
     home: "London",
-    // Estimated trip costs (USD, for both of us) that aren't hotels or activities - drive the Trip Summary pie charts.
     // Hotels come from each leg's stay; "events" are estimated from the cost level ($/$$/$$$) of ideas in the plan.
     // A cost has a date, or from/to (spread evenly per day, to exclusive). Estimates only - update as things get booked.
     costs: [
       { type: "flights", label: "London → Las Vegas, 2 people, economy (estimate)", amount: 900, date: "2026-10-31" },
-      { type: "flights", label: "Las Vegas → San Antonio, 2 people (estimate)", amount: 250, date: "2026-11-03" },
-      { type: "flights", label: "Maryna: Austin → London, economy (estimate)", amount: 500, date: "2026-11-08" },
+      { type: "car", label: "Car hire for the Zion + Grand Canyon loop, 3 days (estimate)", amount: 200, from: "2026-11-02", to: "2026-11-05" },
+      { type: "flights", label: "Maryna: Las Vegas → London, economy (estimate)", amount: 500, date: "2026-11-07" },
+      { type: "flights", label: "Matija: Las Vegas → Austin (estimate)", amount: 130, date: "2026-11-07" },
       { type: "flights", label: "Matija: Austin → London, economy (estimate)", amount: 500, date: "2026-11-14" },
-      { type: "car", label: "Hill Country rental, San Antonio → Austin one-way, 2 days (estimate)", amount: 200, from: "2026-11-04", to: "2026-11-06" },
-      { type: "hotels", label: "Austin, Fri 6 Nov - the night before the work hotel (estimate)", amount: 250, date: "2026-11-06" },
     ],
-    name: "Vegas & the Texas Hill Country, then CoRL",
-    summary: "Together: fly to Las Vegas for Halloween weekend, then San Antonio, the Hill Country and a weekend in Austin. Maryna flies home on Sun 8 Nov; Matija stays on for CoRL and the team summit, flying home Sat 14 Nov.",
+    name: "Vegas, Zion & the Grand Canyon, then CoRL",
+    summary: "Together: a week around Las Vegas - Halloween on the Strip, Valley of Fire, a hire-car loop through Zion, Horseshoe Bend and the Grand Canyon, then back to Vegas. On Sat 7 Nov Maryna flies home to London and Matija flies to Austin for CoRL and the team summit, home Sat 14 Nov. (The New York version is an open question.)",
     budgetPerNight: 200,
     legs: [
-      { place: "lasvegas", arrive: "2026-10-31", leave: "2026-11-03",
+      { place: "lasvegas", arrive: "2026-10-31", leave: "2026-11-02",
         travel: "✈️ Fly London → Las Vegas together (nonstop, ~10h40)",
-        stay: { name: "Mid-Strip hotel", price: 170, notes: "Estimate. Weeknights are cheap, Halloween Saturday is pricier, and most Strip hotels add a ~$45/night resort fee." },
+        stay: { name: "Mid-Strip hotel", price: 170, notes: "Estimate. Halloween Saturday is pricier, and most Strip hotels add a ~$45/night resort fee." },
         days: [
-          ["Land mid-afternoon, check in", "Halloween night on the Strip: lv-fountains"],
-          ["lv-valleyfire (1 h drive, early start)", "Evening: lv-sphere-oz or lv-sphere-metallica (check dates)"],
-          ["lv-redrock", "lv-hoover or a pool afternoon", "Evening: lv-fremont"],
+          ["Land mid-afternoon, check in", "Halloween night on the Strip: lv-fountains (jet lag - keep it short)"],
+          ["Clocks go back tonight", "Early start: lv-valleyfire", "Evening: lv-sphere-oz or lv-sphere-metallica (check dates)"],
         ] },
-      { place: "sanantonio", arrive: "2026-11-03", leave: "2026-11-04",
-        travel: "✈️ Fly Las Vegas → San Antonio (Southwest nonstop, ~3 h)",
-        stay: { name: "Airbnb in King William district", price: 140, notes: "Walkable to the River Walk." },
-        days: [["Afternoon flight", "sa-riverwalk", "Dinner at sa-pearl"]] },
-      { place: "fredericksburg", arrive: "2026-11-04", leave: "2026-11-06",
-        travel: "🚗 Morning: sa-missions, then pick up a rental car · 1.5 h drive",
-        stay: { name: "Guesthaus / cottage near Main St", price: 180, notes: "" },
-        days: [["sa-alamo on the way out", "fbg-wine"], ["Together: fbg-rock (early start)", "fbg-luck"]] },
-      { place: "austin", arrive: "2026-11-06", leave: "2026-11-08",
-        travel: "🚗 1.5 h drive via fbg-pedernales, drop the car in Austin",
-        stay: { name: "Downtown hotel near the venues", covered: true, notes: "Fri 6 Nov is our own booking (~$250, in the costs). From Sat 7 Nov Matija's work pays for the hotel near the venues - check Maryna can share it for the weekend." },
+      { place: "zion", arrive: "2026-11-02", leave: "2026-11-03",
+        travel: "🚗 Pick up a hire car at the airport · 2.5 h drive to Springdale",
+        stay: { name: "Hotel in Springdale, at the park gate", price: 200, notes: "Estimate." },
+        days: [["Afternoon: zion-narrows", "Evening in Springdale"]] },
+      { place: "grandcanyon", arrive: "2026-11-03", leave: "2026-11-05",
+        travel: "🚗 gc-scenic, day 2: zion-drive with zion-overlook, page-horseshoe, then gc-desertview (~5 h driving)",
+        stay: { name: "Lodge inside the park (El Tovar / Bright Angel / Maswik)", price: 250, notes: "Estimate - in-park lodges book up early." },
         days: [
-          ["Drop the car", "atx-soco", "Dinner: atx-bbq (Terry Black's is walk-in)"],
-          ["Breakfast: atx-tacos", "Together, nature day: atx-barton", "atx-wildflower", "Sunset: atx-bonnell"],
-          ["Last morning together: atx-kayak", "atx-lbj (check Sunday hours)", "Evening: Maryna flies Austin → London (lands Mon 9 Nov)"],
+          ["Arrive along the rim", "Sunset: gc-sunrise"],
+          ["Sunrise at Mather Point", "gc-kaibab", "Afternoon: rim walk and rest"],
         ] },
-      { id: "austin-matija", who: "Matija", place: "austin", arrive: "2026-11-08", leave: "2026-11-14", daysFrom: "2026-11-09",
-        stay: { name: "Downtown hotel near the venues", covered: true, notes: "Paid by work. Matija checks out Sat 14 Nov." },
+      { id: "lasvegas-2", place: "lasvegas", arrive: "2026-11-05", leave: "2026-11-07",
+        travel: "🚗 Drive back to Vegas via gc-route66 (~5 h), drop the car",
+        stay: { name: "Hotel in Vegas", price: 150, notes: "Estimate - weeknights are cheaper." },
         days: [
+          ["Drive back", "Evening: lv-fremont"],
+          ["lv-blackcanyon (full day)", "Evening: lv-cirque"],
+          ["Morning: lv-redrock or lv-atv", "Evening: Maryna flies Vegas → London; Matija flies to Austin"],
+        ] },
+      { id: "austin-matija", who: "Matija", place: "austin", arrive: "2026-11-07", leave: "2026-11-14", daysFrom: "2026-11-08",
+        travel: "✈️ Matija: Las Vegas → Austin (Southwest nonstop, ~3 h)",
+        stay: { name: "Downtown hotel near the venues", covered: true, notes: "Paid by work from Sat 7 Nov. Matija checks out Sat 14 Nov." },
+        days: [
+          ["Breakfast: atx-tacos", "atx-barton", "atx-soco", "Dinner: atx-bbq"],
           ["Evening: atx-music"],
           ["Evening: atx-stubbs"],
           ["Free evening"],
@@ -356,7 +267,7 @@ window.TRIP = {
     ],
     // Flights home: one per person when they leave on different days (`who`); a single entry without `who` if together.
     ends: [
-      { who: "Maryna", date: "2026-11-08", text: "✈️ Maryna: Austin → London, evening (lands Mon 9 Nov)" },
+      { who: "Maryna", date: "2026-11-07", text: "✈️ Maryna: Las Vegas → London, overnight (lands Sun 8 Nov)" },
       { who: "Matija", date: "2026-11-14", text: "✈️ Matija: Austin → London" },
     ],
   },
