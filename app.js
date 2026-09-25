@@ -128,8 +128,11 @@
           <div class="card">
             <div class="item-head"><h3>${esc(p.name)}</h3><span class="tag date-tag">${fmt(l.arrive)} – ${fmt(l.leave)}</span></div>
             <div class="item-meta">${n} night${n > 1 ? "s" : ""} · ${esc(p.blurb || "")}</div>
-            ${s ? `<div class="stay"><div class="item-head"><span>🛏️ ${esc(s.name)}</span>${s.covered ? '<span class="tag ok">paid by work</span>' : `<span class="tag ${s.price <= P.budgetPerNight ? "ok" : "over"}">~${money(s.price)}/nt</span>`}</div>${s.notes ? `<div class="item-meta">${esc(s.notes)}</div>` : ""}
-              <div class="stay-links">${detailsBtn("stay:" + l.place)}${mapBtn(gmaps(s.name + ", " + p.name))}</div></div>` : ""}
+            ${s ? `<div class="stay"><div class="stay-row">
+              <div><div>🛏️ ${esc(s.name)}</div>${s.notes ? `<div class="item-meta">${esc(s.notes)}</div>` : ""}</div>
+              <div class="day-side">${s.covered ? '<span class="tag ok">paid by work</span>' : `<span class="tag ${s.price <= P.budgetPerNight ? "ok" : "over"}">~${money(s.price)}/nt</span>`}
+                <div class="mini">${mapBtn(gmaps(s.name + ", " + p.name), "📍")}${detailsBtn("stay:" + l.place, "📜")}${commentBtn("stay:" + l.place, `Stay: ${s.name}`, true)}</div></div>
+            </div></div>` : ""}
             <div class="days">${days}</div>
             <div class="vote">${detailsBtn("stop:" + l.place)}${commentBtn("stop:" + l.place, `Stop: ${p.name}`)}</div>
           </div>
@@ -262,9 +265,9 @@
   const mapBtn = (url, label = "📍 Map") => `<a class="details-btn" href="${esc(url)}" target="_blank" rel="noopener">${label}</a>`;
   const webBtn = url => `<a class="details-btn" href="${esc(url)}" target="_blank" rel="noopener">🔗 Website</a>`;
 
-  function detailsBtn(key) {
+  function detailsBtn(key, label = "📜 Details") {
     const dd = T.details?.[key];
-    return `<a class="details-btn" href="${esc(dd?.href || "#details/" + key)}">📜 Details</a>`;
+    return `<a class="details-btn" href="${esc(dd?.href || "#details/" + key)}" aria-label="Details">${label}</a>`;
   }
 
   // Automatic details page for a stop / journey / stay that has no written TRIP.details entry yet

@@ -80,7 +80,7 @@ async function createFeedback(req, env) {
     data.target = clean(b.target, 80);        // "stop:<place>", "day:<YYYY-MM-DD>", "travel:<place>|home" or "trip:summary"
     data.targetTitle = clean(b.targetTitle, 120);
     data.vote = ["down", "note"].includes(b.vote) ? b.vote : "up";   // note = 💬 comment, no sentiment
-    if (!/^(stop|day|travel|trip):[\w-]+$/.test(data.target)) fail(400, "bad plan target");
+    if (!/^(stop|day|travel|trip|stay):[\w-]+$/.test(data.target)) fail(400, "bad plan target");
     if (data.vote === "note" && !text) fail(400, "empty comment");
     title = `[${who}] ${ICON[data.vote]} Plan: ${data.targetTitle || data.target}`;
   } else if (kind === "reply") {
