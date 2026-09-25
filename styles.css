@@ -330,6 +330,4 @@ input[type=search] { width: 100%; border: 1px solid var(--line); background: var
 
 /* Idea cards: 🗑️ delete (top-right), faded while the delete is pending; Planned not bold */
 .icon-btn { border: 1px solid var(--line); background: var(--card); border-radius: 10px; padding: 3px 8px; font-size: 13px; cursor: pointer; -webkit-tap-highlight-color: transparent; }
-.idea.deleting { opacity: .55; }
-.deleting-note { font-size: 13px; color: var(--bad); margin: 4px 0; }
 .vote button.planned-btn { font-weight: 400; }

@@ -379,10 +379,8 @@
       + agentNotes.map(f => `<div class="fb ${tint(AGENT)}"><b>Agent 💬</b> ${esc(f.resolution)}</div>`).join("");
     const state = STATES[place(a.place).name.split(", ").pop()] || "";
     const text = norm([a.title, a.why, place(a.place).name, state, place(a.place).type, a.cat, CATS[a.cat], a.cost, a.dur, inPlan.has(a.id) ? "in plan" : ""].join(" "));
-    const deleting = feedback.some(f => f.kind === "idea" && f.idea === a.id && f.vote === "delete" && f.state === "open");
-    return `<article class="idea${deleting ? " deleting" : ""}" data-text="${esc(text)}">
+    return `<article class="idea" data-text="${esc(text)}">
       <div class="item-head"><h3>${esc(a.title)}</h3><span class="link-btns">${a.link ? webBtn(a.link) : ""}${T.details?.["idea:" + a.id] ? detailsBtn("idea:" + a.id) : ""}${mapBtn(`https://www.google.com/maps/search/?api=1&query=${q}`)}<button class="icon-btn" data-deleteidea="${a.id}" aria-label="Delete this idea" title="Delete this idea">🗑️</button></span></div>
-      ${deleting ? `<div class="deleting-note">🗑️ Deleting… - to undo, 💬 Comment on the delete in the Comments tab</div>` : ""}
       <div class="item-meta">📍 ${esc(short(a.place))} · ${CATS[a.cat] || ""} · ${esc(a.dur)} · ${esc(a.cost)}</div>
       <p>${esc(a.why)}</p>
       ${reactions}
@@ -400,10 +398,16 @@
     return `<button data-plancomment="${esc(key)}" data-title="${esc(title)}" aria-label="Comment on ${esc(title)}">💬${mini ? "" : " Comment"}</button>`;
   }
 
+  // Ideas someone has 🗑️ deleted: hidden straight away, until the agent removes the card - unless someone has
+  // commented on that delete (= undo), which brings the card back.
+  const deletedIdeas = () => new Set(feedback.filter(f => f.kind === "idea" && f.vote === "delete" && f.state === "open"
+    && !feedback.some(r => r.kind === "reply" && +r.replyTo === +f.number)).map(f => f.idea));
+
   function viewIdeas() {
+    const deleted = deletedIdeas();
     const regions = [...new Set(T.ideas.map(a => a.place))];
     const inRegion = a => ui.region === "all" || a.place === ui.region || ui.region === "type:" + place(a.place).type;
-    const list = T.ideas.filter(a => inRegion(a) && matches(a));
+    const list = T.ideas.filter(a => !deleted.has(a.id) && inRegion(a) && matches(a));
     const groups = regions.map(r => ({ r, items: list.filter(a => a.place === r) })).filter(g => g.items.length);
     return `
       <h2>Ideas</h2>
@@ -639,10 +643,10 @@
   const rerender = () => render(true);
 
   let toastTimer;
-  function toast(msg) {
+  function toast(msg, ms = 2500) {
     const t = document.getElementById("toast");
     t.textContent = msg; t.classList.add("show");
-    clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove("show"), 2500);
+    clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove("show"), ms);
   }
 
   document.addEventListener("click", async e => {
@@ -682,7 +686,7 @@
       if (needWho()) return;
       const idea = ideas[ds.deleteidea];
       el.disabled = true;
-      if (await submit({ who, kind: "idea", idea: idea.id, ideaTitle: idea.title, vote: "delete", text: "", model: "sonnet" })) toast("🗑️ Deleting - undo from the Comments tab");
+      if (await submit({ who, kind: "idea", idea: idea.id, ideaTitle: idea.title, vote: "delete", text: "", model: "sonnet" })) toast("🗑️ Deleted. To undo, 💬 Comment on the delete in the Comments tab.", 6000);
       el.disabled = false;
       return;
     }
