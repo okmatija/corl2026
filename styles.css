@@ -118,7 +118,7 @@ summary::-webkit-details-marker { display: none; }
 summary::before { content: "▸ "; color: var(--muted); }
 details[open] > summary::before { content: "▾ "; }
 
-.day { display: grid; grid-template-columns: 74px 1fr; gap: 8px; padding: 6px 0; border-bottom: 1px dashed var(--line); font-size: 14px; }
+.day { display: grid; grid-template-columns: 1fr auto; gap: 10px; padding: 8px 0; border-bottom: 1px dashed var(--line); font-size: 14px; align-items: start; }
 .day:last-child { border-bottom: 0; }
 .day .date { color: var(--muted); font-size: 13px; }
 .day .date b { display: block; color: var(--ink); font-size: 14px; }
@@ -315,3 +315,10 @@ input[type=search] { width: 100%; border: 1px solid var(--line); background: var
 .link-btns { display: flex; gap: 6px; flex: none; align-items: center; flex-wrap: wrap; justify-content: flex-end; }
 .travel-card .link-btns { justify-content: flex-start; margin-top: 6px; }
 .link-btns .details-btn { margin: 0; padding: 4px 10px; font-size: 13px; background: var(--card); }
+
+/* Dates: one style everywhere on the plan (the beige/brown bubble), day bubble + 📜 💬 stacked on the right */
+.date-tag { white-space: nowrap; }
+.day-side { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
+.day .mini { margin-top: 0; }
+.day ul { padding-left: 16px; }
+.leg > .card .item-head { align-items: flex-start; }

@@ -115,9 +115,10 @@
         const lines = [...obl, ...items];
         const key = "day:" + date;
         const dayTitle = `${fmt(date)} in ${short(l.place)}`;
-        return `<div class="day"><div class="date"><b>${fmt(date, { weekday: "short" })}</b>${fmt(date, { day: "numeric", month: "short" })}
-          <div class="mini"><button data-daydetails="${date}" data-title="${esc(dayTitle)}" aria-label="Idea cards for ${esc(dayTitle)}">📜</button>${commentBtn(key, dayTitle, true)}</div></div>
-          <div><ul>${lines.map(x => `<li>${x}</li>`).join("") || "<li class='muted'>Free</li>"}</ul></div></div>`;
+        // bullets on the left; date bubble top-right with 📜 💬 under it
+        return `<div class="day"><ul>${lines.map(x => `<li>${x}</li>`).join("") || "<li class='muted'>Free</li>"}</ul>
+          <div class="day-side"><span class="tag date-tag">${fmt(date)}</span>
+          <div class="mini"><button data-daydetails="${date}" data-title="${esc(dayTitle)}" aria-label="Idea cards for ${esc(dayTitle)}">📜</button>${commentBtn(key, dayTitle, true)}</div></div></div>`;
       }).join("");
       const s = l.stay;
       return `
@@ -125,8 +126,8 @@
         <div class="leg">
           <div class="dot">${i + 1}</div>
           <div class="card">
-            <div class="item-head"><h3>${esc(p.name)}</h3><span class="tag">${n} night${n > 1 ? "s" : ""}</span></div>
-            <div class="item-meta">${fmt(l.arrive)} → ${fmt(l.leave)} · ${esc(p.blurb || "")}</div>
+            <div class="item-head"><h3>${esc(p.name)}</h3><span class="tag date-tag">${fmt(l.arrive)} – ${fmt(l.leave)}</span></div>
+            <div class="item-meta">${n} night${n > 1 ? "s" : ""} · ${esc(p.blurb || "")}</div>
             ${s ? `<div class="stay"><div class="item-head"><span>🛏️ ${esc(s.name)}</span>${s.covered ? '<span class="tag ok">paid by work</span>' : `<span class="tag ${s.price <= P.budgetPerNight ? "ok" : "over"}">~${money(s.price)}/nt</span>`}</div>${s.notes ? `<div class="item-meta">${esc(s.notes)}</div>` : ""}
               <div class="stay-links">${detailsBtn("stay:" + l.place)}${mapBtn(gmaps(s.name + ", " + p.name))}</div></div>` : ""}
             <div class="days">${days}</div>
