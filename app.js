@@ -522,7 +522,7 @@
       </div>
       <h2 class="section-title">Comment history</h2>
       <div class="chips fb-filters" role="group" aria-label="Filter comments">
-        ${[...PEOPLE, AGENT].map(p => toggleChip("fbwho", p, whoLabel(p), whoSel.includes(p))).join("")}
+        ${[...PEOPLE, AGENT].map(p => toggleChip("fbwho", p, p === AGENT ? "Agent" : esc(p), whoSel.includes(p))).join("")}
         <span class="chip-sep"></span>
         ${FB_TYPES.map(([k, l]) => toggleChip("fbtype", k, l, typeSel.includes(k))).join("")}
       </div>
