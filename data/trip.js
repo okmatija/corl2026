@@ -4,7 +4,7 @@ window.TRIP = {
   meta: {
     title: "CoRL 2026 · USA trip",
     travellers: ["Matija", "Maryna"],
-    updated: "2026-09-25T09:22Z",
+    updated: "2026-09-25T10:21Z",
     status: "Maryna has to be back in London on Mon 9 Nov, so the holiday is now BEFORE CoRL: Vegas, then San Antonio and the Hill Country, then Austin. Matija stays on alone for CoRL and the team summit.",
   },
 
@@ -63,7 +63,6 @@ window.TRIP = {
     { id: "atx-soco", place: "austin", title: "South Congress stroll", cat: "city", cost: "free", dur: "2h", why: "Shops, murals, 'I love you so much' wall, view of the Capitol." },
     { id: "atx-bbq", place: "austin", title: "Texas BBQ (Franklin / la Barbecue / Terry Black's)", cat: "food", cost: "$$", dur: "2-4h", why: "Franklin needs a morning queue; Terry Black's is walk-in and good." },
     { id: "atx-tacos", place: "austin", title: "Breakfast tacos crawl", cat: "food", cost: "$", dur: "1h", why: "Veracruz All Natural migas taco is a local classic." },
-    { id: "atx-capitol", place: "austin", title: "Texas State Capitol", cat: "culture", cost: "free", dur: "1h", why: "Free tours, bigger than the US Capitol (Texans will tell you)." },
     { id: "atx-bonnell", place: "austin", title: "Sunset at Mount Bonnell", cat: "nature", cost: "free", dur: "1h", why: "Short climb, best sunset over Lake Austin." },
     { id: "atx-kayak", place: "austin", title: "Kayak / SUP on Lady Bird Lake", cat: "nature", cost: "$", dur: "2h", why: "Skyline views from the water, rentals near Zilker." },
     { id: "atx-stubbs", place: "austin", title: "Rock show at Stubb's or Mohawk", cat: "music", cost: "$$", dur: "evening", why: "Austin's classic outdoor rock stages. November line-ups are announced late - check what's on during CoRL week." },
@@ -120,7 +119,6 @@ window.TRIP = {
     // Space / rockets
     { id: "space-starbase", place: "starbase", title: "SpaceX Starbase (Starship) + South Padre beaches", cat: "adventure", cost: "$", dur: "1-2 days", why: "~5 h drive from San Antonio. You can see the Starship towers from the road/beach any time; a launch is a bonus - dates are only set weeks ahead and slip often." },
     { id: "space-cape", place: "spacecoast", title: "Watch a Falcon 9 launch on the Space Coast", cat: "adventure", cost: "$$", dur: "2-3 days", why: "The most reliable way to see a SpaceX launch: several per week in 2026. Fly to Orlando; watch from Playalinda Beach or Jetty Park, plus Kennedy Space Center visitor complex." },
-    { id: "space-mcgregor", place: "austin", title: "SpaceX McGregor engine test site (drive-by)", cat: "adventure", cost: "free", dur: "half day", why: "1.5 h north of Austin near Waco. No tours or launches - only engine tests you may hear from outside. Low odds, fun detour with Waco's Magnolia/Dr Pepper museum." },
 
     // Fredericksburg / Hill Country
     { id: "fbg-rock", place: "fredericksburg", title: "Hike Enchanted Rock", cat: "nature", cost: "$", dur: "3h", why: "Huge pink granite dome; book a state-park day pass in advance." },

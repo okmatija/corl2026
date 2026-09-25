@@ -1,6 +1,7 @@
 // Log of plan updates made from feedback (newest first). Appended by Claude on every run that changes something.
 // { start, end: ISO UTC, by: "scheduled" | "manual", model, issues: [numbers], summary, tokens?: number, costUsd?: number }
 window.RUNS = [
+  { start: "2026-09-25T10:20:56Z", end: "2026-09-25T10:21:32Z", by: "scheduled", model: "claude-sonnet-5", issues: [64, 65, 66, 67], summary: "Deleted 2 ideas; kept jazz club" },
   { start: "2026-09-25T10:05:00Z", end: "2026-09-25T09:54:54Z", by: "manual", model: "claude-opus-5-5", issues: [], summary: "Solid outlines, no \"only\" labels" },
   { start: "2026-09-25T09:50:00Z", end: "2026-09-25T09:51:31Z", by: "manual", model: "claude-opus-5-5", issues: [], summary: "Plan shows shared and solo parts" },
   { start: "2026-09-25T09:25:00Z", end: "2026-09-25T09:40:35Z", by: "manual", model: "claude-opus-5-5", issues: [], summary: "Deleted ideas hide at once; Help tidied" },
