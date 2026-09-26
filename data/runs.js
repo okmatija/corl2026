@@ -1,6 +1,7 @@
 // Log of plan updates made from feedback (newest first). Appended by Claude on every run that changes something.
 // { start, end: ISO UTC, by: "scheduled" | "manual", model, issues: [numbers], summary, tokens?: number, costUsd?: number }
 window.RUNS = [
+  { start: "2026-09-26T05:20:52Z", end: "2026-09-26T05:21:24Z", by: "scheduled", model: "claude-sonnet-5", issues: [70], summary: "Added Vegas shooting range idea" },
   { start: "2026-09-25T18:11:00Z", end: "2026-09-25T18:13:03Z", by: "manual", model: "claude-opus-5-5", issues: [69], summary: "Separate ideas for each plan" },
   { start: "2026-09-25T14:21:12Z", end: "2026-09-25T14:21:46Z", by: "scheduled", model: "claude-sonnet-5", issues: [68], summary: "Deleted skydiving idea" },
   { start: "2026-09-25T12:05:00Z", end: "2026-09-25T13:34:40Z", by: "manual", model: "claude-opus-5-5", issues: [], summary: "NYC bars, jazz, Broadway; NYC + Austin plan" },
