@@ -4,7 +4,7 @@ window.TRIP = {
   meta: {
     title: "CoRL 2026 · USA trip",
     travellers: ["Matija", "Maryna"],
-    updated: "2026-09-27T20:45Z",
+    updated: "2026-09-27T22:22Z",
     status: "Plans to choose from (menu at the top left): Vegas, New York, New York + Austin, or a Texas road trip - then CoRL in Austin for Matija.",
   },
 
@@ -708,7 +708,7 @@ window.TRIP = {
           stay: { name: "Motel or casita in Terlingua / Study Butte, or Chisos Mountains Lodge in the park", price: 190, notes: "Estimate - the in-park lodge books up early." },
           days: [
             ["Arrive along the River Road", "Sunset: tx-terlingua"],
-            ["Early start: tx-lostmine", "Afternoon: tx-rossmaxwell to tx-santaelena", "Night: stargazing - Big Bend is a dark-sky park"],
+            ["Early start: tx-lostmine", "Afternoon: tx-rossmaxwell to tx-santaelena, or a half-day float with tx-canoe", "Night: stargazing - Big Bend is a dark-sky park"],
           ] },
         { place: "concan", arrive: "2026-11-06", leave: "2026-11-07",
           travel: "🚗 East on US-90 with stops at tx-seminole (~5.5 h driving - the long day)",
