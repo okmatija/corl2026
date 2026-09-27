@@ -4,8 +4,8 @@ window.TRIP = {
   meta: {
     title: "CoRL 2026 · USA trip",
     travellers: ["Matija", "Maryna"],
-    updated: "2026-09-26T05:22Z",
-    status: "Two plans to choose from (menu at the top left): Vegas or New York together, then Maryna flies home to London and Matija flies on to Austin for CoRL.",
+    updated: "2026-09-27T20:45Z",
+    status: "Plans to choose from (menu at the top left): Vegas, New York, New York + Austin, or a Texas road trip - then CoRL in Austin for Matija.",
   },
 
   // Matija's work commitments. Maryna is free the whole time.
@@ -23,6 +23,8 @@ window.TRIP = {
     "Sphere in Vegas: Metallica (residency runs through the autumn - check dates) or The Wizard of Oz (daily)?",
     "Matija after the team summit (ends Fri 13 Nov, 16:00): fly home Sat 14 Nov, or a weekend in New York first (e.g. see Maja & Amit)?",
     "Flights: Matija might fly business (BA Club Suite). Should Maryna fly business too, both take premium economy together, or split cabins? See the 📜 Details on the London → Las Vegas card.",
+    "Texas plan: Maryna flies home on Sun 8 Nov evening, the day before CoRL - or stay a few days in Austin during CoRL week (e.g. home Tue 10 Nov, like the NYC + Austin plan)?",
+    "Texas plan: the loop is ~1,500 miles over 8 days (longest day ~5.5 h). Keep Big Bend, or skip it for a shorter Hill Country-only loop (Fredericksburg, Lost Maples, Concan, San Antonio) with more time in each place?",
     "Any must-sees already on your list?",
   ],
 
@@ -35,6 +37,9 @@ window.TRIP = {
     zion:           { name: "Zion National Park, UT",      type: "nature", lat: 37.1889, lng: -112.9986, blurb: "Towering red canyon walls, iconic hikes (stay in Springdale)." },
     page:           { name: "Page, AZ",                    type: "nature", lat: 36.9147, lng: -111.4558, blurb: "Horseshoe Bend, Antelope Canyon, Lake Powell." },
     grandcanyon:    { name: "Grand Canyon South Rim, AZ",  type: "nature", lat: 36.0544, lng: -112.1401, blurb: "Needs no introduction. Sunrise & sunset on the rim." },
+    fortdavis:      { name: "Fort Davis & Marfa, TX",      type: "nature", lat: 30.5882, lng: -103.8946, blurb: "Davis Mountains, McDonald Observatory, Marfa's art and mystery lights." },
+    bigbend:        { name: "Big Bend National Park, TX",  type: "nature", lat: 29.2498, lng: -103.2502, blurb: "Desert, mountains and Rio Grande canyons on the Mexican border; dark skies (stay in Terlingua)." },
+    concan:         { name: "Concan (Frio River), TX",     type: "nature", lat: 29.4988, lng: -99.7134,  blurb: "Cypress-lined Frio River, Garner State Park, the Twisted Sisters roads and Lost Maples." },
     nyc:            { name: "New York City, NY",           type: "city",   lat: 40.7128, lng: -74.0060,  blurb: "Museums, Broadway, late-fall Central Park - and Thanksgiving on Thu 26 Nov." },
   },
 
@@ -595,6 +600,186 @@ window.TRIP = {
             ] },
           ],
         },
+      },
+    },
+    {
+      id: "texas",
+      label: "🤠 Texas plan",
+      // Idea cards for this plan (only places easily reached by car from its stops). Cards are per plan:
+      // to have an idea in another plan too, copy its card there. `place` groups it on the Ideas page.
+      ideas: [
+        // Austin
+        { id: "atx-tacos", place: "austin", title: "Breakfast tacos crawl", cat: "food", cost: "$", dur: "1h", why: "Veracruz All Natural migas taco is a local classic." },
+        { id: "atx-barton", place: "austin", title: "Swim at Barton Springs Pool", cat: "nature", cost: "$", dur: "2h", why: "Spring-fed pool at ~20°C all year - locals swim in November too." },
+        { id: "atx-soco", place: "austin", title: "South Congress stroll", cat: "city", cost: "free", dur: "2h", why: "Shops, murals, 'I love you so much' wall, view of the Capitol." },
+        { id: "atx-bbq", place: "austin", title: "Texas BBQ (Franklin / la Barbecue / Terry Black's)", cat: "food", cost: "$$", dur: "2-4h", why: "Franklin needs a morning queue; Terry Black's is walk-in and good." },
+        { id: "atx-bonnell", place: "austin", title: "Sunset at Mount Bonnell", cat: "nature", cost: "free", dur: "1h", why: "Short climb, best sunset over Lake Austin." },
+        { id: "atx-kayak", place: "austin", title: "Kayak / SUP on Lady Bird Lake", cat: "nature", cost: "$", dur: "2h", why: "Skyline views from the water, rentals near Zilker." },
+        { id: "atx-stubbs", place: "austin", title: "Rock show at Stubb's or Mohawk", cat: "music", cost: "$$", dur: "evening", why: "Austin's classic outdoor rock stages. November line-ups are announced late - check what's on during CoRL week." },
+        { id: "atx-music", place: "austin", title: "Live music: Continental Club / Broken Spoke", cat: "music", cost: "$", dur: "evening", why: "Broken Spoke gives two-step lessons - great post-conference night." },
+        { id: "atx-wildflower", place: "austin", title: "Lady Bird Johnson Wildflower Center", cat: "nature", cost: "$", dur: "2-3h", why: "Good solo day for Maryna during the conference." },
+        { id: "atx-blanton", place: "austin", title: "Blanton Museum + Ellsworth Kelly's 'Austin'", cat: "culture", cost: "$", dur: "2h", why: "Kelly's light-filled chapel is a must for art fans." },
+        { id: "atx-hamilton", place: "austin", title: "Hamilton Pool Preserve", cat: "nature", cost: "$", dur: "half day", why: "Collapsed grotto with waterfall; reservation required - check if open." },
+        { id: "atx-lbj", place: "austin", title: "LBJ Presidential Library", cat: "culture", cost: "$", dur: "2h", why: "On the UT campus right next to Bass Hall (a CoRL venue). Daytime museum hours - no evening opening, check times before going." },
+        { id: "atx-mckinney", place: "austin", title: "McKinney Falls State Park", cat: "nature", cost: "$", dur: "half day", why: "Waterfalls, limestone pools and cypress trails 20 min from downtown. Book a day pass." },
+        { id: "atx-greenbelt", place: "austin", title: "Barton Creek Greenbelt hike", cat: "nature", cost: "free", dur: "2-3h", why: "Wooded canyon trail starting right by Barton Springs; creek may be dry in Nov." },
+        { id: "atx-zilker", place: "austin", title: "Zilker Botanical Garden", cat: "nature", cost: "$", dur: "1-2h", why: "Japanese Garden, cactus and rose gardens right by Zilker Park - a quieter option than Barton Springs." },
+        { id: "atx-bats", place: "austin", title: "Congress Avenue bat bridge", cat: "nature", cost: "free", dur: "30m", why: "Season is Mar-Oct; by November most bats have left - low odds." },
+        { id: "nascar-cota", place: "austin", title: "Circuit of the Americas (COTA)", cat: "adventure", cost: "$$", dur: "half day", why: "Austin's F1/NASCAR circuit, 20 min from downtown. Easiest evening drop-in is Speed City (karting + mini-golf + zipline, ~$25-40pp estimate karting); COTA Driving Experience (~$1,837pp estimate) and Xtreme Xperience supercar rides (from ~$99pp estimate) are pricier day-session bookings, not evening drop-ins. No F1 or NASCAR Cup race clashes in Nov 2026 (F1 is in October); Schnell Fest club racing runs Nov 11-12 (daytime, may mean extra track traffic those days). Sources disagree on exact evening hours - confirm nearer the time." },
+        { id: "tx-sixth", place: "austin", title: "Halloween on Sixth Street", cat: "night", cost: "free", dur: "evening", why: "Austin's biggest street party of the year: Sixth Street closes to cars and fills with costumes, bars and live music. Dress up!" },
+        { id: "tx-lockhart", place: "austin", title: "Lockhart - the BBQ capital of Texas", cat: "food", cost: "$$", dur: "half day", why: "45 min south of Austin: Kreuz Market, Black's and Smitty's - brisket and sausage on butcher paper, in old smoke-blackened halls." },
+
+        // Hill Country
+        { id: "fbg-rock", place: "fredericksburg", title: "Hike Enchanted Rock", cat: "nature", cost: "$", dur: "3h", why: "Huge pink granite dome; book a state-park day pass in advance." },
+        { id: "fbg-wine", place: "fredericksburg", title: "Hill Country wineries on Hwy 290", cat: "food", cost: "$$", dur: "half day", why: "Dozens of tasting rooms; designate a driver or book a shuttle." },
+        { id: "fbg-pedernales", place: "fredericksburg", title: "Pedernales Falls State Park", cat: "nature", cost: "$", dur: "3h", why: "Tiered limestone falls in the Hill Country; an easy stop on the way to or from Fredericksburg." },
+        { id: "fbg-luck", place: "fredericksburg", title: "Luckenbach dance hall", cat: "music", cost: "free", dur: "2h", why: "Tiny town, big country music legend." },
+        { id: "fbg-pacific", place: "fredericksburg", title: "National Museum of the Pacific War", cat: "culture", cost: "$", dur: "3h", why: "Excellent if you like history." },
+        { id: "tx-willow", place: "fredericksburg", title: "Willow City Loop drive", cat: "nature", cost: "free", dur: "1h", why: "13 miles of narrow ranch road through granite hills north of Fredericksburg - famous for spring wildflowers, but a lovely quiet drive any time (it's private land - stay on the road)." },
+
+        // Fort Davis, Marfa & the Davis Mountains
+        { id: "tx-balmorhea", place: "fortdavis", title: "Swim at Balmorhea springs pool", cat: "nature", cost: "$", dur: "1-2h", link: "https://tpwd.texas.gov/state-parks/balmorhea", why: "A huge spring-fed desert pool, ~22-23°C all year, with fish swimming around you. Right on the drive west (I-10). Day-pass reservation required - capacity is limited. Gates close at sunset." },
+        { id: "tx-mcdonald", place: "fortdavis", title: "Star party at McDonald Observatory", cat: "nature", cost: "$", dur: "2-3h", link: "https://mcdonaldobservatory.org/visit/star-party/", why: "Some of the darkest skies in the US: a guided constellation tour and views through big telescopes. Star parties run Tuesday, Friday and Saturday evenings - book tickets ahead; bring warm layers (it's at 2,000 m)." },
+        { id: "tx-scenicloop", place: "fortdavis", title: "Davis Mountains Scenic Loop", cat: "nature", cost: "free", dur: "2h", why: "A 75-mile loop from Fort Davis past the observatory - the highest public road in Texas, with mountain and grassland views." },
+        { id: "tx-marfa-lights", place: "fortdavis", title: "Marfa Lights viewing area", cat: "night", cost: "free", dur: "1h", why: "Mysterious glowing lights on the horizon east of Marfa that nobody has fully explained - a roadside viewing platform, best just after dark." },
+        { id: "tx-chinati", place: "fortdavis", title: "Marfa: Chinati Foundation (Donald Judd)", cat: "culture", cost: "$$", dur: "2-3h", link: "https://chinati.org/", why: "Minimalist art in old army buildings in a tiny desert town - Judd's 100 aluminium boxes glowing in the sun. Guided tours, book ahead; limited days." },
+        { id: "tx-prada", place: "fortdavis", title: "Prada Marfa (art installation)", cat: "culture", cost: "free", dur: "30m", why: "A fake Prada shop alone on US-90 in the desert, 35 min west of Marfa - the classic Texas road-trip photo." },
+        { id: "tx-fortdavis", place: "fortdavis", title: "Fort Davis National Historic Site", cat: "culture", cost: "$", dur: "1-2h", why: "A well-preserved 1850s frontier fort under the cliffs of the Davis Mountains." },
+
+        // Big Bend
+        { id: "tx-riverroad", place: "bigbend", title: "River Road (FM 170): Presidio to Lajitas", cat: "nature", cost: "free", dur: "2h", why: "One of the most scenic drives in the US: 50 miles along the Rio Grande through canyons, with Mexico across the river and a 15% climb over 'the Big Hill'." },
+        { id: "tx-santaelena", place: "bigbend", title: "Santa Elena Canyon trail", cat: "nature", cost: "$", dur: "1.5h", why: "Easy walk into a 450 m-deep slot where the Rio Grande leaves the mountains - Mexico is the far wall. Park entry needed (the America the Beautiful pass covers it)." },
+        { id: "tx-rossmaxwell", place: "bigbend", title: "Ross Maxwell Scenic Drive", cat: "nature", cost: "$", dur: "2-3h", why: "30 miles through volcanic desert with viewpoints (Sotol Vista, Mule Ears, Tuff Canyon), ending at Santa Elena Canyon." },
+        { id: "tx-lostmine", place: "bigbend", title: "Lost Mine Trail (Chisos Mountains)", cat: "nature", cost: "$", dur: "3h", why: "The best-value hike in Big Bend: 4.8 miles round trip to a ridge with views over the Chisos and into Mexico. Start early - the trailhead car park fills up." },
+        { id: "tx-window", place: "bigbend", title: "Window View at sunset (Chisos Basin)", cat: "nature", cost: "$", dur: "30m", why: "A flat 0.3-mile loop where the sun sets through a notch in the mountains. Or hike the 5.5-mile Window Trail down to the pour-off." },
+        { id: "tx-hotsprings", place: "bigbend", title: "Langford Hot Springs on the Rio Grande", cat: "nature", cost: "$", dur: "1-2h", why: "Soak in a 40°C stone tub by the river, next to an abandoned bathhouse. Short walk from a rough gravel road (fine in a normal car when dry)." },
+        { id: "tx-boquillas", place: "bigbend", title: "Row across to Boquillas, Mexico", cat: "culture", cost: "$", dur: "half day", link: "https://www.nps.gov/bibe/planyourvisit/visiting-boquillas.htm", why: "Take a rowboat across the Rio Grande to a tiny Mexican village for tacos and a margarita. Needs passports; the port of entry only opens some days (was Fri-Mon 9-4 in late 2025) - check before going." },
+        { id: "tx-terlingua", place: "bigbend", title: "Terlingua ghost town + Starlight Theatre", cat: "night", cost: "$", dur: "evening", why: "An old mining town of ruins where locals watch the sunset from the porch of the Trading Post, then dinner and music at the Starlight Theatre." },
+        { id: "tx-canoe", place: "bigbend", title: "Canoe or raft the Rio Grande", cat: "adventure", cost: "$$", dur: "half day", why: "Outfitters in Terlingua run guided half- and full-day floats through the canyons. Water levels vary - they'll say which stretches are running." },
+
+        // Concan, Lost Maples & the western Hill Country
+        { id: "tx-seminole", place: "concan", title: "Seminole Canyon rock art + Pecos River High Bridge", cat: "culture", cost: "$", dur: "1-2h", why: "On the long US-90 drive east: 4,000-year-old painted murals in the canyon (guided tour Wed-Sun, check times) and the dramatic Pecos River bridge viewpoint. Judge Roy Bean's saloon in Langtry is nearby." },
+        { id: "tx-twisted", place: "concan", title: "The Twisted Sisters (RR 335, 336, 337)", cat: "nature", cost: "free", dur: "2-3h", why: "Texas's most famous driving roads: 100 miles of hairpins, river crossings and hilltop views around Leakey and Vanderpool, loved by motorcyclists." },
+        { id: "tx-lostmaples", place: "concan", title: "Lost Maples - autumn colour", cat: "nature", cost: "$", dur: "3h", link: "https://tpwd.texas.gov/state-parks/lost-maples", why: "Rare bigtooth maples turn red and orange from late October to mid-November - perfect timing. Very busy at weekends: book the day pass (opens 30 days ahead) and arrive before 8am." },
+        { id: "tx-garner", place: "concan", title: "Garner State Park + Frio River", cat: "nature", cost: "$", dur: "half day", why: "Crystal-clear river under cypress trees; hike Old Baldy for the view. Too cold to tube in November, but beautiful." },
+        { id: "tx-bandera", place: "concan", title: "Bandera, 'Cowboy Capital of the World'", cat: "culture", cost: "$", dur: "2h", why: "Western town with honky-tonks (the 11th Street Cowboy Bar), saddle shops and dude ranches offering trail rides." },
+        { id: "tx-fnl", place: "concan", title: "Friday night high-school football", cat: "culture", cost: "$", dur: "evening", why: "'Friday Night Lights' is a Texas religion - bands, cheerleaders and the whole town in the stands, tickets ~$5-10 (estimate). Fri 6 Nov is around the end of the regular season - see if a town on the way has a home game." },
+
+        // San Antonio & the drive back to Austin
+        { id: "sa-missions", place: "sanantonio", title: "Mission trail by bike", cat: "culture", cost: "$", dur: "half day", why: "UNESCO missions, bike-share along the river." },
+        { id: "sa-riverwalk", place: "sanantonio", title: "River Walk evening", cat: "city", cost: "free", dur: "2h", why: "Touristy but charming at night." },
+        { id: "sa-pearl", place: "sanantonio", title: "Pearl district + Hotel Emma bar", cat: "food", cost: "$$", dur: "3h", why: "Best food hall and farmers market (weekends)." },
+        { id: "sa-alamo", place: "sanantonio", title: "The Alamo", cat: "culture", cost: "free", dur: "1h", why: "Quick visit - smaller than people expect." },
+        { id: "park-fiesta", place: "sanantonio", title: "Six Flags Fiesta Texas", cat: "adventure", cost: "$$", dur: "full day", why: "Big coasters in an old quarry. Heads-up: 'Holiday in the Park' only starts 21 Nov, so it's probably closed on our San Antonio day - check the calendar." },
+        { id: "tx-gruene", place: "sanantonio", title: "Gruene Hall - the oldest dance hall in Texas", cat: "music", cost: "$", dur: "2-3h", why: "In New Braunfels, halfway between San Antonio and Austin: live country music in a wooden hall from 1878. Often free in the daytime at weekends - check the calendar." },
+        { id: "tx-bucees", place: "sanantonio", title: "Buc-ee's (the giant Texas petrol station)", cat: "food", cost: "$", dur: "45m", why: "A very Texas experience: 100+ pumps, brisket sandwiches, Beaver Nuggets, jerky wall and famously clean toilets. The New Braunfels one is among the biggest." },
+        { id: "tx-natbridge", place: "sanantonio", title: "Natural Bridge Caverns", cat: "adventure", cost: "$$", dur: "2-3h", why: "The largest show caves in Texas, between San Antonio and Austin; guided tours all year, plus a zipline/ropes course." },
+        { id: "tx-mitierra", place: "sanantonio", title: "Tex-Mex at Mi Tierra (Market Square)", cat: "food", cost: "$", dur: "1-2h", why: "San Antonio institution covered in year-round Christmas lights with mariachis walking the room; famous pan dulce bakery." },
+      ],
+      home: "London",
+      costs: [
+        { type: "flights", label: "Maryna: return London ⇄ Austin, BA nonstop economy, out Fri 30 Oct, back Sun 8 Nov (rough estimate ~$800 - not a live quote, check Google Flights). Matija's flights are paid by work.", amount: 800, date: "2026-10-30" },
+        { type: "car", label: "Car hire for the road trip, 8 days, picked up and dropped at Austin airport (estimate)", amount: 450, from: "2026-11-01", to: "2026-11-09" },
+      ],
+      name: "Texas road trip, then CoRL",
+      summary: "Together: fly into Austin on Fri 30 Oct for Halloween on Sixth Street, then a hire-car loop through Texas - Hill Country, the Davis Mountains and Marfa, Big Bend National Park, the Twisted Sisters and Lost Maples in autumn colour, and San Antonio - back in Austin on Sun 8 Nov, the day before CoRL. Maryna flies home that evening; Matija stays for CoRL and the team summit, home Sat 14 Nov.",
+      budgetPerNight: 200,
+      legs: [
+        { place: "austin", arrive: "2026-10-30", leave: "2026-11-01",
+          travel: "✈️ Fly London → Austin together (BA nonstop, ~10h45)",
+          stay: { name: "Hotel in Austin (South Congress or downtown)", price: 250, notes: "Estimate - Halloween Saturday is pricier." },
+          days: [
+            ["Land in the evening, check in", "Easy dinner: atx-soco"],
+            ["Halloween! Breakfast: atx-tacos", "atx-barton", "Late lunch: atx-bbq", "Night: tx-sixth - costumes everywhere", "Clocks go back tonight (an extra hour of sleep)"],
+          ] },
+        { place: "fredericksburg", arrive: "2026-11-01", leave: "2026-11-02",
+          travel: "🚗 Pick up the hire car · into the Hill Country via fbg-pedernales (~2 h driving)",
+          stay: { name: "B&B or guesthouse in Fredericksburg", price: 180, notes: "Estimate." },
+          days: [["Morning: fbg-pedernales", "Afternoon: fbg-wine (one of you drives)", "Evening: German beer hall on Main Street"]] },
+        { place: "fortdavis", arrive: "2026-11-02", leave: "2026-11-04",
+          travel: "🚗 Early fbg-rock, then west on I-10 with a swim at tx-balmorhea (~5 h driving)",
+          stay: { name: "Historic hotel in Fort Davis or a motel in Marfa", price: 170, notes: "Estimate - few rooms out here, book early." },
+          days: [
+            ["Arrive late afternoon", "After dark: tx-marfa-lights"],
+            ["Morning: tx-scenicloop", "Afternoon in Marfa: tx-chinati and tx-prada", "Night: tx-mcdonald (Tuesday - book ahead)"],
+          ] },
+        { place: "bigbend", arrive: "2026-11-04", leave: "2026-11-06",
+          travel: "🚗 Down to Presidio, then tx-riverroad along the Rio Grande to Terlingua (~3.5 h driving)",
+          stay: { name: "Motel or casita in Terlingua / Study Butte, or Chisos Mountains Lodge in the park", price: 190, notes: "Estimate - the in-park lodge books up early." },
+          days: [
+            ["Arrive along the River Road", "Sunset: tx-terlingua"],
+            ["Early start: tx-lostmine", "Afternoon: tx-rossmaxwell to tx-santaelena", "Night: stargazing - Big Bend is a dark-sky park"],
+          ] },
+        { place: "concan", arrive: "2026-11-06", leave: "2026-11-07",
+          travel: "🚗 East on US-90 with stops at tx-seminole (~5.5 h driving - the long day)",
+          stay: { name: "Cabin on the Frio River in Concan", price: 160, notes: "Estimate." },
+          days: [["Long drive east", "Evening: tx-fnl in a town on the way, or a quiet night by the river"]] },
+        { place: "sanantonio", arrive: "2026-11-07", leave: "2026-11-08",
+          travel: "🚗 Early tx-lostmaples, a loop of tx-twisted, then via tx-bandera to San Antonio (~3.5 h driving)",
+          stay: { name: "Hotel on the River Walk", price: 190, notes: "Estimate." },
+          days: [
+            ["Arrive late afternoon", "Evening: sa-riverwalk", "Dinner: tx-mitierra"],
+            ["Morning: sa-alamo and sa-missions", "tx-bucees on the drive back (~1.5 h)", "Drop the car at Austin airport", "Evening: Maryna flies Austin → London; Matija heads to the work hotel"],
+          ] },
+        { id: "austin-matija", who: "Matija", place: "austin", arrive: "2026-11-08", leave: "2026-11-14", daysFrom: "2026-11-09",
+          stay: { name: "Downtown hotel near the venues", covered: true, notes: "Work hotel from Sun 8 Nov (check work covers that night). Matija checks out Sat 14 Nov." },
+          days: [
+            ["Evening: atx-music"],
+            ["Evening: atx-stubbs"],
+            ["Free evening"],
+            ["Evening: team social"],
+            ["Evening: celebrate the end of CoRL"],
+            ["Check out", "Fly Austin → London"],
+          ] },
+      ],
+      ends: [
+        { who: "Maryna", date: "2026-11-08", text: "✈️ Maryna: Austin → London, BA nonstop, evening (lands Mon 9 Nov)" },
+        { who: "Matija", date: "2026-11-14", text: "✈️ Matija: Austin → London" },
+      ],
+      details: {
+        "travel:austin": {
+          title: "✈️ Flights London → Austin (Fri 30 Oct)",
+          intro: "British Airways is the only nonstop, daily Heathrow → Austin, about 10h45, landing the same evening.",
+          sections: [
+            { title: "Maryna's ticket: a return, out Fri 30 Oct, back Sun 8 Nov", items: [
+              { name: "BA nonstop return", text: "Rough estimate ~$800 economy - not looked up for these dates yet. Tap for live fares.", link: "https://www.google.com/travel/flights?q=Flights%20to%20AUS%20from%20LHR%20on%202026-10-30%20returning%202026-11-08" },
+              { name: "Matija", text: "Paid by work - ideally the same outbound flight." },
+            ] },
+            { title: "Before you fly", items: [
+              { name: "Entry to the US", text: "UK passports need an approved ESTA; other passports may need a US visa, which can take months - check each passport early.", link: "https://esta.cbp.dhs.gov/" },
+            ] },
+          ],
+        },
+        "travel:fredericksburg": {
+          title: "🚗 The Texas road trip (car hire)",
+          intro: "Pick up a car at Austin airport on Sun 1 Nov and drop it back there on Sun 8 Nov - a round trip, so no one-way fee. About 1,500 miles in total; the longest day is Big Bend → Concan (~5.5 h).",
+          sections: [
+            { title: "The route", items: [
+              { name: "Full loop on Google Maps", text: "Austin → Fredericksburg → Balmorhea → Fort Davis / Marfa → Big Bend → Concan → Lost Maples → San Antonio → Austin.", link: "https://www.google.com/maps/dir/Austin,+TX/Fredericksburg,+TX/Balmorhea+State+Park,+TX/Fort+Davis,+TX/Marfa,+TX/Terlingua,+TX/Concan,+TX/Lost+Maples+State+Natural+Area,+TX/San+Antonio,+TX/Austin-Bergstrom+International+Airport" },
+              { name: "Book ahead", text: "Day passes for Balmorhea, Enchanted Rock and Lost Maples (Texas State Parks site; Lost Maples on a November Saturday will sell out), McDonald Observatory star party tickets, and rooms in Fort Davis/Marfa and Big Bend.", link: "https://texasstateparks.reserveamerica.com/" },
+              { name: "Distances", text: "Petrol stations are far apart in West Texas - fill up whenever you're below half. Phone signal is patchy around Big Bend; download offline maps." },
+            ] },
+            { title: "Rough cost (estimate)", items: [
+              { name: "8 days, mid-size, round trip", text: "Roughly $350-550 all-in - check live prices and book a free-cancellation rate. An America the Beautiful pass ($80) covers Big Bend and Fort Davis." },
+            ] },
+            { title: "For UK drivers", items: [
+              { name: "What to bring", text: "Full UK photocard licence, passport, and a credit card in the main driver's name. A UK car-hire excess policy is usually cheaper than the desk's waiver." },
+            ] },
+          ],
+        },
+        "travel:home": {
+          title: "✈️ Flights home to London",
+          intro: "Maryna flies home from Austin at the end of the road trip; Matija after CoRL and the team summit.",
+          sections: [
+            { title: "Maryna - Sun 8 Nov", items: [
+              { name: "British Airways Austin → London (nonstop), the return half of her ticket", text: "Evening departure (around 19:00 - check), landing at Heathrow on Mon 9 Nov morning." },
+            ] },
+            { title: "Matija - Sat 14 Nov", items: [
+              { name: "British Airways Austin → London (nonstop)", text: "Paid by work. After checking out of the work hotel; lands Sun 15 Nov.", link: "https://www.britishairways.com/content/flights/usa/texas/austin" },
+            ] },
+          ],
+        },
+        "stay:austin-matija": { href: "#austin" },
       },
     },
   ],
