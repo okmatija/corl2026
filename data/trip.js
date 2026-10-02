@@ -4,7 +4,7 @@ window.TRIP = {
   meta: {
     title: "CoRL 2026 · USA trip",
     travellers: ["Matija", "Maryna"],
-    updated: "2026-09-27T22:22Z",
+    updated: "2026-10-02T17:43Z",
     status: "Plans to choose from (menu at the top left): Vegas, New York, New York + Austin, or a Texas road trip - then CoRL in Austin for Matija.",
   },
 
@@ -89,36 +89,39 @@ window.TRIP = {
       // to have an idea in another plan too, copy its card there. `place` groups it on the Ideas page.
       ideas: [
         // Southwest
-        { id: "lv-redrock", place: "lasvegas", title: "Red Rock Canyon scenic loop", cat: "nature", cost: "$", dur: "half day", why: "30 min from the Strip; timed entry reservation." },
+        { id: "lv-redrock", place: "lasvegas", title: "Red Rock Canyon scenic loop", cat: "nature", cost: "$", dur: "half day", link: "https://www.recreation.gov/timed-entry/10075177/ticket/10075181", why: "30 min from the Strip. 🎟️ Book ahead: a timed-entry slot (recreation.gov) is required 1 Oct - 31 May for entries 8am-5pm, plus $20 per car (the park pass is accepted). Slots for weekends go first. 🎒 Kit: water - there is almost none along the loop." },
         { id: "lv-sphere-metallica", place: "lasvegas", title: "Metallica 'Life Burns Faster' at the Sphere", cat: "music", cost: "$$$", dur: "evening", why: "Residency runs 1 Oct 2026 - 13 Mar 2027, so it overlaps our dates. Shows sell out - check dates and book early." },
         { id: "lv-sphere-oz", place: "lasvegas", title: "The Wizard of Oz at Sphere", cat: "night", cost: "$$", dur: "2h", why: "The fully immersive version of the film on the 16K wraparound screen with wind and effects; usually daily at 11am, 2pm, 5pm and 8pm." },
         { id: "lv-fountains", place: "lasvegas", title: "The Strip at night + Bellagio fountains", cat: "city", cost: "free", dur: "evening", why: "Free fountain show every 15-30 min after dark; walk from Caesars to the Cosmopolitan." },
         { id: "lv-fremont", place: "lasvegas", title: "Fremont Street & old downtown", cat: "night", cost: "free", dur: "2-3h", why: "Old-Vegas casinos under the LED canopy, zipline overhead, cheaper drinks." },
         { id: "lv-cirque", place: "lasvegas", title: "Cirque du Soleil 'O' at Bellagio", cat: "night", cost: "$$$", dur: "2h", why: "The classic water show - one of the best productions in Vegas." },
-        { id: "lv-valleyfire", place: "lasvegas", title: "Valley of Fire State Park", cat: "nature", cost: "$", dur: "half day", why: "1 h from the Strip: glowing red sandstone, Fire Wave hike; perfect November temperatures." },
+        { id: "lv-valleyfire", place: "lasvegas", title: "Valley of Fire State Park", cat: "nature", cost: "$", dur: "half day", why: "1 h from the Strip: glowing red sandstone; perfect November temperatures. Best hikes: Fire Wave (1.5 miles return) and the White Domes loop (1.1 miles, through a slot canyon). 🎟️ No booking - pay ~$15 per out-of-state car at the gate. 🎒 Kit: just water and sun cream; there is no shade." },
         { id: "lv-hoover", place: "lasvegas", title: "Hoover Dam + bypass bridge walk", cat: "culture", cost: "$", dur: "half day", why: "45 min away; walk the bridge for the classic view down onto the dam." },
         { id: "lv-blackcanyon", place: "lasvegas", title: "Kayak the Black Canyon below Hoover Dam", cat: "adventure", cost: "$$", dur: "full day", why: "Calm water between huge canyon walls, Emerald Cave, and hot springs you hike up to from the river. Guided trips from Vegas run all year. No experience or licence needed - just basic fitness; the outfitter sorts the launch permit." },
         { id: "lv-atv", place: "lasvegas", title: "ATV / buggy (UTV) desert tour", cat: "adventure", cost: "$$", dur: "half day", why: "Quad bikes or side-by-side buggies in the dunes and desert around Vegas. Driver needs a full valid licence (UK is fine), usually 16-18+; closed-toe shoes, no alcohol, sign a waiver, credit-card deposit. Passengers need no licence." },
         { id: "lv-climb", place: "lasvegas", title: "Guided intro rock climbing at Red Rock", cat: "adventure", cost: "$$$", dur: "half day", why: "World-class sandstone climbing 30 min from the Strip. Beginner half-days need no experience - guide and all kit included." },
-        { id: "lv-calico", place: "lasvegas", title: "Calico Tanks scramble (Red Rock)", cat: "nature", cost: "$", dur: "2-3h", why: "Fun boulder-hopping hike to a hidden water pocket, with a view of the Strip at the top. Needs the Red Rock timed-entry reservation." },
+        { id: "lv-calico", place: "lasvegas", title: "Calico Tanks scramble (Red Rock)", cat: "nature", cost: "$", dur: "2-3h", why: "Fun boulder-hopping hike (~2.5 miles return) to a hidden water pocket, with a view of the Strip at the top. 🎟️ Book ahead: the Red Rock timed-entry slot (see the scenic loop card). 🎒 Kit: shoes with grippy soles for the sandstone scrambling, 2 L water each; no shade." },
+        { id: "lv-icebox", place: "lasvegas", title: "Ice Box Canyon hike (Red Rock)", cat: "nature", cost: "$", dur: "2-3h", why: "Shady canyon (2.6 miles return) with boulder-hopping to seasonal waterfalls after rain - a cooler alternative to Calico Tanks. 🎟️ Book ahead: Red Rock timed entry. 🎒 Kit: grippy shoes, water." },
         { id: "lv-ebike", place: "lasvegas", title: "E-bike tour of Red Rock Canyon", cat: "adventure", cost: "$$", dur: "half day", why: "Ride the 13-mile scenic loop without the car and the hills taking it out of you." },
         { id: "lv-horse", place: "lasvegas", title: "Horse riding at Red Rock", cat: "nature", cost: "$$", dur: "2h", why: "Guided trail rides at the edge of Red Rock; sunset rides are the best. No experience needed." },
         { id: "lv-zipline", place: "lasvegas", title: "Zipline: Flightlinez (Bootleg Canyon) or SlotZilla", cat: "adventure", cost: "$$", dur: "2-3h", why: "Flightlinez flies over desert canyons near Hoover Dam (easy to pair with it); SlotZilla shoots down Fremont Street." },
         { id: "lv-shooting", place: "lasvegas", title: "Vegas shooting range (handguns/machine guns)", cat: "adventure", cost: "$$", dur: "1-2h", link: "https://www.battlefieldvegas.com/", why: "Vegas has several tourist-friendly ranges (Battlefield Vegas, The Gun Store, Machine Gun Vegas) offering handgun, rifle and machine-gun packages with an instructor - no experience or licence needed, just ID and a waiver (usually 18+, some allow younger with a guardian). Book ahead, packages run ~$100-250pp estimate depending on guns chosen." },
-        { id: "lv-deathvalley", place: "lasvegas", title: "Death Valley day trip", cat: "nature", cost: "$", dur: "full day", why: "About 2 h away and at its best in November: Zabriskie Point, Badwater salt flats, Artists Drive, Mesquite dunes at sunset." },
+        { id: "lv-deathvalley", place: "lasvegas", title: "Death Valley day trip", cat: "nature", cost: "$", dur: "full day", why: "About 2 h away and at its best in November: Zabriskie Point, Badwater salt flats, Artists Drive, Mesquite dunes at sunset. Best short hike: Golden Canyon to Red Cathedral (~3 miles return). 🎟️ No booking - $35 per car, or the park pass (no non-resident surcharge here). 🎒 Kit: full tank of fuel, lots of water." },
         { id: "lv-gcwest", place: "lasvegas", title: "Grand Canyon West (Skywalk) or helicopter", cat: "nature", cost: "$$$", dur: "full day", why: "The 2-2.5 h option from Vegas. Pricey and far less impressive than the South Rim - only if there is no time for a night there." },
-        { id: "zion-overlook", place: "zion", title: "Canyon Overlook trail", cat: "nature", cost: "$", dur: "1h", why: "Short, huge payoff." },
-        { id: "zion-angels", place: "zion", title: "Angels Landing (permit lottery)", cat: "adventure", cost: "$", dur: "half day", link: "https://www.nps.gov/zion/planyourvisit/angels-landing-hiking-permits.htm", why: "Needs a permit: apply in the seasonal lottery 1-3 months ahead, or the day-before lottery." },
-        { id: "zion-narrows", place: "zion", title: "Riverside Walk / lower Narrows", cat: "nature", cost: "$", dur: "3h", why: "Water is cold in Nov - drysuit rentals in Springdale." },
+        { id: "zion-overlook", place: "zion", title: "Canyon Overlook trail", cat: "nature", cost: "$", dur: "1h", why: "Short (1 mile return), huge payoff - view straight down Zion Canyon. 🎟️ No permit; the trailhead is just east of the tunnel and its small car park fills by mid-morning - go early. 🎒 Kit: nothing special; some unfenced drop-offs." },
+        { id: "zion-angels", place: "zion", title: "Angels Landing (permit lottery)", cat: "adventure", cost: "$", dur: "half day", link: "https://www.nps.gov/zion/planyourvisit/angels-landing-hiking-permits.htm", why: "🎟️ Book ahead: needs a permit. The seasonal lottery for Sep-Nov hikes has closed, so for us it is the day-before lottery on recreation.gov (apply 00:01-15:00 the day before, $6 + $3pp if you win, results by 16:00). Without a permit you can still hike to Scout Lookout (~3.6 miles return). 🎒 Kit: grippy shoes, gloves help on the chains; not for anyone nervous of heights." },
+        { id: "zion-narrows", place: "zion", title: "Riverside Walk / lower Narrows", cat: "nature", cost: "$", dur: "3h", why: "Paved Riverside Walk (2.2 miles return, no kit), then wade up the river as far as you like. 🎒 Kit: the river is ~10°C in November - rent a drysuit package (drysuit, canyon boots, neoprene socks, stick; ~$90pp estimate) in Springdale, e.g. Zion Adventures; 🎟️ book it a few days ahead or pick it up the afternoon before. The park shuttle still runs in early November to the trailhead. The Narrows closes when the river is high - check the flow and flash-flood forecast that morning." },
+        { id: "zion-watchman", place: "zion", title: "Watchman Trail", cat: "nature", cost: "$", dur: "2h", why: "Easy 3.3 miles return straight from the visitor centre (no shuttle needed), up to a viewpoint over Springdale and the Watchman - good for an arrival afternoon or sunset. 🎟️ No permit. 🎒 Kit: water; no shade." },
+        { id: "zion-observation", place: "zion", title: "Observation Point via East Mesa", cat: "nature", cost: "$$", dur: "half day", why: "The view down onto Angels Landing from above, on a fairly flat 7-mile return trail across the mesa. 🎟️ No permit, but the trailhead road needs a high-clearance 4x4 (not a normal hire car) - book a shuttle from an East Zion outfitter (e.g. East Zion Adventures, ~$10-20pp estimate). 🎒 Kit: 2 L water, layers - it is ~2,000 m up and cold in November mornings; can be muddy after rain." },
         { id: "zion-drive", place: "zion", title: "Zion-Mount Carmel Highway drive", cat: "nature", cost: "$", dur: "1h", why: "Switchbacks, a tunnel through the cliffs, then slickrock country - one of the best drives in the US, and the scenic way on towards Page." },
-        { id: "page-horseshoe", place: "page", title: "Horseshoe Bend at sunset", cat: "nature", cost: "$", dur: "1h", why: "Iconic Colorado River bend." },
-        { id: "page-antelope", place: "page", title: "Antelope Canyon guided tour", cat: "nature", cost: "$$", dur: "2h", why: "Navajo-guided tours only; book ahead." },
+        { id: "page-horseshoe", place: "page", title: "Horseshoe Bend at sunset", cat: "nature", cost: "$", dur: "1h", why: "Iconic Colorado River bend; an easy 1.5-mile return walk. 🎟️ No booking - pay for parking at the trailhead (~$10 per car estimate). 🎒 Kit: nothing special." },
+        { id: "page-antelope", place: "page", title: "Antelope Canyon guided tour", cat: "nature", cost: "$$", dur: "2h", why: "Navajo-guided tours only. 🎟️ Book ahead - midday slots in particular sell out weeks before. 🎒 Kit: bags usually not allowed (phones/cameras only); Lower Antelope has steep ladders." },
         { id: "page-kayak", place: "page", title: "Kayak the Colorado up to Horseshoe Bend", cat: "adventure", cost: "$$", dur: "full day", why: "From Lees Ferry: a boat takes you and the kayak upstream, then you paddle back down through Glen Canyon and under Horseshoe Bend. Calm water." },
         { id: "gc-sunrise", place: "grandcanyon", title: "Sunrise at Mather Point, sunset at Hopi Point", cat: "nature", cost: "$", dur: "2h", why: "Stay inside the park to make both easy." },
-        { id: "gc-brightangel", place: "grandcanyon", title: "Bright Angel Trail to 1.5-mile resthouse", cat: "nature", cost: "free", dur: "3h", why: "Taste of the inner canyon; the climb back is the hard part." },
+        { id: "gc-brightangel", place: "grandcanyon", title: "Bright Angel Trail to 1.5-mile resthouse", cat: "nature", cost: "free", dur: "3h", why: "Taste of the inner canyon (3 miles return, ~340 m back up); the climb back is the hard part. Open to here - the trail lower down (below the Tonto junction) is closed after the 29 Aug 2026 flash flood. 🎟️ No permit for day hikes. 🎒 Kit: microspikes (~$25-50 or borrow) - the top switchbacks are often icy on November mornings; 2 L water each (taps may be off), layers, headtorch." },
         { id: "gc-scenic", place: "grandcanyon", title: "Scenic drive from Vegas via Zion and Page (2 days)", cat: "nature", cost: "$", dur: "2 days", link: "https://www.google.com/maps/dir/?api=1&origin=Las+Vegas,+NV&destination=Grand+Canyon+Village,+AZ&waypoints=Springdale,+UT%7CHorseshoe+Bend,+Page,+AZ%7CDesert+View+Watchtower,+AZ&travelmode=driving", why: "About 7.5 h of driving over 2 days: Zion, the Zion-Mount Carmel Highway, Horseshoe Bend, then into the park from the east along the rim. The direct route (4.5 h, I-40) is mostly dull desert motorway." },
         { id: "gc-desertview", place: "grandcanyon", title: "Desert View Drive along the rim", cat: "nature", cost: "$", dur: "2-3h", why: "25 miles of viewpoints between the east entrance and Grand Canyon Village, ending at the Desert View Watchtower." },
-        { id: "gc-kaibab", place: "grandcanyon", title: "South Kaibab Trail to Ooh Aah Point or Cedar Ridge", cat: "nature", cost: "free", dur: "1.5-3h", why: "Ridge-top trail with open views the whole way down. Ooh Aah Point ~1.5 h round trip, Cedar Ridge ~2-3 h. Never try river-and-back in a day." },
+        { id: "gc-kaibab", place: "grandcanyon", title: "South Kaibab Trail to Ooh Aah Point or Cedar Ridge", cat: "nature", cost: "free", dur: "1.5-3h", why: "Ridge-top trail with open views the whole way down. Ooh Aah Point ~1.5 h round trip, Cedar Ridge ~2-3 h (both above the section closed after the Aug 2026 flood). Never try river-and-back in a day. 🎟️ No permit; the trailhead is reached only by the free park shuttle (Kaibab Rim route) - no private cars. 🎒 Kit: microspikes for icy mornings, 2 L water each (none on the trail), layers." },
         { id: "gc-route66", place: "grandcanyon", title: "Old Route 66: Seligman to Kingman", cat: "culture", cost: "free", dur: "2h", why: "Swap the I-40 motorway for the old road on the drive back to Vegas: quirky diners and the Hackberry General Store. ~30 min extra." },
         { id: "gc-rafting", place: "grandcanyon", title: "One-day white-water rafting (Hualapai River Runners)", cat: "adventure", cost: "$$$", dur: "full day", why: "The only one-day Grand Canyon white-water trip. It usually runs spring to October, so early November is probably too late - check the season." },
 
@@ -163,8 +166,9 @@ window.TRIP = {
       // Hotels come from each leg's stay; "events" are estimated from the cost level ($/$$/$$$) of ideas in the plan.
       // A cost has a date, or from/to (spread evenly per day, to exclusive). Estimates only - update as things get booked.
       costs: [
-        { type: "flights", label: "Maryna: return London ⇄ Las Vegas, economy nonstop (from ~$624, Google Flights 25 Sep - estimate). Matija's flights are paid by work.", amount: 624, date: "2026-10-30" },
+        { type: "flights", label: "Maryna: return London ⇄ Las Vegas, economy nonstop, out Fri 30 Oct, back Sat 7 Nov (~$650 estimate, 2 Oct: Virgin from ~$624, British Airways ~$760). Matija's flights are paid by work.", amount: 650, date: "2026-10-30" },
         { type: "car", label: "Car hire for the Zion + Grand Canyon loop, 3 days (estimate)", amount: 200, from: "2026-11-02", to: "2026-11-05" },
+        { type: "events", label: "Non-resident America the Beautiful pass, $250 per car - cheaper than the new $100pp non-resident surcharge at both Zion and the Grand Canyon (would be $400 + entry)", amount: 250, date: "2026-11-02" },
       ],
       name: "Vegas, Zion & the Grand Canyon, then CoRL",
       summary: "Together: from Fri 30 Oct, a week around Las Vegas - Halloween on the Strip, Valley of Fire, a hire-car loop through Zion, Horseshoe Bend and the Grand Canyon, then back to Vegas. On Sat 7 Nov Maryna flies home to London and Matija flies to Austin for CoRL and the team summit, home Sat 14 Nov.",
@@ -181,13 +185,13 @@ window.TRIP = {
         { place: "zion", arrive: "2026-11-02", leave: "2026-11-03",
           travel: "🚗 Pick up a hire car at the airport · 2.5 h drive to Springdale",
           stay: { name: "Hotel in Springdale, at the park gate", price: 200, notes: "Estimate." },
-          days: [["Afternoon: zion-narrows", "Evening in Springdale"]] },
+          days: [["Buy the non-resident park pass at the Zion gate ($250 per car - see the 🚗 car hire 📜 Details)", "Pick up a drysuit package in Springdale", "Afternoon: zion-narrows (or zion-watchman if the river is closed)", "Evening in Springdale"]] },
         { place: "grandcanyon", arrive: "2026-11-03", leave: "2026-11-05",
           travel: "🚗 gc-scenic, day 2: zion-drive with zion-overlook, page-horseshoe, then gc-desertview (~5 h driving)",
           stay: { name: "Lodge inside the park (El Tovar / Bright Angel / Maswik)", price: 250, notes: "Estimate - in-park lodges book up early." },
           days: [
             ["Arrive along the rim", "Sunset: gc-sunrise"],
-            ["Sunrise at Mather Point", "gc-kaibab", "Afternoon: rim walk and rest"],
+            ["Sunrise at Mather Point", "gc-kaibab (bring microspikes)", "Afternoon: rim walk and rest"],
           ] },
         { id: "lasvegas-2", place: "lasvegas", arrive: "2026-11-05", leave: "2026-11-07",
           travel: "🚗 Drive back to Vegas via gc-route66 (~5 h), drop the car",
@@ -221,12 +225,12 @@ window.TRIP = {
           title: "✈️ Flights London → Las Vegas (Fri 30 Oct)",
           intro: "British Airways and Virgin Atlantic fly nonstop Heathrow → Las Vegas, about 10h45, landing the same evening.",
           sections: [
-            { title: "Maryna's ticket: a return, out Fri 30 or Sat 31 Oct, back Sat 7 Nov (economy, estimates from Google Flights, 25 Sep)", items: [
-              { name: "Out Fri 30 Oct", text: "Virgin Atlantic nonstop from ~$624 return (17:40 → 21:25); British Airways nonstop ~$793 (16:05 → 19:50).", link: "https://www.google.com/travel/flights?q=Flights%20to%20LAS%20from%20LON%20on%202026-10-30%20returning%202026-11-07" },
+            { title: "Maryna's ticket: a return, out Fri 30 or Sat 31 Oct, back Sat 7 Nov (economy, estimates - last checked 2 Oct)", items: [
+              { name: "Out Fri 30 Oct", text: "Virgin Atlantic nonstop from ~$624 return (17:40 → 21:25); British Airways nonstop ~$760 (16:05 → 18:50). Fares on this route are holding steady, but the cheap Virgin seats are the ones that go - budget ~$650 (estimate). Book soon.", link: "https://www.google.com/travel/flights?q=Flights%20to%20LAS%20from%20LON%20on%202026-10-30%20returning%202026-11-07" },
               { name: "Out Sat 31 Oct", text: "Virgin Atlantic nonstop from ~$624 return - the same price, so Friday costs nothing extra and gives a whole Halloween day.", link: "https://www.google.com/travel/flights?q=Flights%20to%20LAS%20from%20LON%20on%202026-10-31%20returning%202026-11-07" },
               { name: "Book a return, not one-ways", text: "One-ways are far pricier (~$967+ nonstop just to get there). Maryna's trip is a simple round trip, so a return is the cheapest way." },
               { name: "Matija", text: "Paid by work - ideally booked on the same outbound flight (the Virgin 17:40 is the cheapest one for Maryna)." },
-              { name: "Live prices", text: "Tap a date above for today's return fares on Google Flights; use Track prices for alerts. Google says the cheapest time to book this route is now, until about 9 Oct." },
+              { name: "Live prices", text: "Tap a date above for today's return fares on Google Flights; use Track prices for alerts. Google says the cheapest time to book this route is now, until about 9 Oct - so book in the next week." },
             ] },
             { title: "Nonstop options", items: [
               { name: "British Airways (LHR → LAS)", text: "Economy, World Traveller Plus (premium economy) or Club Suite business.", link: "https://www.britishairways.com/" },
@@ -249,7 +253,10 @@ window.TRIP = {
               { name: "Back to Vegas", text: "About 4.5-5 h direct; swap I-40 for old Route 66 between Seligman and Kingman." },
             ] },
             { title: "Rough cost (estimate)", items: [
-              { name: "3 days, mid-size, round trip", text: "Roughly $150-250 all-in - check live prices and book a free-cancellation rate. Park entry: an America the Beautiful annual pass covers Zion and the Grand Canyon." },
+              { name: "3 days, mid-size, round trip", text: "Roughly $150-250 all-in - check live prices and book a free-cancellation rate. " },
+            ] },
+            { title: "National park entry (new in 2026)", items: [
+              { name: "Non-resident pass - buy one", text: "Since 1 Jan 2026 visitors who don't live in the US pay a $100pp surcharge (on top of $35 per car) at Zion and the Grand Canyon. The non-resident America the Beautiful annual pass ($250) waives it and covers everyone in the car - so one pass (~$250) instead of ~$470. Buy it at the Zion gate or online. It also covers Red Rock and Death Valley.", link: "https://www.nps.gov/planyourvisit/passes.htm" },
             ] },
             { title: "For UK drivers", items: [
               { name: "What to bring", text: "Full UK photocard licence (usually held 12+ months), passport, and a credit card in the main driver's name. An International Driving Permit is normally not needed. A UK car-hire excess policy is usually cheaper than the desk's waiver." },

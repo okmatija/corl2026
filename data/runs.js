@@ -1,6 +1,7 @@
 // Log of plan updates made from feedback (newest first). Appended by Claude on every run that changes something.
 // { start, end: ISO UTC, by: "scheduled" | "manual", model, issues: [numbers], summary, tokens?: number, costUsd?: number }
 window.RUNS = [
+  { start: "2026-10-02T17:40:32Z", end: "2026-10-02T17:43:11Z", by: "scheduled", model: "claude-opus-5-5", issues: [73, 74], summary: "Vegas hikes: booking + kit; fares" },
   { start: "2026-09-27T22:21:02Z", end: "2026-09-27T22:22:20Z", by: "scheduled", model: "claude-sonnet-5", issues: [72], summary: "Added Rio Grande canoe/raft to Big Bend" },
   { start: "2026-09-27T20:40:39Z", end: "2026-09-27T20:45:01Z", by: "scheduled", model: "claude-opus-5-5", issues: [71], summary: "New Texas road trip plan" },
   { start: "2026-09-26T05:20:52Z", end: "2026-09-26T05:21:24Z", by: "scheduled", model: "claude-sonnet-5", issues: [70], summary: "Added Vegas shooting range idea" },
